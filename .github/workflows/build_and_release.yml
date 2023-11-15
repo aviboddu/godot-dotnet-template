@@ -36,4 +36,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.ref_name }}
         run: |
-          gh release edit ${tag} "/home/runner/.local/share/godot/builds/Windows Desktop/Game.exe" /home/runner/.local/share/godot/builds/LinuxX11/Game.x86_64
+          gh release upload --clobber ${tag} "/home/runner/.local/share/godot/builds/Windows Desktop/Game.exe" /home/runner/.local/share/godot/builds/LinuxX11/Game.x86_64
