@@ -36,4 +36,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.event.head_commit.message }}
         run: |
-          gh release create ${tag} "/home/runner/.local/share/godot/builds/Windows Desktop/Game.exe" /home/runner/.local/share/godot/builds/LinuxX11/Game.x86_64
+          gh release create "${tag}" "/home/runner/.local/share/godot/builds/Windows Desktop/Game.exe" /home/runner/.local/share/godot/builds/LinuxX11/Game.x86_64
