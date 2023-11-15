@@ -34,6 +34,6 @@ jobs:
       - name: Create release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ github.ref_name }}test
+          tag: ${{ github.event.release.tag_name }}
         run: |
           gh release create ${tag} "/home/runner/.local/share/godot/builds/Windows Desktop/Game.exe" /home/runner/.local/share/godot/builds/LinuxX11/Game.x86_64
