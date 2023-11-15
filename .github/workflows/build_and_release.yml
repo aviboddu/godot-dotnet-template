@@ -34,8 +34,7 @@ jobs:
             relative_project_path: ./
             cache: true
       - name: Create release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ github.ref_name }}
-        run: |
-          gh release create "${tag}" "/home/runner/.local/share/godot/builds/Windows Desktop/Game.exe" /home/runner/.local/share/godot/builds/LinuxX11/Game.x86_64
+        uses: ncipollo/release-action@v1.13.0
+        with: 
+          allowUpdates: true
+          artifacts: "/home/runner/.local/share/godot/builds/Windows Desktop/Game.exe,/home/runner/.local/share/godot/builds/LinuxX11/Game.x86_64"
