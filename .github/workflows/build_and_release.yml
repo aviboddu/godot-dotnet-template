@@ -31,4 +31,4 @@ jobs:
           artifacts: "/home/runner/.local/share/godot/builds/Windows Desktop/Game.exe,/home/runner/.local/share/godot/builds/LinuxX11/Game.x86_64"
           tag: master
           name: Build
-          body: ${{ github.event.head_commit.message }}
+          generateReleaseNotes: true
