@@ -28,7 +28,7 @@ jobs:
         uses: ncipollo/release-action@v1.13.0
         with: 
           allowUpdates: true
-          artifacts: "/home/runner/.local/share/godot/builds/Windows Desktop/Game.exe,/home/runner/.local/share/godot/builds/LinuxX11/Game.x86_64"
+          artifacts: "/home/runner/.local/share/godot/builds/*"
           tag: master
           name: Build
           generateReleaseNotes: true
