@@ -17,3 +17,6 @@ Export/
 
 # Ignores vscode metadata
 .vscode/
+
+# Ignores Logs
+Logs/

@@ -15,6 +15,10 @@ run/main_scene="res://main_menu.tscn"
 config/features=PackedStringArray("4.1", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+Logger="*res://utilities/logging/Logger.cs"
+
 [dotnet]
 
 project/assembly_name="NetTemplate"
