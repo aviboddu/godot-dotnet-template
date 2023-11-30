@@ -27,7 +27,7 @@ jobs:
       - name: Package Build
         run: |
           cd /home/runner/.local/share/godot/builds
-          usr/bin/tar -cfz builds.tar.gz /home/runner/.local/share/godot/builds
+          /usr/bin/tar -cfz builds.tar.gz /home/runner/.local/share/godot/builds
       - name: Create Release
         uses: ncipollo/release-action@v1.13.0
         with: 
