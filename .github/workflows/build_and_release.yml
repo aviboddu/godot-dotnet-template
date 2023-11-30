@@ -26,12 +26,12 @@ jobs:
             cache: true
       - name: Package Build
         run: |
-          /usr/bin/tar -czf /builds.tar.gz /home/runner/.local/share/godot/builds
+          /usr/bin/tar -czf /home/runner/builds.tar.gz /home/runner/.local/share/godot/builds
       - name: Create Release
         uses: ncipollo/release-action@v1.13.0
         with: 
           allowUpdates: true
-          artifacts: "/builds.tar.gz"
+          artifacts: "/home/runner/builds.tar.gz"
           tag: master
           name: Build
           generateReleaseNotes: true
