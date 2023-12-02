@@ -30,19 +30,21 @@ public partial class Logger : Node
 
 	public override void _Ready()
 	{
-		bool fileOverwritten = File.Exists(logFilePath);
-		Directory.CreateDirectory(logFilePath.GetBaseDir());
-		logFile = File.CreateText(logFilePath);
-		logFile.AutoFlush = true; // Make sure to flush quickly, so logs are available in the event of a crash.
+		if (OS.IsDebugBuild()) {
+			bool fileOverwritten = File.Exists(logFilePath);
+			Directory.CreateDirectory(logFilePath.GetBaseDir());
+			logFile = File.CreateText(logFilePath);
+			logFile.AutoFlush = true; // Make sure to flush quickly, so logs are available in the event of a crash.
 
-		WriteDebug("Log File Created");
-		if (fileOverwritten)
-			WriteWarning("Log File Overwritten");
+			WriteDebug("Log File Created");
+			if (fileOverwritten)
+				WriteWarning("Log File Overwritten");
+		}
 	}
 
 	public void WriteError(in object message)
 	{
-		if (minLogLevel > LogLevel.Error)
+		if (!OS.IsDebugBuild() || minLogLevel > LogLevel.Error)
 			return;
 
 		string formattedMessage = FormatMessage(message, LogLevel.Error);
@@ -52,7 +54,7 @@ public partial class Logger : Node
 
 	public void WriteWarning(in object message)
 	{
-		if (minLogLevel > LogLevel.Warning)
+		if (!OS.IsDebugBuild() || minLogLevel > LogLevel.Warning)
 			return;
 
 		string formattedMessage = FormatMessage(message, LogLevel.Warning);
@@ -62,7 +64,7 @@ public partial class Logger : Node
 
 	public void WriteInfo(in object message)
 	{
-		if (minLogLevel > LogLevel.Info)
+		if (!OS.IsDebugBuild() || minLogLevel > LogLevel.Info)
 			return;
 
 		string formattedMessage = FormatMessage(message, LogLevel.Info);
@@ -72,7 +74,7 @@ public partial class Logger : Node
 
 	public void WriteDebug(in object message)
 	{
-		if (minLogLevel > LogLevel.Debug)
+		if (!OS.IsDebugBuild() || minLogLevel > LogLevel.Debug)
 			return;
 
 		string formattedMessage = FormatMessage(message, LogLevel.Debug);
