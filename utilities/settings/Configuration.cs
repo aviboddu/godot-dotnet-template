@@ -8,7 +8,6 @@ public abstract partial class Configuration : Node
 	private readonly string configFilePath = "./config.ini";
 	private ConfigFile configFile;
 
-	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		configFile = new();
@@ -27,6 +26,7 @@ public abstract partial class Configuration : Node
 		}
 		else
 		{
+			Logger.Instance.WriteInfo("Configuration::_Ready() - No config file found");
 			LoadDefaultConfig();
 			Save();
 		}
