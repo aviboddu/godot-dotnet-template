@@ -43,9 +43,9 @@ public partial class Logger : Node
 			logFile = File.CreateText(logFilePath);
 			logFile.AutoFlush = true; // Make sure to flush quickly, so logs are available in the event of a crash.
 
-			WriteDebug("Log File Created");
+			WriteDebug("Logger::_Ready() - Log File Created");
 			if (fileOverwritten)
-				WriteWarning("Log File Overwritten");
+				WriteWarning("Logger::_Ready() - Log File Overwritten");
 		}
 	}
 

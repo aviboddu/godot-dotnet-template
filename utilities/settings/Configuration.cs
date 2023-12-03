@@ -5,15 +5,14 @@ namespace Utilities;
 
 public abstract partial class Configuration : Node
 {
-	private readonly string configFilePath = "./config.ini";
-	private ConfigFile configFile;
+	private const string CONFIG_FILE_PATH = "./config.ini";
+	private readonly ConfigFile configFile = new();
 
 	public override void _Ready()
 	{
-		configFile = new();
-		if (File.Exists(configFilePath))
+		if (File.Exists(CONFIG_FILE_PATH))
 		{
-			if (configFile.Load(configFilePath) != Error.Ok)
+			if (configFile.Load(CONFIG_FILE_PATH) != Error.Ok)
 			{
 				Logger.Instance.WriteWarning("Configuration::_Ready() - Failed to load config file");
 				LoadDefaultConfig();
@@ -34,7 +33,7 @@ public abstract partial class Configuration : Node
 
 	protected abstract void LoadDefaultConfig();
 
-	protected void ChangeSetting(string section, string key, string value)
+	protected void ChangeSetting(string section, string key, Variant value)
 	{
 		configFile.SetValue(section, key, value);
 		Logger.Instance.WriteInfo($"Configuration::ChangeSetting() - Changed {section}:{key} to {value}");
@@ -43,7 +42,7 @@ public abstract partial class Configuration : Node
 
 	private void Save()
 	{
-		if (configFile.Save(configFilePath) != Error.Ok)
+		if (configFile.Save(CONFIG_FILE_PATH) != Error.Ok)
 			Logger.Instance.WriteWarning("Configuration::Save() - Failed to save config");
 		else
 			Logger.Instance.WriteDebug("Configuration::Save() - Saved config");
