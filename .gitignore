@@ -20,3 +20,6 @@ Export/
 
 # Ignores Logs
 Logs/
+
+# Ignores config
+config.ini
