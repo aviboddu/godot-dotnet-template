@@ -46,12 +46,14 @@ public partial class AudioManager : Node
 	{
 		if (Configuration.Instance.HasSetting(AUDIO_SECTION, PropertyName.MasterVolume))
 		{
+			Logger.Instance.WriteInfo("AudioManager::_Ready() - Initializing Volumes from Configuration");
 			_masterVolume = Configuration.Instance.GetSetting<float>(AUDIO_SECTION, PropertyName.MasterVolume);
 			_musicVolume = Configuration.Instance.GetSetting<float>(AUDIO_SECTION, PropertyName.MusicVolume);
 			_sfxVolume = Configuration.Instance.GetSetting<float>(AUDIO_SECTION, PropertyName.SfxVolume);
 		}
 		else
 		{
+			Logger.Instance.WriteInfo("AudioManager::_Ready() - Default Initialization from Configuration");
 			MasterVolume = 1F;
 			MusicVolume = 1F;
 			SfxVolume = 1F;

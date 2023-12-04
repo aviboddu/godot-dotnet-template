@@ -3,7 +3,7 @@ using System.IO;
 
 namespace Utilities;
 
-public abstract partial class Configuration : Node
+public partial class Configuration : Node
 {
 	private const string CONFIG_FILE_PATH = "./config.ini";
 	private readonly ConfigFile configFile = new();
