@@ -41,10 +41,19 @@ public partial class AudioManager : Node
 		}
 	}
 
+	public static AudioManager Instance { get; private set; }
+
+	public override void _EnterTree()
+	{
+		if (Instance != null)
+			QueueFree(); // The singleton is already loaded, kill this instance
+		Instance = this;
+	}
+
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		if (Configuration.Instance.HasSetting(AUDIO_SECTION, PropertyName.MasterVolume))
+		if (Configuration.Instance.HasSection(AUDIO_SECTION))
 		{
 			Logger.Instance.WriteInfo("AudioManager::_Ready() - Initializing Volumes from Configuration");
 			_masterVolume = Configuration.Instance.GetSetting<float>(AUDIO_SECTION, PropertyName.MasterVolume);
@@ -53,7 +62,7 @@ public partial class AudioManager : Node
 		}
 		else
 		{
-			Logger.Instance.WriteInfo("AudioManager::_Ready() - Default Initialization from Configuration");
+			Logger.Instance.WriteInfo("AudioManager::_Ready() - Default Initialization");
 			MasterVolume = 1F;
 			MusicVolume = 1F;
 			SfxVolume = 1F;

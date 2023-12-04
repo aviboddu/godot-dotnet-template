@@ -55,11 +55,18 @@ public partial class VideoManager : Node
 		}
 	}
 
+	public static VideoManager Instance { get; private set; }
 
-	// Called when the node enters the scene tree for the first time.
+	public override void _EnterTree()
+	{
+		if (Instance != null)
+			QueueFree(); // The singleton is already loaded, kill this instance
+		Instance = this;
+	}
+
 	public override void _Ready()
 	{
-		if (Configuration.Instance.HasSetting(VIDEO_SECTION, PropertyName.Resolution))
+		if (Configuration.Instance.HasSection(VIDEO_SECTION))
 		{
 			Logger.Instance.WriteInfo("VideoManager::_Ready() - Initializing Settings from Configuration");
 			Resolution = Configuration.Instance.GetSetting<Vector2I>(VIDEO_SECTION, PropertyName.Resolution);
@@ -69,7 +76,7 @@ public partial class VideoManager : Node
 		}
 		else
 		{
-			Logger.Instance.WriteInfo("VideoManager::_Ready() - Default Initialization from Configuration");
+			Logger.Instance.WriteInfo("VideoManager::_Ready() - Default Initialization");
 			Resolution = DisplayServer.ScreenGetSize();
 			RefreshRate = 0;
 			WindowMode = DisplayServer.WindowMode.Windowed;

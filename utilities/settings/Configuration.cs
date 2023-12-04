@@ -38,6 +38,10 @@ public partial class Configuration : Node
 		return configFile.GetValue(section, key).As<T>();
 	}
 
+	public bool HasSection(string section)
+	{
+		return configFile.HasSection(section);
+	}
 
 	public bool HasSetting(string section, string key)
 	{
