@@ -9,6 +9,8 @@ public partial class Configuration : Node
 	private readonly ConfigFile configFile = new();
 
 	public static Configuration Instance { get; private set; }
+
+	private bool _saveQueued = false; // Ensures we don't call multiple saves unnecessarily.
 	public override void _EnterTree()
 	{
 		if (Instance != null)
@@ -44,13 +46,20 @@ public partial class Configuration : Node
 
 	public void ChangeSetting(string section, string key, Variant value)
 	{
+		if (HasSetting(section, key) && value.Equals(GetSetting<Variant>(section, key)))
+			return;
 		configFile.SetValue(section, key, value);
 		Logger.Instance.WriteInfo($"Configuration::ChangeSetting() - Changed {section}:{key} to {value}");
-		CallDeferred(MethodName.Save);
+		if (!_saveQueued)
+		{
+			_saveQueued = true;
+			CallDeferred(MethodName.Save);
+		}
 	}
 
 	private void Save()
 	{
+		_saveQueued = false;
 		if (configFile.Save(CONFIG_FILE_PATH) != Error.Ok)
 			Logger.Instance.WriteWarning("Configuration::Save() - Failed to save config");
 		else
