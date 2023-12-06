@@ -1,5 +1,4 @@
 using System;
-using System.Reflection.Metadata.Ecma335;
 using Godot;
 
 namespace Utilities;
@@ -31,6 +30,7 @@ public partial class VideoManager : Node
 		}
 	}
 
+	// TODO: More sophisticated window mode using more normal settings (Exclusive fullscreen, Fullscreen, Borderless Windowed, Windowed)
 	private DisplayServer.WindowMode _windowMode;
 	public DisplayServer.WindowMode WindowMode
 	{
