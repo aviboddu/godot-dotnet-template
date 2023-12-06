@@ -65,7 +65,7 @@ public partial class AudioManager : Node
 
 	public override void _Ready()
 	{
-
+		ulong ticks = Time.GetTicksMsec();
 		if (Configuration.Instance.HasSection(AUDIO_SECTION))
 		{
 			Logger.Instance.WriteInfo("AudioManager::_Ready() - Initializing Volumes from Configuration");
@@ -80,6 +80,7 @@ public partial class AudioManager : Node
 			MusicVolume = GetBusVolume(_musicBusIndex);
 			SfxVolume = GetBusVolume(_sfxBusIndex);
 		}
+		Logger.Instance.WriteInfo($"AudioManager::_Ready() - Time to Initialize {Time.GetTicksMsec() - ticks}");
 	}
 
 	private static void SetBusVolume(int busIndex, float volume)

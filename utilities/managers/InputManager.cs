@@ -18,6 +18,7 @@ public partial class InputManager : Node
 
 	public override void _Ready()
 	{
+		ulong ticks = Time.GetTicksMsec();
 		if (Configuration.Instance.HasSection(INPUT_SECTION))
 		{
 			Logger.Instance.WriteInfo("InputManager::_Ready() - Initializing Bindings from Configuration");
@@ -34,6 +35,7 @@ public partial class InputManager : Node
 			foreach (StringName action in InputMap.GetActions())
 				Configuration.Instance.ChangeSetting(INPUT_SECTION, action, InputMap.ActionGetEvents(action));
 		}
+		Logger.Instance.WriteInfo($"InputManager::_Ready() - Time to Initialize {Time.GetTicksMsec() - ticks}");
 	}
 
 	public void SwapEvent(StringName action, InputEvent remove, InputEvent add)
