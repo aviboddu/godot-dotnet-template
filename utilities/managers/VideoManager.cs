@@ -75,7 +75,7 @@ public partial class VideoManager : Node
 		{
 			Logger.Instance.WriteInfo("VideoManager::_Ready() - Default Initialization");
 			SetResolution(DisplayServer.ScreenGetSize(), false);
-			SetRefreshRate(Engine.MaxFps, false); // 0 indicates uncapped frame rate
+			SetRefreshRate(Engine.MaxFps, false);
 			SetWindowMode(GetScreenMode(), false);
 			SetVsyncMode(DisplayServer.WindowGetVsyncMode(), false);
 			Configuration.Instance.Save(); // We know we're going to change a bunch of settings, so we batch the write.
@@ -124,7 +124,7 @@ public partial class VideoManager : Node
 				DisplayServer.WindowSetMode(DisplayServer.WindowMode.Maximized);
 				DisplayServer.WindowSetFlag(DisplayServer.WindowFlags.Borderless, false);
 				break;
-			case ScreenMode.Minimized: // Don't want to save this state.
+			default: // Don't want to save any error states or minimized state
 				return;
 		}
 		Configuration.Instance.ChangeSetting(VIDEO_SECTION, PropertyName.WindowMode, (int)value, saveNow);
@@ -147,14 +147,13 @@ public partial class VideoManager : Node
 				return ScreenMode.ExclusiveFullscreen;
 			case Window.ModeEnum.Fullscreen:
 				return ScreenMode.Fullscreen;
-			case Window.ModeEnum.Windowed:
-				if (GetWindow().Borderless) return ScreenMode.BorderlessWindowed;
-				return ScreenMode.Windowed;
 			case Window.ModeEnum.Minimized:
 				return ScreenMode.Minimized;
 			case Window.ModeEnum.Maximized:
 				return ScreenMode.Maximized;
+			default:
+				if (GetWindow().Borderless) return ScreenMode.BorderlessWindowed;
+				return ScreenMode.Windowed;
 		}
-		throw new ArgumentException($"VideoManager::ScreenMode - {modeEnum} does not correspond to a screen mode");
 	}
 }
