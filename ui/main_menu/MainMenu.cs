@@ -1,6 +1,7 @@
 using Godot;
 using Utilities;
 
+namespace UI;
 public partial class MainMenu : Control
 {
 	[Export]

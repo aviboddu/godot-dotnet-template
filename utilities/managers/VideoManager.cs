@@ -1,4 +1,3 @@
-using System;
 using System.Diagnostics;
 using Godot;
 
@@ -66,18 +65,18 @@ public partial class VideoManager : Node
 		if (Configuration.Instance.HasSection(VIDEO_SECTION))
 		{
 			Logger.Instance.WriteInfo("VideoManager::_Ready() - Initializing Settings from Configuration");
-			Resolution = Configuration.Instance.GetSetting<Vector2I>(VIDEO_SECTION, PropertyName.Resolution);
-			RefreshRate = Configuration.Instance.GetSetting<int>(VIDEO_SECTION, PropertyName.RefreshRate);
 			WindowMode = (ScreenMode)Configuration.Instance.GetSetting<int>(VIDEO_SECTION, PropertyName.WindowMode);
+			RefreshRate = Configuration.Instance.GetSetting<int>(VIDEO_SECTION, PropertyName.RefreshRate);
 			VSyncMode = (DisplayServer.VSyncMode)Configuration.Instance.GetSetting<int>(VIDEO_SECTION, PropertyName.VSyncMode);
+			Resolution = Configuration.Instance.GetSetting<Vector2I>(VIDEO_SECTION, PropertyName.Resolution); // Must be after changing window mode, otherwise might be overwritten
 		}
 		else
 		{
 			Logger.Instance.WriteInfo("VideoManager::_Ready() - Default Initialization");
-			SetResolution(DisplayServer.ScreenGetSize(), false);
-			SetRefreshRate(Engine.MaxFps, false);
 			SetWindowMode(GetScreenMode(), false);
+			SetRefreshRate(Engine.MaxFps, false);
 			SetVsyncMode(DisplayServer.WindowGetVsyncMode(), false);
+			SetResolution(DisplayServer.ScreenGetSize(), false);
 			Configuration.Instance.Save(); // We know we're going to change a bunch of settings, so we batch the write.
 		}
 
@@ -86,6 +85,7 @@ public partial class VideoManager : Node
 #endif
 	}
 
+	// TODO: Changing resolutions and window mode gets a bit buggy
 	private void SetResolution(Vector2I value, bool saveNow)
 	{
 		Debug.Assert(value.Sign().Equals(Vector2I.One), $"VideoManager::SetResolution({value}, {saveNow}) - {value} must be positive in both axes");
