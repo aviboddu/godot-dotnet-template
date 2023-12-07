@@ -25,6 +25,7 @@ jobs:
             relative_project_path: ./
             cache: true
             archive_output: true
+            verbose: true
       - name: Create Release
         uses: ncipollo/release-action@v1.13.0
         with: 
