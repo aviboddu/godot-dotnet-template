@@ -1,3 +1,4 @@
+// Remove these if you don't want to relevant behavior
 #define WRITE_TO_FILE
 #define WRITE_TO_CONSOLE
 
