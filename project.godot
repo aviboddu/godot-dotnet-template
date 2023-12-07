@@ -23,6 +23,13 @@ AudioManager="*res://utilities/managers/AudioManager.cs"
 VideoManager="*res://utilities/managers/VideoManager.cs"
 InputManager="*res://utilities/managers/InputManager.cs"
 
+[display]
+
+window/size/viewport_width=1920
+window/size/viewport_height=1080
+window/size/mode=3
+window/size/resizable=false
+
 [dotnet]
 
 project/assembly_name="NetTemplate"

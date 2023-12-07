@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 using Godot;
 
@@ -9,7 +10,9 @@ public partial class VideoManager : Node
 		ExclusiveFullscreen,
 		Fullscreen,
 		BorderlessWindowed,
-		Windowed
+		Windowed,
+		Maximized,
+		Minimized
 	};
 
 	private const string VIDEO_SECTION = "Video";
@@ -72,9 +75,9 @@ public partial class VideoManager : Node
 		{
 			Logger.Instance.WriteInfo("VideoManager::_Ready() - Default Initialization");
 			SetResolution(DisplayServer.ScreenGetSize(), false);
-			SetRefreshRate(0, false); // 0 indicates uncapped frame rate
-			SetWindowMode(ScreenMode.Windowed, false);
-			SetVsyncMode(DisplayServer.VSyncMode.Disabled, false);
+			SetRefreshRate(Engine.MaxFps, false); // 0 indicates uncapped frame rate
+			SetWindowMode(GetScreenMode(), false);
+			SetVsyncMode(DisplayServer.WindowGetVsyncMode(), false);
 			Configuration.Instance.Save(); // We know we're going to change a bunch of settings, so we batch the write.
 		}
 
@@ -86,22 +89,21 @@ public partial class VideoManager : Node
 	private void SetResolution(Vector2I value, bool saveNow)
 	{
 		Debug.Assert(value.Sign().Equals(Vector2I.One), $"VideoManager::SetResolution({value}, {saveNow}) - {value} must be positive in both axes");
+		Configuration.Instance.ChangeSetting(VIDEO_SECTION, PropertyName.Resolution, value, saveNow);
 		_resolution = value;
 		GetWindow().Size = value;
-		Configuration.Instance.ChangeSetting(VIDEO_SECTION, PropertyName.Resolution, value, saveNow);
 	}
 
 	private void SetRefreshRate(int value, bool saveNow)
 	{
 		Debug.Assert(value >= 0, $"VideoManager::SetRefreshRate({value}, {saveNow}) - {value} must be greater than or equal to zero");
+		Configuration.Instance.ChangeSetting(VIDEO_SECTION, PropertyName.RefreshRate, value, saveNow);
 		_refreshRate = value;
 		Engine.MaxFps = value;
-		Configuration.Instance.ChangeSetting(VIDEO_SECTION, PropertyName.RefreshRate, value, saveNow);
 	}
 
 	private void SetWindowMode(ScreenMode value, bool saveNow)
 	{
-		_windowMode = value;
 		switch (value)
 		{
 			case ScreenMode.ExclusiveFullscreen:
@@ -118,14 +120,41 @@ public partial class VideoManager : Node
 				DisplayServer.WindowSetMode(DisplayServer.WindowMode.Windowed);
 				DisplayServer.WindowSetFlag(DisplayServer.WindowFlags.Borderless, false);
 				break;
+			case ScreenMode.Maximized:
+				DisplayServer.WindowSetMode(DisplayServer.WindowMode.Maximized);
+				DisplayServer.WindowSetFlag(DisplayServer.WindowFlags.Borderless, false);
+				break;
+			case ScreenMode.Minimized: // Don't want to save this state.
+				return;
 		}
 		Configuration.Instance.ChangeSetting(VIDEO_SECTION, PropertyName.WindowMode, (int)value, saveNow);
+		_windowMode = value;
 	}
 
 	private void SetVsyncMode(DisplayServer.VSyncMode value, bool saveNow)
 	{
+		Configuration.Instance.ChangeSetting(VIDEO_SECTION, PropertyName.VSyncMode, (int)value, saveNow);
 		_vsyncMode = value;
 		DisplayServer.WindowSetVsyncMode(value);
-		Configuration.Instance.ChangeSetting(VIDEO_SECTION, PropertyName.VSyncMode, (int)value, saveNow);
+	}
+
+	private ScreenMode GetScreenMode()
+	{
+		Window.ModeEnum modeEnum = GetWindow().Mode;
+		switch (modeEnum)
+		{
+			case Window.ModeEnum.ExclusiveFullscreen:
+				return ScreenMode.ExclusiveFullscreen;
+			case Window.ModeEnum.Fullscreen:
+				return ScreenMode.Fullscreen;
+			case Window.ModeEnum.Windowed:
+				if (GetWindow().Borderless) return ScreenMode.BorderlessWindowed;
+				return ScreenMode.Windowed;
+			case Window.ModeEnum.Minimized:
+				return ScreenMode.Minimized;
+			case Window.ModeEnum.Maximized:
+				return ScreenMode.Maximized;
+		}
+		throw new ArgumentException($"VideoManager::ScreenMode - {modeEnum} does not correspond to a screen mode");
 	}
 }
