@@ -30,6 +30,6 @@ jobs:
         with: 
           allowUpdates: true
           artifacts: "/home/runner/.local/share/godot/archives/*"
-          tag: master
+          tag: build
           name: Build
           generateReleaseNotes: true
