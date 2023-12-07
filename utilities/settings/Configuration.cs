@@ -1,5 +1,6 @@
 using Godot;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace Utilities;
 
@@ -10,7 +11,7 @@ public partial class Configuration : Node
 
 	public static Configuration Instance { get; private set; }
 
-	private bool _saveQueued = false; // Ensures we don't call multiple saves unnecessarily.
+	private bool goingToSave = false; // Makes sure that we don't try to save again if we have a save queued
 	public override void _EnterTree()
 	{
 		if (Instance != null)
@@ -23,7 +24,7 @@ public partial class Configuration : Node
 		if (File.Exists(CONFIG_FILE_PATH))
 		{
 			if (configFile.Load(CONFIG_FILE_PATH) != Error.Ok)
-				Logger.Instance.WriteWarning("Configuration::_Ready() - Failed to load config file");
+				Logger.Instance.WriteError("Configuration::_Ready() - Failed to load config file");
 			else
 				Logger.Instance.WriteInfo("Configuration::_Ready() - Loaded config file");
 		}
@@ -48,25 +49,26 @@ public partial class Configuration : Node
 		return configFile.HasSectionKey(section, key);
 	}
 
-	public void ChangeSetting(string section, string key, Variant value)
+	public void ChangeSetting(string section, string key, Variant value, bool saveNow = true)
 	{
 		if (HasSetting(section, key) && value.Equals(GetSetting<Variant>(section, key)))
 			return;
-		configFile.SetValue(section, key, value);
-		Logger.Instance.WriteInfo($"Configuration::ChangeSetting() - Changed {section}:{key} to {value}");
-		if (!_saveQueued)
-		{
-			_saveQueued = true;
-			CallDeferred(MethodName.Save);
-		}
+		lock (configFile)
+			configFile.SetValue(section, key, value);
+		Logger.Instance.WriteDebug($"Configuration::ChangeSetting() - Changed {section}:{key} to {value}");
+		if (saveNow && !goingToSave) Task.Run(Save);
 	}
 
-	private void Save()
+	public void Save()
 	{
-		_saveQueued = false;
-		if (configFile.Save(CONFIG_FILE_PATH) != Error.Ok)
-			Logger.Instance.WriteWarning("Configuration::Save() - Failed to save config");
-		else
-			Logger.Instance.WriteDebug("Configuration::Save() - Saved config");
+		goingToSave = true;
+		lock (configFile)
+		{
+			if (configFile.Save(CONFIG_FILE_PATH) != Error.Ok)
+				Logger.Instance.WriteError("Configuration::Save() - Failed to save config");
+			else
+				Logger.Instance.WriteDebug("Configuration::Save() - Saved config");
+		}
+		goingToSave = false;
 	}
 }
