@@ -1,14 +1,26 @@
+using System;
 using Godot;
 using Utilities;
 
 namespace UI;
-public partial class SfxVolumeSetting : HBoxContainer
+public partial class VolumeSetting : HBoxContainer
 {
+
+	public enum VolumeSettingEnum
+	{
+		MasterVolume,
+		MusicVolume,
+		SfxVolume
+	};
+
 	[Export]
 	Slider volumeSlider;
 
 	[Export]
 	Label volumeLabel;
+
+	[Export]
+	VolumeSettingEnum volumeName;
 
 	private int volume;
 
@@ -18,7 +30,7 @@ public partial class SfxVolumeSetting : HBoxContainer
 		volumeSlider.DragEnded += _on_drag_ended;
 		volumeSlider.ValueChanged += _on_value_changed;
 
-		volume = Mathf.RoundToInt(AudioManager.Instance.SfxVolume * 100);
+		volume = Mathf.RoundToInt((float)AudioManager.Instance.GetIndexed(Enum.GetName(volumeName)) * 100);
 		volumeSlider.SetValueNoSignal(volume);
 		volumeLabel.Text = volume.ToString();
 	}
@@ -28,9 +40,9 @@ public partial class SfxVolumeSetting : HBoxContainer
 		if (!changed)
 			return;
 
-		Logger.Instance.WriteInfo($"SfxVolumeSetting::_on_drag_ended({changed}) - User changed volume to {volumeSlider.Value}");
+		Logger.Instance.WriteInfo($"MasterVolumeSetting::_on_drag_ended({changed}) - User changed volume to {volumeSlider.Value}");
 		volume = Mathf.RoundToInt(volumeSlider.Value);
-		AudioManager.Instance.SfxVolume = volume / 100f;
+		AudioManager.Instance.SetIndexed(Enum.GetName(volumeName), volume / 100f);
 	}
 
 	public void _on_value_changed(double value)

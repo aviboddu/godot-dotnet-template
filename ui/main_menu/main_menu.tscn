@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://gbj8oc5h4nu4"]
+[gd_scene load_steps=8 format=3 uid="uid://gbj8oc5h4nu4"]
 
 [ext_resource type="Script" path="res://ui/main_menu/MainMenu.cs" id="1_57cxm"]
 [ext_resource type="StyleBox" uid="uid://h4njscbkx150" path="res://ui/main_menu/ScrollMarginContainer.tres" id="2_y1dn5"]
@@ -6,9 +6,7 @@
 [ext_resource type="Script" path="res://ui/main_menu/WindowModeSetting.cs" id="4_k38ve"]
 [ext_resource type="Script" path="res://ui/main_menu/VSyncSetting.cs" id="5_clunt"]
 [ext_resource type="Script" path="res://ui/main_menu/MaximumFramerateSetting.cs" id="6_eitc3"]
-[ext_resource type="Script" path="res://ui/main_menu/MasterVolumeSetting.cs" id="7_qw6t5"]
-[ext_resource type="Script" path="res://ui/main_menu/MusicVolumeSetting.cs" id="8_2cx0a"]
-[ext_resource type="Script" path="res://ui/main_menu/SfxVolumeSetting.cs" id="9_knu46"]
+[ext_resource type="Script" path="res://ui/main_menu/VolumeSetting.cs" id="7_qw6t5"]
 
 [node name="Main Menu" type="Control" node_paths=PackedStringArray("Settings", "StartMenu")]
 layout_mode = 3
@@ -183,9 +181,10 @@ ticks_on_borders = true
 
 [node name="Music Volume" type="HBoxContainer" parent="CenterContainer/Settings Container/Settings/Audio/Audio Settings" node_paths=PackedStringArray("volumeSlider", "volumeLabel")]
 layout_mode = 2
-script = ExtResource("8_2cx0a")
+script = ExtResource("7_qw6t5")
 volumeSlider = NodePath("Music Volume Slider")
 volumeLabel = NodePath("Music Volume Value")
+volumeName = 1
 
 [node name="Music Volume Label" type="Label" parent="CenterContainer/Settings Container/Settings/Audio/Audio Settings/Music Volume"]
 layout_mode = 2
@@ -205,9 +204,10 @@ tick_count = 10
 
 [node name="SFX Volume" type="HBoxContainer" parent="CenterContainer/Settings Container/Settings/Audio/Audio Settings" node_paths=PackedStringArray("volumeSlider", "volumeLabel")]
 layout_mode = 2
-script = ExtResource("9_knu46")
+script = ExtResource("7_qw6t5")
 volumeSlider = NodePath("SFX Volume Slider")
 volumeLabel = NodePath("SFX Volume Value")
+volumeName = 2
 
 [node name="SFX Volume Label" type="Label" parent="CenterContainer/Settings Container/Settings/Audio/Audio Settings/SFX Volume"]
 layout_mode = 2
