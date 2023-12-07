@@ -39,7 +39,7 @@ public partial class Logger : Node
 		bool fileOverwritten = File.Exists(logFilePath);
 		Directory.CreateDirectory(logFilePath.GetBaseDir());
 		logFile = File.CreateText(logFilePath);
-		logFile.AutoFlush = true; // Make sure to flush quickly, so logs are available in the event of a crash.
+		logFile.AutoFlush = true; // Make sure to flush quickly, so logs are available in the event of a crash
 
 		WriteDebug("Logger::_Ready() - Log File Created");
 		if (fileOverwritten)
