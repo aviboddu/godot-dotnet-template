@@ -42,7 +42,7 @@ public partial class VolumeSetting : HBoxContainer
 
 		Logger.Instance.WriteInfo($"MasterVolumeSetting::_on_drag_ended({changed}) - User changed volume to {volumeSlider.Value}");
 		volume = Mathf.RoundToInt(volumeSlider.Value);
-		AudioManager.Instance.SetIndexed(Enum.GetName(volumeName), volume / 100f);
+		AudioManager.Instance.SetDeferred(Enum.GetName(volumeName), volume / 100f);
 	}
 
 	public void _on_value_changed(double value)

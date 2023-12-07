@@ -59,10 +59,10 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Resolution" type="HBoxContainer" parent="CenterContainer/Settings Container/Settings/Video/Video Container" node_paths=PackedStringArray("resolutionDropDown")]
+[node name="Resolution" type="HBoxContainer" parent="CenterContainer/Settings Container/Settings/Video/Video Container" node_paths=PackedStringArray("dropDown")]
 layout_mode = 2
 script = ExtResource("3_t6qc7")
-resolutionDropDown = NodePath("Resolution DropDown")
+dropDown = NodePath("Resolution DropDown")
 
 [node name="Resolution Label" type="Label" parent="CenterContainer/Settings Container/Settings/Video/Video Container/Resolution"]
 layout_mode = 2
@@ -83,10 +83,10 @@ popup/item_3/id = 2
 popup/item_4/text = "1366x768"
 popup/item_4/id = 4
 
-[node name="Window Mode" type="HBoxContainer" parent="CenterContainer/Settings Container/Settings/Video/Video Container" node_paths=PackedStringArray("windowModeDropDown")]
+[node name="Window Mode" type="HBoxContainer" parent="CenterContainer/Settings Container/Settings/Video/Video Container" node_paths=PackedStringArray("dropDown")]
 layout_mode = 2
 script = ExtResource("4_k38ve")
-windowModeDropDown = NodePath("Window Mode DropDown")
+dropDown = NodePath("Window Mode DropDown")
 
 [node name="Window Mode Label" type="Label" parent="CenterContainer/Settings Container/Settings/Video/Video Container/Window Mode"]
 layout_mode = 2
@@ -118,10 +118,10 @@ text = "VSync"
 layout_mode = 2
 size_flags_horizontal = 10
 
-[node name="Maximum Framerate" type="HBoxContainer" parent="CenterContainer/Settings Container/Settings/Video/Video Container" node_paths=PackedStringArray("maxFPSDropDown")]
+[node name="Maximum Framerate" type="HBoxContainer" parent="CenterContainer/Settings Container/Settings/Video/Video Container" node_paths=PackedStringArray("dropDown")]
 layout_mode = 2
 script = ExtResource("6_eitc3")
-maxFPSDropDown = NodePath("Maximum Framerate DropDown")
+dropDown = NodePath("Maximum Framerate DropDown")
 
 [node name="Maximum Framerate Label" type="Label" parent="CenterContainer/Settings Container/Settings/Video/Video Container/Maximum Framerate"]
 layout_mode = 2

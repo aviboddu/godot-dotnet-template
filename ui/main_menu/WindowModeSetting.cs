@@ -1,39 +1,33 @@
 using System;
-using Godot;
 using Utilities;
 
 namespace UI;
-public partial class WindowModeSetting : HBoxContainer
+public partial class WindowModeSetting : VideoDropDownSetting<VideoManager.ScreenMode>
 {
 	private const string FULLSCREEN = "Fullscreen";
 	private const string EXCLUSIVE_FULLSCREEN = "Exclusive Fullscreen";
 	private const string WINDOWED = "Windowed";
 	private const string BORDERLESS_WINDOWED = "Borderless Windowed";
 
-	[Export]
-	OptionButton windowModeDropDown;
-
 	public override void _Ready()
 	{
-		windowModeDropDown.ItemSelected += _on_value_selected;
-		string mode = ScreenModeToString(VideoManager.Instance.WindowMode);
-		for (int i = 0; i < windowModeDropDown.ItemCount; i++)
-		{
-			if (mode.Equals(windowModeDropDown.GetItemText(i)))
-			{
-				windowModeDropDown.Selected = i;
-				break;
-			}
-		}
+		property = "WindowMode";
+		base._Ready();
 	}
 
-	public void _on_value_selected(long idx)
+	protected override string PropertyToString(VideoManager.ScreenMode mode)
 	{
-		Logger.Instance.WriteInfo($"WindowModeSetting::_on_value_selected({idx}) - User selected window mode {idx}");
-		VideoManager.Instance.WindowMode = StringToScreenMode(windowModeDropDown.GetItemText((int)idx));
+		return mode switch
+		{
+			VideoManager.ScreenMode.Fullscreen => FULLSCREEN,
+			VideoManager.ScreenMode.ExclusiveFullscreen => EXCLUSIVE_FULLSCREEN,
+			VideoManager.ScreenMode.Windowed => WINDOWED,
+			VideoManager.ScreenMode.BorderlessWindowed => BORDERLESS_WINDOWED,
+			_ => throw new ArgumentException($"WindowModeSetting::ScreenModeToString({mode}) - {mode} was not valid"),
+		};
 	}
 
-	private static VideoManager.ScreenMode StringToScreenMode(string s)
+	protected override VideoManager.ScreenMode StringToProperty(string s)
 	{
 		return s switch
 		{
@@ -45,15 +39,4 @@ public partial class WindowModeSetting : HBoxContainer
 		};
 	}
 
-	private static string ScreenModeToString(VideoManager.ScreenMode mode)
-	{
-		return mode switch
-		{
-			VideoManager.ScreenMode.Fullscreen => FULLSCREEN,
-			VideoManager.ScreenMode.ExclusiveFullscreen => EXCLUSIVE_FULLSCREEN,
-			VideoManager.ScreenMode.Windowed => WINDOWED,
-			VideoManager.ScreenMode.BorderlessWindowed => BORDERLESS_WINDOWED,
-			_ => throw new ArgumentException($"WindowModeSetting::ScreenModeToString({mode}) - {mode} was not valid"),
-		};
-	}
 }
