@@ -20,28 +20,28 @@ public partial class VideoManager : Node
 	public Vector2I Resolution
 	{
 		get => _resolution;
-		set => SetResolution(value, true);
+		set => SetResolution(value, false);
 	}
 
 	private int _refreshRate = -1;
 	public int RefreshRate
 	{
 		get => _refreshRate;
-		set => SetRefreshRate(value, true);
+		set => SetRefreshRate(value, false);
 	}
 
 	private ScreenMode _windowMode;
 	public ScreenMode WindowMode
 	{
 		get => _windowMode;
-		set => SetWindowMode(value, true);
+		set => SetWindowMode(value, false);
 	}
 
 	private DisplayServer.VSyncMode _vsyncMode;
 	public DisplayServer.VSyncMode VSyncMode
 	{
 		get => _vsyncMode;
-		set => SetVsyncMode(value, true);
+		set => SetVsyncMode(value, false);
 	}
 
 	public static VideoManager Instance { get; private set; }
@@ -73,11 +73,19 @@ public partial class VideoManager : Node
 		else
 		{
 			Logger.Instance.WriteInfo("VideoManager::_Ready() - Default Initialization");
-			SetWindowMode(GetScreenMode(), false);
-			SetRefreshRate(Engine.MaxFps, false);
-			SetVsyncMode(DisplayServer.WindowGetVsyncMode(), false);
-			SetResolution(DisplayServer.ScreenGetSize(), false);
-			Configuration.Instance.Save(); // We know we're going to change a bunch of settings, so we batch the write.
+
+			// Initialize without calling video configuration methods
+			_windowMode = GetScreenMode();
+			Configuration.Instance.ChangeSetting(VIDEO_SECTION, PropertyName.WindowMode, (int)_windowMode, false);
+
+			_refreshRate = Engine.MaxFps;
+			Configuration.Instance.ChangeSetting(VIDEO_SECTION, PropertyName.RefreshRate, _refreshRate, false);
+
+			_vsyncMode = DisplayServer.WindowGetVsyncMode();
+			Configuration.Instance.ChangeSetting(VIDEO_SECTION, PropertyName.VSyncMode, (int)VSyncMode, false);
+
+			_resolution = DisplayServer.ScreenGetSize();
+			Configuration.Instance.ChangeSetting(VIDEO_SECTION, PropertyName.Resolution, _resolution, false);
 		}
 
 #if DEBUG

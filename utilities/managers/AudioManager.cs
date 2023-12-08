@@ -19,21 +19,21 @@ public partial class AudioManager : Node
 	public float MasterVolume
 	{
 		get => _masterVolume;
-		set => SetMasterVolume(value, true);
+		set => SetMasterVolume(value, false);
 	}
 
 	private float _musicVolume = float.NaN;
 	public float MusicVolume
 	{
 		get => _musicVolume;
-		set => SetMusicVolume(value, true);
+		set => SetMusicVolume(value, false);
 	}
 
 	private float _sfxVolume = float.NaN;
 	public float SfxVolume
 	{
 		get => _sfxVolume;
-		set => SetSfxVolume(value, true);
+		set => SetSfxVolume(value, false);
 	}
 
 	public static AudioManager Instance { get; private set; }
@@ -61,10 +61,15 @@ public partial class AudioManager : Node
 		else
 		{
 			Logger.Instance.WriteInfo("AudioManager::_Ready() - Default Initialization");
-			SetMasterVolume(GetBusVolume(_masterBusIndex), false);
-			SetMusicVolume(GetBusVolume(_musicBusIndex), false);
-			SetSfxVolume(GetBusVolume(_sfxBusIndex), false);
-			Configuration.Instance.Save(); // We know we're going to change a bunch of settings, so we batch the write.
+			// Initialize without calling audio configuration methods
+			_masterVolume = GetBusVolume(_masterBusIndex);
+			Configuration.Instance.ChangeSetting(AUDIO_SECTION, PropertyName.MasterVolume, _masterVolume);
+
+			_musicVolume = GetBusVolume(_musicBusIndex);
+			Configuration.Instance.ChangeSetting(AUDIO_SECTION, PropertyName.MusicVolume, _musicVolume);
+
+			_sfxVolume = GetBusVolume(_sfxBusIndex);
+			Configuration.Instance.ChangeSetting(AUDIO_SECTION, PropertyName.SfxVolume, _sfxVolume);
 		}
 #if DEBUG
 		Logger.Instance.WriteDebug($"AudioManager::_Ready() - Time to Initialize {Time.GetTicksMsec() - ticks} ms");

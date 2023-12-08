@@ -11,6 +11,8 @@ public partial class Configuration : Node
 
 	public static Configuration Instance { get; private set; }
 
+	private Timer saveDelay = new();
+
 	private bool goingToSave = false; // Makes sure that we don't try to save again if we have a save queued
 	public override void _EnterTree()
 	{
@@ -21,6 +23,9 @@ public partial class Configuration : Node
 
 	public override void _Ready()
 	{
+		AddChild(saveDelay);
+		saveDelay.WaitTime = 1;
+		saveDelay.Timeout += () => Task.Run(Save);
 		if (File.Exists(CONFIG_FILE_PATH))
 		{
 			if (configFile.Load(CONFIG_FILE_PATH) != Error.Ok)
@@ -56,7 +61,15 @@ public partial class Configuration : Node
 		lock (configFile)
 			configFile.SetValue(section, key, value);
 		Logger.Instance.WriteDebug($"Configuration::ChangeSetting() - Changed {section}:{key} to {value}");
-		if (saveNow && !goingToSave) Task.Run(Save);
+
+		if (saveNow)
+		{
+			Task.Run(Save);
+			if (saveDelay.TimeLeft != 0)
+				saveDelay.Stop();
+		}
+		else if (saveDelay.TimeLeft == 0)
+			saveDelay.Start();
 	}
 
 	public void Save()
