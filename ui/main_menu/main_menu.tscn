@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://ui/main_menu/MainMenu.cs" id="1_57cxm"]
 [ext_resource type="Script" path="res://ui/main_menu/Play.cs" id="2_hg6gl"]
 [ext_resource type="StyleBox" uid="uid://h4njscbkx150" path="res://ui/main_menu/ScrollMarginContainer.tres" id="2_y1dn5"]
-[ext_resource type="PackedScene" uid="uid://cqfa8jqytmyng" path="res://utilities/testing/Test3DScene.tscn" id="3_63wws"]
+[ext_resource type="PackedScene" uid="uid://ctax2n635eift" path="res://utilities/testing/Test2DScene.tscn" id="3_0djbv"]
 [ext_resource type="Script" path="res://ui/main_menu/ResolutionSetting.cs" id="3_t6qc7"]
 [ext_resource type="Script" path="res://ui/main_menu/WindowModeSetting.cs" id="4_k38ve"]
 [ext_resource type="Script" path="res://ui/main_menu/VSyncSetting.cs" id="5_clunt"]
@@ -36,7 +36,7 @@ layout_mode = 2
 layout_mode = 2
 text = "Play"
 script = ExtResource("2_hg6gl")
-gameScene = ExtResource("3_63wws")
+gameScene = ExtResource("3_0djbv")
 mainMenu = NodePath("../../..")
 
 [node name="Settings" type="Button" parent="CenterContainer/Start Menu"]
