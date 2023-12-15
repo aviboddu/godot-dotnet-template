@@ -236,10 +236,9 @@ horizontal_scroll_mode = 0
 [node name="Input Settings" type="VBoxContainer" parent="CenterContainer/Settings Container/Settings/Input"]
 layout_mode = 2
 
-[node name="Temp" type="Label" parent="CenterContainer/Settings Container/Settings/Input/Input Settings"]
+[node name="Example Control Listing" type="Label" parent="CenterContainer/Settings Container/Settings/Input/Input Settings"]
 layout_mode = 2
-text = "Temp
-"
+text = "[Example] Jump - Space"
 
 [node name="Back" type="Button" parent="CenterContainer/Settings Container"]
 layout_mode = 2
