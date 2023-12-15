@@ -1,7 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://gbj8oc5h4nu4"]
+[gd_scene load_steps=10 format=3 uid="uid://gbj8oc5h4nu4"]
 
 [ext_resource type="Script" path="res://ui/main_menu/MainMenu.cs" id="1_57cxm"]
+[ext_resource type="Script" path="res://ui/main_menu/Play.cs" id="2_hg6gl"]
 [ext_resource type="StyleBox" uid="uid://h4njscbkx150" path="res://ui/main_menu/ScrollMarginContainer.tres" id="2_y1dn5"]
+[ext_resource type="PackedScene" uid="uid://cqfa8jqytmyng" path="res://utilities/testing/Test3DScene.tscn" id="3_63wws"]
 [ext_resource type="Script" path="res://ui/main_menu/ResolutionSetting.cs" id="3_t6qc7"]
 [ext_resource type="Script" path="res://ui/main_menu/WindowModeSetting.cs" id="4_k38ve"]
 [ext_resource type="Script" path="res://ui/main_menu/VSyncSetting.cs" id="5_clunt"]
@@ -29,6 +31,13 @@ grow_vertical = 2
 
 [node name="Start Menu" type="VBoxContainer" parent="CenterContainer"]
 layout_mode = 2
+
+[node name="Play" type="Button" parent="CenterContainer/Start Menu" node_paths=PackedStringArray("mainMenu")]
+layout_mode = 2
+text = "Play"
+script = ExtResource("2_hg6gl")
+gameScene = ExtResource("3_63wws")
+mainMenu = NodePath("../../..")
 
 [node name="Settings" type="Button" parent="CenterContainer/Start Menu"]
 layout_mode = 2
@@ -245,6 +254,7 @@ layout_mode = 2
 text = "Back
 "
 
+[connection signal="pressed" from="CenterContainer/Start Menu/Play" to="CenterContainer/Start Menu/Play" method="_on_pressed"]
 [connection signal="pressed" from="CenterContainer/Start Menu/Settings" to="." method="_on_settings_pressed"]
 [connection signal="pressed" from="CenterContainer/Start Menu/Quit" to="." method="_on_quit_pressed"]
 [connection signal="pressed" from="CenterContainer/Settings Container/Back" to="." method="_on_back_pressed"]

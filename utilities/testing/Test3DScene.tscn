@@ -1,0 +1,79 @@
+[gd_scene load_steps=13 format=3 uid="uid://cqfa8jqytmyng"]
+
+[sub_resource type="Animation" id="Animation_7cny2"]
+resource_name = "RotateLabel"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "rotation_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Label3D")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 2, 1, 0, 0, 0, -1)
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_njht7"]
+_data = {
+"RotateLabel": SubResource("Animation_7cny2")
+}
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_ws1ix"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_j4on4"]
+seamless = true
+noise = SubResource("FastNoiseLite_ws1ix")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_v0voe"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_xwgqc"]
+seamless = true
+noise = SubResource("FastNoiseLite_v0voe")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_o3lxc"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_pso7r"]
+in_3d_space = true
+as_normal_map = true
+noise = SubResource("FastNoiseLite_o3lxc")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_mr7hs"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_f86p0"]
+seamless = true
+noise = SubResource("FastNoiseLite_mr7hs")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_n0pyp"]
+albedo_texture = SubResource("NoiseTexture2D_j4on4")
+metallic = 1.0
+metallic_texture = SubResource("NoiseTexture2D_xwgqc")
+roughness_texture = SubResource("NoiseTexture2D_f86p0")
+emission = Color(0.854902, 0, 0.854902, 1)
+normal_enabled = true
+normal_texture = SubResource("NoiseTexture2D_pso7r")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_q7dhk"]
+material = SubResource("StandardMaterial3D_n0pyp")
+subdivide_width = 16
+subdivide_depth = 16
+
+[node name="Test3dScene" type="Node3D"]
+
+[node name="Label3D" type="Label3D" parent="."]
+transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 0, 0)
+text = "Test Scene 3D"
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.939693, 0.34202, 0, -0.34202, 0.939693, 0, 1, 2)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_njht7")
+}
+autoplay = "RotateLabel"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.185706, 0)
+mesh = SubResource("PlaneMesh_q7dhk")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.04307, -0.218112)
