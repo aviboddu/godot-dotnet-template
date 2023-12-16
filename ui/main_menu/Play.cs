@@ -12,18 +12,12 @@ public partial class Play : Button
 	[Export]
 	public Node mainMenu;
 
-	public override void _Ready()
-	{
-		if (gameScene is not null)
-			ResourceLoader.LoadThreadedRequest(LOADING_SCREEN_PATH);
-	}
-
 	public void _on_pressed()
 	{
 		if (gameScene is not null)
 		{
 			Logger.Instance.WriteDebug($"Play::_on_pressed() - Loading {gameScene.ResourceName}");
-			LoadingScreen loadingScreen = (LoadingScreen)((PackedScene)ResourceLoader.LoadThreadedGet(LOADING_SCREEN_PATH)).Instantiate();
+			LoadingScreen loadingScreen = GD.Load<PackedScene>(LOADING_SCREEN_PATH).Instantiate<LoadingScreen>();
 			loadingScreen.ScenePath = gameScene.ResourcePath;
 			GetTree().Root.AddChild(loadingScreen);
 			mainMenu.QueueFree();

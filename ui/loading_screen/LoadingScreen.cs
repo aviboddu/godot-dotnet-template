@@ -13,8 +13,15 @@ public partial class LoadingScreen : Control
 
 	private Array progressPercentage;
 
+#if DEBUG
+	private float startTime;
+#endif
+
 	public override void _Ready()
 	{
+#if DEBUG
+		startTime = Time.GetTicksMsec();
+#endif
 		progressPercentage = [];
 		progressPercentage.Resize(1);
 		progressBar.Value = 0;
@@ -31,6 +38,9 @@ public partial class LoadingScreen : Control
 				Logger.Instance.WriteInfo($"LoadingScreen::_Process - Successfully loaded {ScenePath}");
 				GetTree().Root.AddChild(((PackedScene)ResourceLoader.LoadThreadedGet(ScenePath)).Instantiate());
 				QueueFree();
+#if DEBUG
+				Logger.Instance.WriteDebug($"LoadingScreen::_Process - Time to load {ScenePath} = {Time.GetTicksMsec() - startTime} ms");
+#endif
 				break;
 			case ResourceLoader.ThreadLoadStatus.InProgress:
 				progressBar.Value = (double)progressPercentage[0];
