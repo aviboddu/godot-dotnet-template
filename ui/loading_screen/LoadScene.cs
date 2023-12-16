@@ -26,7 +26,7 @@ public partial class LoadScene : Button
 		if (sceneToLoad is not null)
 		{
 			sceneToUnload.QueueFree();
-			Logger.Instance.WriteDebug($"LoadScene::_on_pressed() - Loading {sceneToLoad}");
+			Logger.WriteDebug($"LoadScene::_on_pressed() - Loading {sceneToLoad}");
 			LoadingScreen loadingScreen = GD.Load<PackedScene>(LOADING_SCREEN_PATH).Instantiate<LoadingScreen>();
 			loadingScreen.ScenePath = sceneToLoad;
 			GetTree().Root.AddChild(loadingScreen);

@@ -47,15 +47,27 @@ public partial class Logger : Node
 #endif
 	}
 
-	public void WriteError(in object message)
+	public void Write(in object message, LogLevel logLevel)
 	{
 #if DEBUG && (WRITE_TO_CONSOLE || WRITE_TO_FILE)
-		if (minLogLevel > LogLevel.Error)
+		if (minLogLevel > logLevel)
 			return;
 
-		string formattedMessage = FormatMessage(message, LogLevel.Error);
+		string formattedMessage = FormatMessage(message, logLevel);
+
 #if WRITE_TO_CONSOLE
-		GD.PushError(formattedMessage);
+		switch (logLevel)
+		{
+			case LogLevel.Error:
+				GD.PushError(formattedMessage);
+				break;
+			case LogLevel.Warning:
+				GD.PushWarning(formattedMessage);
+				break;
+			default:
+				GD.Print(formattedMessage);
+				break;
+		}
 #endif
 #if WRITE_TO_FILE
 		logFile.WriteLine(formattedMessage);
@@ -63,55 +75,24 @@ public partial class Logger : Node
 #endif
 	}
 
-	public void WriteWarning(in object message)
+	public static void WriteError(in object message)
 	{
-#if DEBUG && (WRITE_TO_CONSOLE || WRITE_TO_FILE)
-		if (minLogLevel > LogLevel.Warning)
-			return;
-
-		string formattedMessage = FormatMessage(message, LogLevel.Warning);
-
-#if WRITE_TO_CONSOLE
-		GD.PushWarning(formattedMessage); // TODO: Change to print warning if/when possible. (Could write an extension for that if it's important.)
-#endif
-#if WRITE_TO_FILE
-		logFile.WriteLine(formattedMessage);
-#endif
-#endif
+		Instance.Write(message, LogLevel.Error);
 	}
 
-	public void WriteInfo(in object message)
+	public static void WriteWarning(in object message)
 	{
-#if DEBUG && (WRITE_TO_CONSOLE || WRITE_TO_FILE)
-		if (minLogLevel > LogLevel.Info)
-			return;
-
-		string formattedMessage = FormatMessage(message, LogLevel.Info);
-
-#if WRITE_TO_CONSOLE
-		GD.Print(formattedMessage);
-#endif
-#if WRITE_TO_FILE
-		logFile.WriteLine(formattedMessage);
-#endif
-#endif
+		Instance.Write(message, LogLevel.Warning);
 	}
 
-	public void WriteDebug(in object message)
+	public static void WriteInfo(in object message)
 	{
-#if DEBUG && (WRITE_TO_CONSOLE || WRITE_TO_FILE)
-		if (minLogLevel > LogLevel.Debug)
-			return;
+		Instance.Write(message, LogLevel.Info);
+	}
 
-		string formattedMessage = FormatMessage(message, LogLevel.Debug);
-
-#if WRITE_TO_CONSOLE
-		GD.Print(formattedMessage);
-#endif
-#if WRITE_TO_FILE
-		logFile.WriteLine(formattedMessage);
-#endif
-#endif
+	public static void WriteDebug(in object message)
+	{
+		Instance.Write(message, LogLevel.Debug);
 	}
 
 	private static string FormatMessage(in object message, LogLevel level) => $"[{DateTime.Now:yyyy/MM/dd HH:mm:ss:fff}][{level}] {message}";

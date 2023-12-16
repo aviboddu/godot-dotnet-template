@@ -24,7 +24,7 @@ public partial class InputManager : Node
 
 		if (Configuration.Instance.HasSection(INPUT_SECTION))
 		{
-			Logger.Instance.WriteInfo("InputManager::_Ready() - Initializing Bindings from Configuration");
+			Logger.WriteInfo("InputManager::_Ready() - Initializing Bindings from Configuration");
 			foreach (StringName action in InputMap.GetActions())
 			{
 				InputMap.ActionEraseEvents(action);
@@ -34,14 +34,14 @@ public partial class InputManager : Node
 		}
 		else
 		{
-			Logger.Instance.WriteInfo("InputManager::_Ready() - Default Initialization");
+			Logger.WriteInfo("InputManager::_Ready() - Default Initialization");
 			foreach (StringName action in InputMap.GetActions())
 			{
 				Configuration.Instance.ChangeSetting(INPUT_SECTION, action, InputMap.ActionGetEvents(action), false);
 			}
 		}
 #if DEBUG
-		Logger.Instance.WriteDebug($"InputManager::_Ready() - Time to Initialize {Time.GetTicksMsec() - ticks} ms");
+		Logger.WriteDebug($"InputManager::_Ready() - Time to Initialize {Time.GetTicksMsec() - ticks} ms");
 #endif
 	}
 

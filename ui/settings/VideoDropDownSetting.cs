@@ -31,7 +31,7 @@ public abstract partial class VideoDropDownSetting<[MustBeVariant] T> : Node
 
 	public void _on_value_selected(long idx)
 	{
-		Logger.Instance.WriteInfo($"{GetClass()}::_on_value_selected({idx}) - User selected resolution {idx}");
+		Logger.WriteInfo($"{GetClass()}::_on_value_selected({idx}) - User selected resolution {idx}");
 		VideoManager.Instance.SetDeferred(property.ToString(), Variant.From(StringToProperty(dropDown.GetItemText((int)idx))));
 	}
 

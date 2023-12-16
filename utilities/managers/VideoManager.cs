@@ -64,7 +64,7 @@ public partial class VideoManager : Node
 
 		if (Configuration.Instance.HasSection(VIDEO_SECTION))
 		{
-			Logger.Instance.WriteInfo("VideoManager::_Ready() - Initializing Settings from Configuration");
+			Logger.WriteInfo("VideoManager::_Ready() - Initializing Settings from Configuration");
 			WindowMode = (ScreenMode)Configuration.Instance.GetSetting<int>(VIDEO_SECTION, PropertyName.WindowMode);
 			RefreshRate = Configuration.Instance.GetSetting<int>(VIDEO_SECTION, PropertyName.RefreshRate);
 			VSyncMode = (DisplayServer.VSyncMode)Configuration.Instance.GetSetting<int>(VIDEO_SECTION, PropertyName.VSyncMode);
@@ -72,7 +72,7 @@ public partial class VideoManager : Node
 		}
 		else
 		{
-			Logger.Instance.WriteInfo("VideoManager::_Ready() - Default Initialization");
+			Logger.WriteInfo("VideoManager::_Ready() - Default Initialization");
 
 			// Initialize without calling video configuration methods
 			_windowMode = GetScreenMode();
@@ -89,7 +89,7 @@ public partial class VideoManager : Node
 		}
 
 #if DEBUG
-		Logger.Instance.WriteDebug($"VideoManager::_Ready() - Time to Initialize {Time.GetTicksMsec() - ticks} ms");
+		Logger.WriteDebug($"VideoManager::_Ready() - Time to Initialize {Time.GetTicksMsec() - ticks} ms");
 #endif
 	}
 

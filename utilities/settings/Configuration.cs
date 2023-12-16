@@ -28,14 +28,15 @@ public partial class Configuration : Node
 		saveDelay.Timeout += () => Task.Run(Save);
 		if (File.Exists(CONFIG_FILE_PATH))
 		{
-			if (configFile.Load(CONFIG_FILE_PATH) != Error.Ok)
-				Logger.Instance.WriteError("Configuration::_Ready() - Failed to load config file");
+			Error err = configFile.Load(CONFIG_FILE_PATH);
+			if (err != Error.Ok)
+				Logger.WriteError($"Configuration::_Ready() - Failed to load config file. Error {err}");
 			else
-				Logger.Instance.WriteInfo("Configuration::_Ready() - Loaded config file");
+				Logger.WriteInfo("Configuration::_Ready() - Loaded config file");
 		}
 		else
 		{
-			Logger.Instance.WriteInfo("Configuration::_Ready() - No config file found");
+			Logger.WriteInfo("Configuration::_Ready() - No config file found");
 		}
 	}
 
@@ -60,7 +61,7 @@ public partial class Configuration : Node
 			return;
 		lock (configFile)
 			configFile.SetValue(section, key, value);
-		Logger.Instance.WriteDebug($"Configuration::ChangeSetting() - Changed {section}:{key} to {value}");
+		Logger.WriteDebug($"Configuration::ChangeSetting() - Changed {section}:{key} to {value}");
 
 		if (saveNow)
 		{
@@ -77,10 +78,11 @@ public partial class Configuration : Node
 		goingToSave = true;
 		lock (configFile)
 		{
-			if (configFile.Save(CONFIG_FILE_PATH) != Error.Ok)
-				Logger.Instance.WriteError("Configuration::Save() - Failed to save config");
+			Error err = configFile.Save(CONFIG_FILE_PATH);
+			if (err != Error.Ok)
+				Logger.WriteError($"Configuration::Save() - Failed to save config. Error {err}");
 			else
-				Logger.Instance.WriteDebug("Configuration::Save() - Saved config");
+				Logger.WriteDebug("Configuration::Save() - Saved config");
 		}
 		goingToSave = false;
 	}

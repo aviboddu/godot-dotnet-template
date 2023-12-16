@@ -12,21 +12,21 @@ public partial class MainMenu : Control
 
 	public void _on_settings_pressed()
 	{
-		Logger.Instance.WriteInfo("User Opened Settings");
+		Logger.WriteInfo("User Opened Settings");
 		Settings.Visible = true;
 		StartMenu.Visible = false;
 	}
 
 	public void _on_back_pressed()
 	{
-		Logger.Instance.WriteInfo("User Exited Settings");
+		Logger.WriteInfo("User Exited Settings");
 		Settings.Visible = false;
 		StartMenu.Visible = true;
 	}
 
 	public void _on_quit_pressed()
 	{
-		Logger.Instance.WriteInfo("User Quit");
+		Logger.WriteInfo("User Quit");
 		GetTree().Quit();
 	}
 }

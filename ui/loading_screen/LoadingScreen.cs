@@ -34,22 +34,22 @@ public partial class LoadingScreen : Control
 		switch (loadStatus)
 		{
 			case ResourceLoader.ThreadLoadStatus.Loaded:
-				Logger.Instance.WriteInfo($"LoadingScreen::_Process - Successfully loaded {ScenePath}");
+				Logger.WriteInfo($"LoadingScreen::_Process - Successfully loaded {ScenePath}");
 				GetTree().Root.AddChild(((PackedScene)ResourceLoader.LoadThreadedGet(ScenePath)).Instantiate());
 				QueueFree();
 #if DEBUG
-				Logger.Instance.WriteDebug($"LoadingScreen::_Process - Time to load {ScenePath} = {Time.GetTicksMsec() - startTime} ms");
+				Logger.WriteDebug($"LoadingScreen::_Process - Time to load {ScenePath} = {Time.GetTicksMsec() - startTime} ms");
 #endif
 				break;
 			case ResourceLoader.ThreadLoadStatus.InProgress:
 				progressBar.Value = (double)progressPercentage[0];
 				break;
 			case ResourceLoader.ThreadLoadStatus.InvalidResource:
-				Logger.Instance.WriteError($"LoadingScreen::_Process - {ScenePath} is invalid");
+				Logger.WriteError($"LoadingScreen::_Process - {ScenePath} is invalid");
 				GetTree().Quit(-1);
 				break;
 			case ResourceLoader.ThreadLoadStatus.Failed:
-				Logger.Instance.WriteError($"LoadingScreen::_Process - {ScenePath} failed to load");
+				Logger.WriteError($"LoadingScreen::_Process - {ScenePath} failed to load");
 				GetTree().Quit(-1);
 				break;
 		}

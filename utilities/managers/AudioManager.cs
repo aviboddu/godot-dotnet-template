@@ -53,14 +53,14 @@ public partial class AudioManager : Node
 
 		if (Configuration.Instance.HasSection(AUDIO_SECTION))
 		{
-			Logger.Instance.WriteInfo("AudioManager::_Ready() - Initializing Volumes from Configuration");
+			Logger.WriteInfo("AudioManager::_Ready() - Initializing Volumes from Configuration");
 			MasterVolume = Configuration.Instance.GetSetting<float>(AUDIO_SECTION, PropertyName.MasterVolume);
 			MusicVolume = Configuration.Instance.GetSetting<float>(AUDIO_SECTION, PropertyName.MusicVolume);
 			SfxVolume = Configuration.Instance.GetSetting<float>(AUDIO_SECTION, PropertyName.SfxVolume);
 		}
 		else
 		{
-			Logger.Instance.WriteInfo("AudioManager::_Ready() - Default Initialization");
+			Logger.WriteInfo("AudioManager::_Ready() - Default Initialization");
 			// Initialize without calling audio configuration methods
 			_masterVolume = GetBusVolume(_masterBusIndex);
 			Configuration.Instance.ChangeSetting(AUDIO_SECTION, PropertyName.MasterVolume, _masterVolume);
@@ -72,7 +72,7 @@ public partial class AudioManager : Node
 			Configuration.Instance.ChangeSetting(AUDIO_SECTION, PropertyName.SfxVolume, _sfxVolume);
 		}
 #if DEBUG
-		Logger.Instance.WriteDebug($"AudioManager::_Ready() - Time to Initialize {Time.GetTicksMsec() - ticks} ms");
+		Logger.WriteDebug($"AudioManager::_Ready() - Time to Initialize {Time.GetTicksMsec() - ticks} ms");
 #endif
 	}
 
