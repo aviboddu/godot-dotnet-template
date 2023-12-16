@@ -27,8 +27,12 @@ public partial class VolumeSetting : HBoxContainer
 
 	public override void _Ready()
 	{
-		volumeSlider.DragEnded += _on_drag_ended;
-		volumeSlider.ValueChanged += _on_value_changed;
+		Callable dragEnded = new(this, MethodName._on_drag_ended);
+		Callable valueChanged = new(this, MethodName._on_value_changed);
+		if (volumeSlider.IsConnected(Slider.SignalName.DragEnded, dragEnded))
+			volumeSlider.Connect(Slider.SignalName.DragEnded, dragEnded);
+		if (volumeSlider.IsConnected(Slider.SignalName.ValueChanged, valueChanged))
+			volumeSlider.Connect(Slider.SignalName.ValueChanged, valueChanged);
 
 		volume = Mathf.RoundToInt((float)AudioManager.Instance.GetIndexed(Enum.GetName(volumeName)) * 100);
 		volumeSlider.SetValueNoSignal(volume);

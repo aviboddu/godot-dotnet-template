@@ -13,7 +13,11 @@ public abstract partial class VideoDropDownSetting<[MustBeVariant] T> : Node
 	public override void _Ready()
 	{
 		Debug.Assert(property is not null, "VideoDropDownSettings::_Ready() - property must not be null. Override _Ready() accordingly");
-		dropDown.ItemSelected += _on_value_selected;
+
+		Callable valueSelected = new(this, MethodName._on_value_selected);
+		if (!dropDown.IsConnected(OptionButton.SignalName.ItemSelected, valueSelected))
+			dropDown.Connect(OptionButton.SignalName.ItemSelected, valueSelected);
+
 		string res = PropertyToString(VideoManager.Instance.GetIndexed(property).As<T>());
 		for (int i = 0; i < dropDown.ItemCount; i++)
 		{

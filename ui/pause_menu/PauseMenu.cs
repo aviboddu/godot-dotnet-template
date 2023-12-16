@@ -1,4 +1,3 @@
-using System.IO;
 using Godot;
 
 namespace UI;
@@ -21,7 +20,7 @@ public partial class PauseMenu : Control
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		QuitToMainMenuButton.sceneToUnload = QuitToMainMenuButton.GetPathTo(this) + '/' + ContainingScene;
+		QuitToMainMenuButton.sceneToUnload = GetNode(ContainingScene).GetPath();
 	}
 
 	public void _on_resume_pressed()

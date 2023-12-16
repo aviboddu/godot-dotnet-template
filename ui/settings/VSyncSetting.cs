@@ -9,7 +9,10 @@ public partial class VSyncSetting : HBoxContainer
 
 	public override void _Ready()
 	{
-		VSyncButton.Toggled += _on_button_toggled;
+		Callable buttonToggled = new(this, MethodName._on_button_toggled);
+		if (!VSyncButton.IsConnected(CheckBox.SignalName.Toggled, buttonToggled))
+			VSyncButton.Connect(CheckBox.SignalName.Toggled, buttonToggled);
+
 		bool isVsync = VideoManager.Instance.VSyncMode == DisplayServer.VSyncMode.Enabled;
 		VSyncButton.SetPressedNoSignal(isVsync);
 	}

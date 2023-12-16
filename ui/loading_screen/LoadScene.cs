@@ -15,7 +15,10 @@ public partial class LoadScene : Button
 	public override void _Ready()
 	{
 		base._Ready();
-		Pressed += _on_pressed;
+
+		Callable onPressed = new(this, MethodName._on_pressed);
+		if (!IsConnected(SignalName.Pressed, onPressed))
+			Connect(SignalName.Pressed, onPressed);
 	}
 
 	public void _on_pressed()

@@ -46,3 +46,4 @@ layout_mode = 2
 
 [connection signal="pressed" from="CenterContainer/Start Menu/Settings" to="." method="_on_settings_pressed"]
 [connection signal="pressed" from="CenterContainer/Start Menu/Quit" to="." method="_on_quit_pressed"]
+[connection signal="BackPressed" from="CenterContainer/Settings Container" to="." method="_on_back_pressed"]

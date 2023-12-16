@@ -28,7 +28,6 @@ public partial class LoadingScreen : Control
 		ResourceLoader.LoadThreadedRequest(ScenePath);
 	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
 		ResourceLoader.ThreadLoadStatus loadStatus = ResourceLoader.LoadThreadedGetStatus(ScenePath, progressPercentage);
