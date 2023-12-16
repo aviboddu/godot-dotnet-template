@@ -1,0 +1,54 @@
+[gd_scene load_steps=4 format=3 uid="uid://dyra5rvytwc1g"]
+
+[ext_resource type="PackedScene" uid="uid://d1ark6a4n7xut" path="res://ui/settings/settings.tscn" id="1_6whtp"]
+[ext_resource type="Script" path="res://ui/pause_menu/PauseMenu.cs" id="1_pnte5"]
+[ext_resource type="Script" path="res://ui/loading_screen/LoadScene.cs" id="1_u8u0p"]
+
+[node name="PauseMenu" type="Control" node_paths=PackedStringArray("QuitToMainMenuButton", "settings", "MainPauseMenu")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_pnte5")
+QuitToMainMenuButton = NodePath("CenterContainer/MainPauseMenu/Quit To Main Menu")
+settings = NodePath("CenterContainer/Settings Container")
+MainPauseMenu = NodePath("CenterContainer/MainPauseMenu")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MainPauseMenu" type="VBoxContainer" parent="CenterContainer"]
+layout_mode = 2
+
+[node name="Resume" type="Button" parent="CenterContainer/MainPauseMenu"]
+layout_mode = 2
+text = "Resume"
+
+[node name="Settings" type="Button" parent="CenterContainer/MainPauseMenu"]
+layout_mode = 2
+text = "Settings"
+
+[node name="Quit To Main Menu" type="Button" parent="CenterContainer/MainPauseMenu"]
+layout_mode = 2
+text = "Quit to Main Menu"
+script = ExtResource("1_u8u0p")
+sceneToLoad = NodePath("res://ui/main_menu/main_menu.tscn")
+
+[node name="Quit To OS" type="Button" parent="CenterContainer/MainPauseMenu"]
+layout_mode = 2
+text = "Quit to OS"
+
+[node name="Settings Container" parent="CenterContainer" instance=ExtResource("1_6whtp")]
+layout_mode = 2
+
+[connection signal="pressed" from="CenterContainer/MainPauseMenu/Resume" to="." method="_on_resume_pressed"]
+[connection signal="pressed" from="CenterContainer/MainPauseMenu/Settings" to="." method="_on_settings_pressed"]
+[connection signal="pressed" from="CenterContainer/MainPauseMenu/Quit To OS" to="." method="_on_quit_to_os_pressed"]
+[connection signal="BackPressed" from="CenterContainer/Settings Container" to="." method="_on_back_pressed"]

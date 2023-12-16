@@ -1,0 +1,218 @@
+[gd_scene load_steps=8 format=3 uid="uid://d1ark6a4n7xut"]
+
+[ext_resource type="Script" path="res://ui/settings/Settings.cs" id="1_cef2m"]
+[ext_resource type="StyleBox" uid="uid://h4njscbkx150" path="res://ui/settings/ScrollMarginContainer.tres" id="2_un10f"]
+[ext_resource type="Script" path="res://ui/settings/ResolutionSetting.cs" id="3_vygjg"]
+[ext_resource type="Script" path="res://ui/settings/WindowModeSetting.cs" id="4_dbqe7"]
+[ext_resource type="Script" path="res://ui/settings/VSyncSetting.cs" id="5_ksbo5"]
+[ext_resource type="Script" path="res://ui/settings/MaximumFramerateSetting.cs" id="6_rhmth"]
+[ext_resource type="Script" path="res://ui/settings/VolumeSetting.cs" id="7_nwmg5"]
+
+[node name="Settings Container" type="VBoxContainer"]
+visible = false
+script = ExtResource("1_cef2m")
+
+[node name="Settings" type="TabContainer" parent="."]
+layout_mode = 2
+theme_override_constants/side_margin = 0
+use_hidden_tabs_for_min_size = true
+
+[node name="Video" type="ScrollContainer" parent="Settings"]
+custom_minimum_size = Vector2(500, 500)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("2_un10f")
+follow_focus = true
+horizontal_scroll_mode = 0
+
+[node name="Video Container" type="VBoxContainer" parent="Settings/Video"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Resolution" type="HBoxContainer" parent="Settings/Video/Video Container" node_paths=PackedStringArray("dropDown")]
+layout_mode = 2
+script = ExtResource("3_vygjg")
+dropDown = NodePath("Resolution DropDown")
+
+[node name="Resolution Label" type="Label" parent="Settings/Video/Video Container/Resolution"]
+layout_mode = 2
+text = "Resolution"
+
+[node name="Resolution DropDown" type="OptionButton" parent="Settings/Video/Video Container/Resolution"]
+layout_mode = 2
+size_flags_horizontal = 10
+item_count = 5
+popup/item_0/text = "3840x2160"
+popup/item_0/id = 3
+popup/item_1/text = "2560x1440"
+popup/item_1/id = 4
+popup/item_2/text = "1920x1080"
+popup/item_2/id = 0
+popup/item_3/text = "1440x900"
+popup/item_3/id = 2
+popup/item_4/text = "1366x768"
+popup/item_4/id = 4
+
+[node name="Window Mode" type="HBoxContainer" parent="Settings/Video/Video Container" node_paths=PackedStringArray("dropDown")]
+layout_mode = 2
+script = ExtResource("4_dbqe7")
+dropDown = NodePath("Window Mode DropDown")
+
+[node name="Window Mode Label" type="Label" parent="Settings/Video/Video Container/Window Mode"]
+layout_mode = 2
+text = "Window Mode"
+
+[node name="Window Mode DropDown" type="OptionButton" parent="Settings/Video/Video Container/Window Mode"]
+layout_mode = 2
+size_flags_horizontal = 10
+item_count = 4
+popup/item_0/text = "Exclusive Fullscreen"
+popup/item_0/id = 3
+popup/item_1/text = "Fullscreen"
+popup/item_1/id = 0
+popup/item_2/text = "Windowed"
+popup/item_2/id = 1
+popup/item_3/text = "Borderless Windowed"
+popup/item_3/id = 2
+
+[node name="VSync" type="HBoxContainer" parent="Settings/Video/Video Container" node_paths=PackedStringArray("VSyncButton")]
+layout_mode = 2
+script = ExtResource("5_ksbo5")
+VSyncButton = NodePath("VSync Check")
+
+[node name="VSync Label" type="Label" parent="Settings/Video/Video Container/VSync"]
+layout_mode = 2
+text = "VSync"
+
+[node name="VSync Check" type="CheckButton" parent="Settings/Video/Video Container/VSync"]
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="Maximum Framerate" type="HBoxContainer" parent="Settings/Video/Video Container" node_paths=PackedStringArray("dropDown")]
+layout_mode = 2
+script = ExtResource("6_rhmth")
+dropDown = NodePath("Maximum Framerate DropDown")
+
+[node name="Maximum Framerate Label" type="Label" parent="Settings/Video/Video Container/Maximum Framerate"]
+layout_mode = 2
+text = "Max FPS"
+
+[node name="Maximum Framerate DropDown" type="OptionButton" parent="Settings/Video/Video Container/Maximum Framerate"]
+layout_mode = 2
+size_flags_horizontal = 10
+item_count = 5
+popup/item_0/text = "Unlimited"
+popup/item_0/id = 0
+popup/item_1/text = "30"
+popup/item_1/id = 1
+popup/item_2/text = "60"
+popup/item_2/id = 2
+popup/item_3/text = "120"
+popup/item_3/id = 3
+popup/item_4/text = "144"
+popup/item_4/id = 4
+
+[node name="Audio" type="ScrollContainer" parent="Settings"]
+visible = false
+custom_minimum_size = Vector2(500, 500)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("2_un10f")
+follow_focus = true
+horizontal_scroll_mode = 0
+
+[node name="Audio Settings" type="VBoxContainer" parent="Settings/Audio"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Master Volume" type="HBoxContainer" parent="Settings/Audio/Audio Settings" node_paths=PackedStringArray("volumeSlider", "volumeLabel")]
+layout_mode = 2
+script = ExtResource("7_nwmg5")
+volumeSlider = NodePath("Master Volume Slider")
+volumeLabel = NodePath("Master Volume Value")
+
+[node name="Master Volume Label" type="Label" parent="Settings/Audio/Audio Settings/Master Volume"]
+layout_mode = 2
+text = "Master Volume"
+
+[node name="Master Volume Value" type="Label" parent="Settings/Audio/Audio Settings/Master Volume"]
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 0
+size_flags_stretch_ratio = 2.0
+text = "0"
+
+[node name="Master Volume Slider" type="HSlider" parent="Settings/Audio/Audio Settings/Master Volume"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+tick_count = 10
+ticks_on_borders = true
+
+[node name="Music Volume" type="HBoxContainer" parent="Settings/Audio/Audio Settings" node_paths=PackedStringArray("volumeSlider", "volumeLabel")]
+layout_mode = 2
+script = ExtResource("7_nwmg5")
+volumeSlider = NodePath("Music Volume Slider")
+volumeLabel = NodePath("Music Volume Value")
+volumeName = 1
+
+[node name="Music Volume Label" type="Label" parent="Settings/Audio/Audio Settings/Music Volume"]
+layout_mode = 2
+text = "Music Volume"
+
+[node name="Music Volume Value" type="Label" parent="Settings/Audio/Audio Settings/Music Volume"]
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_stretch_ratio = 2.0
+text = "0"
+
+[node name="Music Volume Slider" type="HSlider" parent="Settings/Audio/Audio Settings/Music Volume"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+tick_count = 10
+
+[node name="SFX Volume" type="HBoxContainer" parent="Settings/Audio/Audio Settings" node_paths=PackedStringArray("volumeSlider", "volumeLabel")]
+layout_mode = 2
+script = ExtResource("7_nwmg5")
+volumeSlider = NodePath("SFX Volume Slider")
+volumeLabel = NodePath("SFX Volume Value")
+volumeName = 2
+
+[node name="SFX Volume Label" type="Label" parent="Settings/Audio/Audio Settings/SFX Volume"]
+layout_mode = 2
+text = "SFX Volume"
+
+[node name="SFX Volume Value" type="Label" parent="Settings/Audio/Audio Settings/SFX Volume"]
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_stretch_ratio = 2.0
+text = "0"
+
+[node name="SFX Volume Slider" type="HSlider" parent="Settings/Audio/Audio Settings/SFX Volume"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+tick_count = 10
+
+[node name="Input" type="ScrollContainer" parent="Settings"]
+visible = false
+custom_minimum_size = Vector2(500, 500)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("2_un10f")
+follow_focus = true
+horizontal_scroll_mode = 0
+
+[node name="Input Settings" type="VBoxContainer" parent="Settings/Input"]
+layout_mode = 2
+
+[node name="Example Control Listing" type="Label" parent="Settings/Input/Input Settings"]
+layout_mode = 2
+text = "[Example] Jump - Space"
+
+[node name="Back" type="Button" parent="."]
+layout_mode = 2
+text = "Back
+"
+
+[connection signal="pressed" from="Back" to="." method="_on_back_pressed"]
