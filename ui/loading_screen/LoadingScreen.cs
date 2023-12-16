@@ -5,8 +5,8 @@ using Utilities;
 namespace UI;
 public partial class LoadingScreen : Control
 {
-	[Export]
-	public NodePath ScenePath { get; set; }
+	[Export(PropertyHint.File, "*.tscn")]
+	public string ScenePath { get; set; }
 
 	[Export]
 	public ProgressBar progressBar;

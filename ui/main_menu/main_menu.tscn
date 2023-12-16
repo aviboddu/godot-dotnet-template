@@ -30,7 +30,7 @@ layout_mode = 2
 layout_mode = 2
 text = "Play"
 script = ExtResource("2_lluh2")
-sceneToLoad = "res://utilities/testing/Test2DScene.tscn"
+sceneToLoad = "res://utilities/testing/Test3DScene.tscn"
 sceneToUnload = NodePath("../../..")
 
 [node name="Settings" type="Button" parent="CenterContainer/Start Menu"]

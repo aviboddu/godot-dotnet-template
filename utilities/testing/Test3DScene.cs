@@ -1,7 +1,7 @@
 using Godot;
 
 namespace Utilities;
-public partial class Test2DScene : Node2D
+public partial class Test3DScene : Node3D
 {
 	[Export]
 	public Control pauseMenu;

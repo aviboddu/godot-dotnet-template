@@ -6,6 +6,7 @@ public partial class PauseMenu : Control
 	[Export]
 	public Node ContainingScene;
 
+	[ExportGroup("Internal")]
 	[Export]
 	public LoadScene QuitToMainMenuButton;
 
@@ -21,6 +22,10 @@ public partial class PauseMenu : Control
 	public override void _Ready()
 	{
 		QuitToMainMenuButton.sceneToUnload = ContainingScene;
+
+		Callable mainMenuUnpause = new(this, MethodName._main_menu_unpause);
+		if (!QuitToMainMenuButton.IsConnected(Button.SignalName.Pressed, mainMenuUnpause))
+			QuitToMainMenuButton.Connect(Button.SignalName.Pressed, mainMenuUnpause);
 	}
 
 	public void _on_resume_pressed()
@@ -41,8 +46,7 @@ public partial class PauseMenu : Control
 		MainPauseMenu.Visible = false;
 	}
 
-	public void _on_quit_to_os_pressed()
-	{
-		GetTree().Quit();
-	}
+	public void _on_quit_to_os_pressed() => GetTree().Quit();
+
+	private void _main_menu_unpause() => Engine.TimeScale = 1;
 }
