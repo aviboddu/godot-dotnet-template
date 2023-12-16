@@ -39,7 +39,7 @@ text = "Settings"
 layout_mode = 2
 text = "Quit to Main Menu"
 script = ExtResource("1_u8u0p")
-sceneToLoad = NodePath("res://ui/main_menu/main_menu.tscn")
+sceneToLoad = "res://ui/main_menu/main_menu.tscn"
 
 [node name="Quit To OS" type="Button" parent="CenterContainer/MainPauseMenu"]
 layout_mode = 2

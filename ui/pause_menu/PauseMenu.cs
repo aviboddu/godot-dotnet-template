@@ -4,7 +4,7 @@ namespace UI;
 public partial class PauseMenu : Control
 {
 	[Export]
-	public NodePath ContainingScene;
+	public Node ContainingScene;
 
 	[Export]
 	public LoadScene QuitToMainMenuButton;
@@ -13,14 +13,14 @@ public partial class PauseMenu : Control
 	public Settings settings;
 
 	[Export]
-	public VBoxContainer MainPauseMenu;
+	public Control MainPauseMenu;
 
 	public float TimeScaleToReturn { get; set; } = 1f;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		QuitToMainMenuButton.sceneToUnload = GetNode(ContainingScene).GetPath();
+		QuitToMainMenuButton.sceneToUnload = ContainingScene;
 	}
 
 	public void _on_resume_pressed()

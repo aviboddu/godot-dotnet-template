@@ -6,11 +6,11 @@ public partial class LoadScene : Button
 {
 	const string LOADING_SCREEN_PATH = "res://ui/loading_screen/LoadingScreen.tscn";
 
-	[Export]
-	public NodePath sceneToLoad;
+	[Export(PropertyHint.File, "*.tscn")]
+	public string sceneToLoad;
 
 	[Export]
-	public NodePath sceneToUnload;
+	public Node sceneToUnload;
 
 	public override void _Ready()
 	{
@@ -25,7 +25,7 @@ public partial class LoadScene : Button
 	{
 		if (sceneToLoad is not null)
 		{
-			GetNode(sceneToUnload).QueueFree();
+			sceneToUnload.QueueFree();
 			Logger.Instance.WriteDebug($"LoadScene::_on_pressed() - Loading {sceneToLoad}");
 			LoadingScreen loadingScreen = GD.Load<PackedScene>(LOADING_SCREEN_PATH).Instantiate<LoadingScreen>();
 			loadingScreen.ScenePath = sceneToLoad;
