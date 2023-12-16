@@ -29,9 +29,6 @@ public partial class VolumeSetting : HBoxContainer
 	{
 		Callable dragEnded = new(this, MethodName._on_drag_ended);
 		Callable valueChanged = new(this, MethodName._on_value_changed);
-		Logger.Instance.WriteInfo(Slider.SignalName.DragEnded);
-		Logger.Instance.WriteInfo(dragEnded);
-		Logger.Instance.WriteInfo(volumeSlider);
 		if (volumeSlider.IsConnected(Slider.SignalName.DragEnded, dragEnded))
 			volumeSlider.Connect(Slider.SignalName.DragEnded, dragEnded);
 		if (volumeSlider.IsConnected(Slider.SignalName.ValueChanged, valueChanged))
