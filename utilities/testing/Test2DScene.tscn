@@ -1,7 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://ctax2n635eift"]
+[gd_scene load_steps=5 format=3 uid="uid://ctax2n635eift"]
 
 [ext_resource type="Texture2D" uid="uid://bxju8hbaatmsu" path="res://icon.svg" id="1_3lvaw"]
-[ext_resource type="Script" path="res://utilities/testing/Test2DScene.cs" id="1_3pwhi"]
 [ext_resource type="PackedScene" uid="uid://dyra5rvytwc1g" path="res://ui/pause_menu/pause_menu.tscn" id="2_d0q6i"]
 
 [sub_resource type="Animation" id="Animation_15arm"]
@@ -26,9 +25,7 @@ _data = {
 "RotateSprite": SubResource("Animation_15arm")
 }
 
-[node name="Test2dScene" type="Node2D" node_paths=PackedStringArray("pauseMenu")]
-script = ExtResource("1_3pwhi")
-pauseMenu = NodePath("PauseMenu")
+[node name="Test2dScene" type="Node2D"]
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(960, 540)
@@ -41,6 +38,7 @@ libraries = {
 autoplay = "RotateSprite"
 
 [node name="PauseMenu" parent="." node_paths=PackedStringArray("ContainingScene") instance=ExtResource("2_d0q6i")]
+process_mode = 3
 visible = false
 offset_left = 960.0
 offset_top = 540.0

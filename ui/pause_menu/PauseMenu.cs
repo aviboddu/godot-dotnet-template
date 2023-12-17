@@ -1,4 +1,5 @@
 using Godot;
+using Utilities;
 
 namespace UI;
 public partial class PauseMenu : Control
@@ -22,9 +23,22 @@ public partial class PauseMenu : Control
 	{
 		QuitToMainMenuButton.sceneToUnload = ContainingScene;
 
-		Callable mainMenuUnpause = new(this, MethodName._main_menu_unpause);
+		Callable mainMenuUnpause = new(this, MethodName.UnPause);
 		if (!QuitToMainMenuButton.IsConnected(Button.SignalName.Pressed, mainMenuUnpause))
 			QuitToMainMenuButton.Connect(Button.SignalName.Pressed, mainMenuUnpause);
+	}
+
+	public override void _Input(InputEvent @event)
+	{
+		base._Input(@event);
+		if (@event is InputEventKey key)
+		{
+			if (key.IsActionPressed("Pause"))
+				if (GetTree().Paused)
+					UnPause();
+				else
+					Pause();
+		}
 	}
 
 	public void _on_back_pressed()
@@ -41,22 +55,21 @@ public partial class PauseMenu : Control
 
 	public void _on_quit_to_os_pressed() => GetTree().Quit();
 
-	private void _main_menu_unpause() => Engine.TimeScale = 1;
-
-	public void Pause(float timeScaleToReturn = 1f)
+	public void Pause()
 	{
+		Logger.WriteInfo($"PauseMenu::Pause() - Game paused");
 		Visible = true;
-		TimeScaleToReturn = timeScaleToReturn;
-		Engine.TimeScale = 0;
+		GetTree().Paused = true;
 	}
 
 	public void UnPause()
 	{
+		Logger.WriteInfo($"PauseMenu::UnPause() - Game unpaused");
 		// Ensures next pause will be from normal state
 		settings.Visible = false;
 		MainPauseMenu.Visible = true;
 
 		Visible = false;
-		Engine.TimeScale = TimeScaleToReturn;
+		GetTree().Paused = false;
 	}
 }

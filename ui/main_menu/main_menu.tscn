@@ -26,9 +26,16 @@ grow_vertical = 2
 [node name="Start Menu" type="VBoxContainer" parent="CenterContainer"]
 layout_mode = 2
 
-[node name="Play" type="Button" parent="CenterContainer/Start Menu" node_paths=PackedStringArray("sceneToUnload")]
+[node name="Play2D" type="Button" parent="CenterContainer/Start Menu" node_paths=PackedStringArray("sceneToUnload")]
 layout_mode = 2
-text = "Play"
+text = "Play 2D Scene"
+script = ExtResource("2_lluh2")
+sceneToLoad = "res://utilities/testing/Test2DScene.tscn"
+sceneToUnload = NodePath("../../..")
+
+[node name="Play3D" type="Button" parent="CenterContainer/Start Menu" node_paths=PackedStringArray("sceneToUnload")]
+layout_mode = 2
+text = "Play 3D Scene"
 script = ExtResource("2_lluh2")
 sceneToLoad = "res://utilities/testing/Test3DScene.tscn"
 sceneToUnload = NodePath("../../..")

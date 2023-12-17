@@ -1,6 +1,5 @@
-[gd_scene load_steps=15 format=3 uid="uid://cqfa8jqytmyng"]
+[gd_scene load_steps=14 format=3 uid="uid://cqfa8jqytmyng"]
 
-[ext_resource type="Script" path="res://utilities/testing/Test3DScene.cs" id="1_b6tjy"]
 [ext_resource type="PackedScene" uid="uid://dyra5rvytwc1g" path="res://ui/pause_menu/pause_menu.tscn" id="1_dn4u2"]
 
 [sub_resource type="Animation" id="Animation_7cny2"]
@@ -59,12 +58,9 @@ material = SubResource("StandardMaterial3D_n0pyp")
 subdivide_width = 16
 subdivide_depth = 16
 
-[node name="Test3dScene" type="Node3D" node_paths=PackedStringArray("pauseMenu")]
-script = ExtResource("1_b6tjy")
-pauseMenu = NodePath("PauseMenu")
+[node name="Test3dScene" type="Node3D"]
 
 [node name="Label3D" type="Label3D" parent="."]
-transform = Transform3D(-1, 0, -1.50996e-07, 0, 1, 0, 1.50996e-07, 0, -1, 0, 0, 0)
 text = "Test Scene 3D"
 
 [node name="Camera3D" type="Camera3D" parent="."]
@@ -84,5 +80,6 @@ mesh = SubResource("PlaneMesh_q7dhk")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.04307, -0.218112)
 
 [node name="PauseMenu" parent="." node_paths=PackedStringArray("ContainingScene") instance=ExtResource("1_dn4u2")]
+process_mode = 3
 visible = false
 ContainingScene = NodePath("..")
