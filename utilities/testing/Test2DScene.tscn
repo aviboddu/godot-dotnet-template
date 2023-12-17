@@ -37,10 +37,7 @@ libraries = {
 }
 autoplay = "RotateSprite"
 
-[node name="PauseMenu" parent="." instance=ExtResource("2_d0q6i")]
-process_mode = 3
-visible = false
-offset_left = 960.0
-offset_top = 540.0
-offset_right = 960.0
-offset_bottom = 540.0
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 0
+
+[node name="PauseMenu" parent="CanvasLayer" instance=ExtResource("2_d0q6i")]

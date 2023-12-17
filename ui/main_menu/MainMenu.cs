@@ -4,11 +4,15 @@ using Utilities;
 namespace UI;
 public partial class MainMenu : Control
 {
-	[Export]
-	Control Settings;
+	private Control Settings;
+	private Control StartMenu;
 
-	[Export]
-	Control StartMenu;
+	public override void _Ready()
+	{
+		base._Ready();
+		Settings = GetNode<Control>("%Settings");
+		StartMenu = GetNode<Control>("%StartMenu");
+	}
 
 	public void _on_settings_pressed()
 	{

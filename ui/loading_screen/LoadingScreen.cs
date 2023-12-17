@@ -9,8 +9,7 @@ public partial class LoadingScreen : Control
 	[Export(PropertyHint.File, "*.tscn")]
 	public string ScenePath { get; set; }
 
-	[Export]
-	public ProgressBar progressBar;
+	private ProgressBar progressBar;
 
 	private Array progressPercentage;
 
@@ -20,10 +19,12 @@ public partial class LoadingScreen : Control
 
 	public override void _Ready()
 	{
+		base._Ready();
 		Debug.Assert(ScenePath is not null, $"LoadingScreen::_Ready() - {PropertyName.ScenePath} is null");
 #if DEBUG
 		startTime = Time.GetTicksMsec();
 #endif
+		progressBar = GetNode<ProgressBar>("%ProgressBar");
 		progressPercentage = [];
 		progressPercentage.Resize(1);
 		progressBar.Value = 0;

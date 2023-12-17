@@ -4,51 +4,68 @@
 [ext_resource type="Script" path="res://ui/pause_menu/PauseMenu.cs" id="1_pnte5"]
 [ext_resource type="Script" path="res://ui/loading_screen/LoadScene.cs" id="1_u8u0p"]
 
-[node name="PauseMenu" type="Control" node_paths=PackedStringArray("settings", "MainPauseMenu")]
+[node name="PauseMenu" type="Control"]
 process_mode = 2
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_pnte5")
-settings = NodePath("CenterContainer/Settings Container")
-MainPauseMenu = NodePath("CenterContainer/MainPauseMenu")
 
-[node name="CenterContainer" type="CenterContainer" parent="."]
+[node name="MainPauseMenu" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -77.0
+offset_top = -68.0
+offset_right = 77.0
+offset_bottom = 68.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="MainPauseMenu" type="VBoxContainer" parent="CenterContainer"]
-layout_mode = 2
-
-[node name="Resume" type="Button" parent="CenterContainer/MainPauseMenu"]
+[node name="Resume" type="Button" parent="MainPauseMenu"]
 layout_mode = 2
 text = "Resume"
 
-[node name="Settings" type="Button" parent="CenterContainer/MainPauseMenu"]
+[node name="Settings" type="Button" parent="MainPauseMenu"]
 layout_mode = 2
 text = "Settings"
 
-[node name="Quit To Main Menu" type="Button" parent="CenterContainer/MainPauseMenu"]
+[node name="Quit To Main Menu" type="Button" parent="MainPauseMenu"]
 layout_mode = 2
 text = "Quit to Main Menu"
 script = ExtResource("1_u8u0p")
 sceneToLoad = "res://ui/main_menu/main_menu.tscn"
 
-[node name="Quit To OS" type="Button" parent="CenterContainer/MainPauseMenu"]
+[node name="Quit To OS" type="Button" parent="MainPauseMenu"]
 layout_mode = 2
 text = "Quit to OS"
 
-[node name="Settings Container" parent="CenterContainer" instance=ExtResource("1_6whtp")]
-layout_mode = 2
+[node name="Settings" parent="." instance=ExtResource("1_6whtp")]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -283.0
+offset_right = 250.0
+offset_bottom = 283.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[connection signal="pressed" from="CenterContainer/MainPauseMenu/Resume" to="." method="UnPause"]
-[connection signal="pressed" from="CenterContainer/MainPauseMenu/Settings" to="." method="_on_settings_pressed"]
-[connection signal="pressed" from="CenterContainer/MainPauseMenu/Quit To Main Menu" to="." method="UnPause"]
-[connection signal="pressed" from="CenterContainer/MainPauseMenu/Quit To OS" to="." method="_on_quit_to_os_pressed"]
+[connection signal="pressed" from="MainPauseMenu/Resume" to="." method="UnPause"]
+[connection signal="pressed" from="MainPauseMenu/Settings" to="." method="_on_settings_pressed"]
+[connection signal="pressed" from="MainPauseMenu/Quit To Main Menu" to="." method="UnPause"]
+[connection signal="pressed" from="MainPauseMenu/Quit To OS" to="." method="_on_quit_to_os_pressed"]
+[connection signal="BackPressed" from="Settings" to="." method="_on_back_pressed"]

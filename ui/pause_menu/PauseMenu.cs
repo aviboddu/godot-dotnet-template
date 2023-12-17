@@ -4,14 +4,15 @@ using Utilities;
 namespace UI;
 public partial class PauseMenu : Control
 {
-	[ExportGroup("Internal")]
-	[Export]
-	public Settings settings;
+	private Settings settings;
+	private Control MainPauseMenu;
 
-	[Export]
-	public Control MainPauseMenu;
-
-	public float TimeScaleToReturn { get; set; } = 1f;
+	public override void _Ready()
+	{
+		base._Ready();
+		settings = GetNode<Settings>("%Settings");
+		MainPauseMenu = GetNode<Control>("%MainPauseMenu");
+	}
 
 	public override void _Input(InputEvent @event)
 	{
