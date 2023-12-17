@@ -10,6 +10,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_hj1n0")
+ScenePath = null
 progressBar = NodePath("Container/LoadingProgress")
 
 [node name="Container" type="MarginContainer" parent="."]

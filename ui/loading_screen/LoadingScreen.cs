@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Godot;
 using Godot.Collections;
 using Utilities;
@@ -19,6 +20,7 @@ public partial class LoadingScreen : Control
 
 	public override void _Ready()
 	{
+		Debug.Assert(ScenePath is not null, $"LoadingScreen::_Ready() - {PropertyName.ScenePath} is null");
 #if DEBUG
 		startTime = Time.GetTicksMsec();
 #endif
@@ -34,15 +36,25 @@ public partial class LoadingScreen : Control
 		switch (loadStatus)
 		{
 			case ResourceLoader.ThreadLoadStatus.Loaded:
-				Logger.WriteInfo($"LoadingScreen::_Process - Successfully loaded {ScenePath}");
-				GetTree().Root.AddChild(((PackedScene)ResourceLoader.LoadThreadedGet(ScenePath)).Instantiate());
-				QueueFree();
+				Error err = GetTree().ChangeSceneToPacked((PackedScene)ResourceLoader.LoadThreadedGet(ScenePath));
+				switch (err)
+				{
+					case Error.Ok:
+						Logger.WriteInfo($"LoadingScreen::_Process - Successfully loaded {ScenePath}");
+						break;
+					case Error.CantCreate:
+						Logger.WriteError($"LoadingScreen::_Process - Failed to load {ScenePath}");
+						break;
+					case Error.InvalidParameter:
+						Logger.WriteError($"LoadingScreen::_Process - {ScenePath} is invalid");
+						break;
+				}
 #if DEBUG
 				Logger.WriteDebug($"LoadingScreen::_Process - Time to load {ScenePath} = {Time.GetTicksMsec() - startTime} ms");
 #endif
 				break;
 			case ResourceLoader.ThreadLoadStatus.InProgress:
-				progressBar.Value = (double)progressPercentage[0];
+				progressBar.Value = (double)progressPercentage[0] * 100;
 				break;
 			case ResourceLoader.ThreadLoadStatus.InvalidResource:
 				Logger.WriteError($"LoadingScreen::_Process - {ScenePath} is invalid");

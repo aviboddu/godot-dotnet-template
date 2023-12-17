@@ -4,13 +4,7 @@ using Utilities;
 namespace UI;
 public partial class PauseMenu : Control
 {
-	[Export]
-	public Node ContainingScene;
-
 	[ExportGroup("Internal")]
-	[Export]
-	public LoadScene QuitToMainMenuButton;
-
 	[Export]
 	public Settings settings;
 
@@ -18,15 +12,6 @@ public partial class PauseMenu : Control
 	public Control MainPauseMenu;
 
 	public float TimeScaleToReturn { get; set; } = 1f;
-
-	public override void _Ready()
-	{
-		QuitToMainMenuButton.sceneToUnload = ContainingScene;
-
-		Callable mainMenuUnpause = new(this, MethodName.UnPause);
-		if (!QuitToMainMenuButton.IsConnected(Button.SignalName.Pressed, mainMenuUnpause))
-			QuitToMainMenuButton.Connect(Button.SignalName.Pressed, mainMenuUnpause);
-	}
 
 	public override void _Input(InputEvent @event)
 	{
@@ -65,6 +50,7 @@ public partial class PauseMenu : Control
 	public void UnPause()
 	{
 		Logger.WriteInfo($"PauseMenu::UnPause() - Game unpaused");
+
 		// Ensures next pause will be from normal state
 		settings.Visible = false;
 		MainPauseMenu.Visible = true;

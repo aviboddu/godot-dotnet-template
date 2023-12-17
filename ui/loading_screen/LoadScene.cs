@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Godot;
 using Utilities;
 
@@ -9,11 +10,10 @@ public partial class LoadScene : Button
 	[Export(PropertyHint.File, "*.tscn")]
 	public string sceneToLoad;
 
-	[Export]
-	public Node sceneToUnload;
-
 	public override void _Ready()
 	{
+		Debug.Assert(sceneToLoad is not null, $"LoadScene::_Ready() - {PropertyName.sceneToLoad} is null");
+
 		base._Ready();
 
 		Callable onPressed = new(this, MethodName._on_pressed);
@@ -23,13 +23,13 @@ public partial class LoadScene : Button
 
 	public void _on_pressed()
 	{
-		if (sceneToLoad is not null)
-		{
-			sceneToUnload.QueueFree();
-			Logger.WriteDebug($"LoadScene::_on_pressed() - Loading {sceneToLoad}");
-			LoadingScreen loadingScreen = GD.Load<PackedScene>(LOADING_SCREEN_PATH).Instantiate<LoadingScreen>();
-			loadingScreen.ScenePath = sceneToLoad;
-			GetTree().Root.AddChild(loadingScreen);
-		}
+		Logger.WriteDebug($"LoadScene::_on_pressed() - Loading {sceneToLoad}");
+		LoadingScreen loadingScreen = ResourceLoader.Load<PackedScene>(LOADING_SCREEN_PATH).Instantiate<LoadingScreen>();
+		loadingScreen.ScenePath = sceneToLoad;
+
+		Node CurrentScene = GetTree().Root.GetChild(GetTree().Root.GetChildCount() - 1);
+		GetTree().Root.AddChild(loadingScreen);
+		GetTree().CurrentScene = loadingScreen;
+		CurrentScene.QueueFree();
 	}
 }

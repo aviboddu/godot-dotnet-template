@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://ui/pause_menu/PauseMenu.cs" id="1_pnte5"]
 [ext_resource type="Script" path="res://ui/loading_screen/LoadScene.cs" id="1_u8u0p"]
 
-[node name="PauseMenu" type="Control" node_paths=PackedStringArray("QuitToMainMenuButton", "settings", "MainPauseMenu")]
+[node name="PauseMenu" type="Control" node_paths=PackedStringArray("settings", "MainPauseMenu")]
 process_mode = 2
 layout_mode = 3
 anchors_preset = 15
@@ -13,7 +13,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_pnte5")
-QuitToMainMenuButton = NodePath("CenterContainer/MainPauseMenu/Quit To Main Menu")
 settings = NodePath("CenterContainer/Settings Container")
 MainPauseMenu = NodePath("CenterContainer/MainPauseMenu")
 
@@ -51,5 +50,5 @@ layout_mode = 2
 
 [connection signal="pressed" from="CenterContainer/MainPauseMenu/Resume" to="." method="UnPause"]
 [connection signal="pressed" from="CenterContainer/MainPauseMenu/Settings" to="." method="_on_settings_pressed"]
+[connection signal="pressed" from="CenterContainer/MainPauseMenu/Quit To Main Menu" to="." method="UnPause"]
 [connection signal="pressed" from="CenterContainer/MainPauseMenu/Quit To OS" to="." method="_on_quit_to_os_pressed"]
-[connection signal="BackPressed" from="CenterContainer/Settings Container" to="." method="_on_back_pressed"]
