@@ -18,7 +18,6 @@ public partial class PauseMenu : Control
 
 	public float TimeScaleToReturn { get; set; } = 1f;
 
-	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		QuitToMainMenuButton.sceneToUnload = ContainingScene;
@@ -26,12 +25,6 @@ public partial class PauseMenu : Control
 		Callable mainMenuUnpause = new(this, MethodName._main_menu_unpause);
 		if (!QuitToMainMenuButton.IsConnected(Button.SignalName.Pressed, mainMenuUnpause))
 			QuitToMainMenuButton.Connect(Button.SignalName.Pressed, mainMenuUnpause);
-	}
-
-	public void _on_resume_pressed()
-	{
-		Engine.TimeScale = TimeScaleToReturn;
-		Visible = false;
 	}
 
 	public void _on_back_pressed()
@@ -49,4 +42,21 @@ public partial class PauseMenu : Control
 	public void _on_quit_to_os_pressed() => GetTree().Quit();
 
 	private void _main_menu_unpause() => Engine.TimeScale = 1;
+
+	public void Pause(float timeScaleToReturn = 1f)
+	{
+		Visible = true;
+		TimeScaleToReturn = timeScaleToReturn;
+		Engine.TimeScale = 0;
+	}
+
+	public void UnPause()
+	{
+		// Ensures next pause will be from normal state
+		settings.Visible = false;
+		MainPauseMenu.Visible = true;
+
+		Visible = false;
+		Engine.TimeScale = TimeScaleToReturn;
+	}
 }

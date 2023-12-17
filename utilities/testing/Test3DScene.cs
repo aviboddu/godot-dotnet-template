@@ -1,10 +1,11 @@
 using Godot;
+using UI;
 
 namespace Utilities;
 public partial class Test3DScene : Node3D
 {
 	[Export]
-	public Control pauseMenu;
+	public PauseMenu pauseMenu;
 
 	public override void _Input(InputEvent @event)
 	{
@@ -12,16 +13,10 @@ public partial class Test3DScene : Node3D
 		if (@event is InputEventKey key)
 		{
 			if (key.IsActionPressed("Pause"))
-				Pause();
-		}
-	}
-
-	private void Pause()
-	{
-		if (!pauseMenu.Visible && Input.IsActionJustPressed("Pause"))
-		{
-			pauseMenu.Visible = true;
-			Engine.TimeScale = 0;
+				if (pauseMenu.Visible)
+					pauseMenu.UnPause();
+				else
+					pauseMenu.Pause();
 		}
 	}
 }

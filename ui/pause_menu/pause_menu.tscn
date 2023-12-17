@@ -48,7 +48,7 @@ text = "Quit to OS"
 [node name="Settings Container" parent="CenterContainer" instance=ExtResource("1_6whtp")]
 layout_mode = 2
 
-[connection signal="pressed" from="CenterContainer/MainPauseMenu/Resume" to="." method="_on_resume_pressed"]
+[connection signal="pressed" from="CenterContainer/MainPauseMenu/Resume" to="." method="UnPause"]
 [connection signal="pressed" from="CenterContainer/MainPauseMenu/Settings" to="." method="_on_settings_pressed"]
 [connection signal="pressed" from="CenterContainer/MainPauseMenu/Quit To OS" to="." method="_on_quit_to_os_pressed"]
 [connection signal="BackPressed" from="CenterContainer/Settings Container" to="." method="_on_back_pressed"]
