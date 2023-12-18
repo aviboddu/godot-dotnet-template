@@ -6,7 +6,7 @@ public static class Miscellaneous
 {
 	public static bool IsValid<T>(this T node) where T : GodotObject
 	{
-		return node != null
+		return node is not null
 				&& GodotObject.IsInstanceValid(node)
 				&& !node.IsQueuedForDeletion();
 	}
