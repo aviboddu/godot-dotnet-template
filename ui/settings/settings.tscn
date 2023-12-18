@@ -6,7 +6,7 @@
 [ext_resource type="Script" path="res://ui/settings/WindowModeSetting.cs" id="4_dbqe7"]
 [ext_resource type="Script" path="res://ui/settings/VSyncSetting.cs" id="5_ksbo5"]
 [ext_resource type="Script" path="res://ui/settings/MaximumFramerateSetting.cs" id="6_rhmth"]
-[ext_resource type="Script" path="res://ui/settings/VolumeSetting.cs" id="7_nwmg5"]
+[ext_resource type="PackedScene" uid="uid://daul3nlbhnenl" path="res://ui/settings/volume_slider.tscn" id="7_6rmts"]
 
 [node name="Settings Container" type="VBoxContainer"]
 visible = false
@@ -125,75 +125,16 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Master Volume" type="HBoxContainer" parent="Settings/Audio/Audio Settings" node_paths=PackedStringArray("volumeSlider", "volumeLabel")]
+[node name="Master Volume" parent="Settings/Audio/Audio Settings" instance=ExtResource("7_6rmts")]
 layout_mode = 2
-script = ExtResource("7_nwmg5")
-volumeSlider = NodePath("Master Volume Slider")
-volumeLabel = NodePath("Master Volume Value")
 
-[node name="Master Volume Label" type="Label" parent="Settings/Audio/Audio Settings/Master Volume"]
+[node name="Music Volume" parent="Settings/Audio/Audio Settings" instance=ExtResource("7_6rmts")]
 layout_mode = 2
-text = "Master Volume"
+volumeName = "MusicVolume"
 
-[node name="Master Volume Value" type="Label" parent="Settings/Audio/Audio Settings/Master Volume"]
+[node name="SFX Volume" parent="Settings/Audio/Audio Settings" instance=ExtResource("7_6rmts")]
 layout_mode = 2
-size_flags_horizontal = 10
-size_flags_vertical = 0
-size_flags_stretch_ratio = 2.0
-text = "0"
-
-[node name="Master Volume Slider" type="HSlider" parent="Settings/Audio/Audio Settings/Master Volume"]
-custom_minimum_size = Vector2(150, 0)
-layout_mode = 2
-size_flags_horizontal = 10
-tick_count = 10
-ticks_on_borders = true
-
-[node name="Music Volume" type="HBoxContainer" parent="Settings/Audio/Audio Settings" node_paths=PackedStringArray("volumeSlider", "volumeLabel")]
-layout_mode = 2
-script = ExtResource("7_nwmg5")
-volumeSlider = NodePath("Music Volume Slider")
-volumeLabel = NodePath("Music Volume Value")
-volumeName = 1
-
-[node name="Music Volume Label" type="Label" parent="Settings/Audio/Audio Settings/Music Volume"]
-layout_mode = 2
-text = "Music Volume"
-
-[node name="Music Volume Value" type="Label" parent="Settings/Audio/Audio Settings/Music Volume"]
-layout_mode = 2
-size_flags_horizontal = 10
-size_flags_stretch_ratio = 2.0
-text = "0"
-
-[node name="Music Volume Slider" type="HSlider" parent="Settings/Audio/Audio Settings/Music Volume"]
-custom_minimum_size = Vector2(150, 0)
-layout_mode = 2
-size_flags_horizontal = 10
-tick_count = 10
-
-[node name="SFX Volume" type="HBoxContainer" parent="Settings/Audio/Audio Settings" node_paths=PackedStringArray("volumeSlider", "volumeLabel")]
-layout_mode = 2
-script = ExtResource("7_nwmg5")
-volumeSlider = NodePath("SFX Volume Slider")
-volumeLabel = NodePath("SFX Volume Value")
-volumeName = 2
-
-[node name="SFX Volume Label" type="Label" parent="Settings/Audio/Audio Settings/SFX Volume"]
-layout_mode = 2
-text = "SFX Volume"
-
-[node name="SFX Volume Value" type="Label" parent="Settings/Audio/Audio Settings/SFX Volume"]
-layout_mode = 2
-size_flags_horizontal = 10
-size_flags_stretch_ratio = 2.0
-text = "0"
-
-[node name="SFX Volume Slider" type="HSlider" parent="Settings/Audio/Audio Settings/SFX Volume"]
-custom_minimum_size = Vector2(150, 0)
-layout_mode = 2
-size_flags_horizontal = 10
-tick_count = 10
+volumeName = "SfxVolume"
 
 [node name="Input" type="ScrollContainer" parent="Settings"]
 visible = false
@@ -208,7 +149,7 @@ layout_mode = 2
 
 [node name="Example Control Listing" type="Label" parent="Settings/Input/Input Settings"]
 layout_mode = 2
-text = "[Example] Jump - Space"
+text = "[Example] Pause - P"
 
 [node name="Back" type="Button" parent="."]
 layout_mode = 2

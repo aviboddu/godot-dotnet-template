@@ -1,7 +1,7 @@
 using Godot;
 
 namespace UI;
-public partial class ResolutionSetting : VideoDropDownSetting<Vector2I>
+public partial class ResolutionSetting : VideoDropDownSetting
 {
 	public override void _Ready()
 	{
@@ -9,9 +9,13 @@ public partial class ResolutionSetting : VideoDropDownSetting<Vector2I>
 		base._Ready();
 	}
 
-	protected override string PropertyToString(Vector2I resolution) => $"{resolution.X}x{resolution.Y}";
+	protected override string PropertyToString(Variant prop)
+	{
+		Vector2I resolution = prop.As<Vector2I>();
+		return $"{resolution.X}x{resolution.Y}";
+	}
 
-	protected override Vector2I StringToProperty(string s)
+	protected override Variant StringToProperty(string s)
 	{
 		string[] split = s.Split('x', 2);
 		return new Vector2I(int.Parse(split[0]), int.Parse(split[1]));

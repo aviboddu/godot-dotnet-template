@@ -1,0 +1,29 @@
+[gd_scene load_steps=2 format=3 uid="uid://daul3nlbhnenl"]
+
+[ext_resource type="Script" path="res://ui/settings/VolumeSetting.cs" id="1_cqdpd"]
+
+[node name="Volume" type="HBoxContainer"]
+script = ExtResource("1_cqdpd")
+volumeName = "MasterVolume"
+
+[node name="Volume Label" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Master Volume"
+
+[node name="Volume Value" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 0
+size_flags_stretch_ratio = 2.0
+text = "0"
+
+[node name="Volume Slider" type="HSlider" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+rounded = true
+tick_count = 10
+ticks_on_borders = true

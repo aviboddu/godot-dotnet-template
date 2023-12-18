@@ -15,32 +15,27 @@ public partial class VideoManager : Node
 	};
 
 	private const string VIDEO_SECTION = "Video";
-
-	private Vector2I _resolution = -Vector2I.One; // Deliberately set to bad values
 	public Vector2I Resolution
 	{
-		get => _resolution;
+		get => GetWindow().Size;
 		set => SetResolution(value, false);
 	}
 
-	private int _refreshRate = -1;
 	public int RefreshRate
 	{
-		get => _refreshRate;
+		get => Engine.MaxFps;
 		set => SetRefreshRate(value, false);
 	}
 
-	private ScreenMode _windowMode;
 	public ScreenMode WindowMode
 	{
-		get => _windowMode;
+		get => GetScreenMode();
 		set => SetWindowMode(value, false);
 	}
 
-	private DisplayServer.VSyncMode _vsyncMode;
 	public DisplayServer.VSyncMode VSyncMode
 	{
-		get => _vsyncMode;
+		get => DisplayServer.WindowGetVsyncMode();
 		set => SetVsyncMode(value, false);
 	}
 
@@ -75,17 +70,14 @@ public partial class VideoManager : Node
 			Logger.WriteInfo("VideoManager::_Ready() - Default Initialization");
 
 			// Initialize without calling video configuration methods
-			_windowMode = GetScreenMode();
-			Configuration.Instance.ChangeSetting(VIDEO_SECTION, PropertyName.WindowMode, (int)_windowMode, false);
+			Configuration.Instance.ChangeSetting(VIDEO_SECTION, PropertyName.WindowMode, (int)GetScreenMode(), false);
 
-			_refreshRate = Engine.MaxFps;
-			Configuration.Instance.ChangeSetting(VIDEO_SECTION, PropertyName.RefreshRate, _refreshRate, false);
+			Configuration.Instance.ChangeSetting(VIDEO_SECTION, PropertyName.RefreshRate, RefreshRate, false);
 
-			_vsyncMode = DisplayServer.WindowGetVsyncMode();
 			Configuration.Instance.ChangeSetting(VIDEO_SECTION, PropertyName.VSyncMode, (int)VSyncMode, false);
 
-			_resolution = DisplayServer.ScreenGetSize();
-			Configuration.Instance.ChangeSetting(VIDEO_SECTION, PropertyName.Resolution, _resolution, false);
+			;
+			Configuration.Instance.ChangeSetting(VIDEO_SECTION, PropertyName.Resolution, GetWindow().Size, false);
 		}
 
 #if DEBUG
@@ -98,7 +90,6 @@ public partial class VideoManager : Node
 	{
 		Debug.Assert(value.Sign().Equals(Vector2I.One), $"VideoManager::SetResolution({value}, {saveNow}) - {value} must be positive in both axes");
 		Configuration.Instance.ChangeSetting(VIDEO_SECTION, PropertyName.Resolution, value, saveNow);
-		_resolution = value;
 		GetWindow().Size = value;
 	}
 
@@ -106,7 +97,6 @@ public partial class VideoManager : Node
 	{
 		Debug.Assert(value >= 0, $"VideoManager::SetRefreshRate({value}, {saveNow}) - {value} must be greater than or equal to zero");
 		Configuration.Instance.ChangeSetting(VIDEO_SECTION, PropertyName.RefreshRate, value, saveNow);
-		_refreshRate = value;
 		Engine.MaxFps = value;
 	}
 
@@ -136,13 +126,11 @@ public partial class VideoManager : Node
 				return;
 		}
 		Configuration.Instance.ChangeSetting(VIDEO_SECTION, PropertyName.WindowMode, (int)value, saveNow);
-		_windowMode = value;
 	}
 
 	private void SetVsyncMode(DisplayServer.VSyncMode value, bool saveNow)
 	{
 		Configuration.Instance.ChangeSetting(VIDEO_SECTION, PropertyName.VSyncMode, (int)value, saveNow);
-		_vsyncMode = value;
 		DisplayServer.WindowSetVsyncMode(value);
 	}
 

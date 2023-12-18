@@ -3,7 +3,7 @@ using Godot;
 using Utilities;
 
 namespace UI;
-public abstract partial class VideoDropDownSetting<[MustBeVariant] T> : Node
+public abstract partial class VideoDropDownSetting : Node
 {
 	[Export]
 	public OptionButton dropDown;
@@ -18,7 +18,7 @@ public abstract partial class VideoDropDownSetting<[MustBeVariant] T> : Node
 		if (!dropDown.IsConnected(OptionButton.SignalName.ItemSelected, valueSelected))
 			dropDown.Connect(OptionButton.SignalName.ItemSelected, valueSelected);
 
-		string res = PropertyToString(VideoManager.Instance.GetIndexed(property).As<T>());
+		string res = PropertyToString(VideoManager.Instance.GetIndexed(property));
 		for (int i = 0; i < dropDown.ItemCount; i++)
 		{
 			if (res.Equals(dropDown.GetItemText(i)))
@@ -32,9 +32,9 @@ public abstract partial class VideoDropDownSetting<[MustBeVariant] T> : Node
 	public void _on_value_selected(long idx)
 	{
 		Logger.WriteInfo($"{GetClass()}::_on_value_selected({idx}) - User selected resolution {idx}");
-		VideoManager.Instance.SetDeferred(property.ToString(), Variant.From(StringToProperty(dropDown.GetItemText((int)idx))));
+		VideoManager.Instance.SetDeferred(property, StringToProperty(dropDown.GetItemText((int)idx)));
 	}
 
-	protected abstract string PropertyToString(T property);
-	protected abstract T StringToProperty(string s);
+	protected abstract string PropertyToString(Variant property);
+	protected abstract Variant StringToProperty(string s);
 }
