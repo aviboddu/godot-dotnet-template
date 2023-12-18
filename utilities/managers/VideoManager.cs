@@ -1,18 +1,17 @@
-using System;
 using System.Diagnostics;
 using Godot;
 
 namespace Utilities;
 public partial class VideoManager : Node
 {
-	public enum WinMode
+	public enum WinMode : long
 	{
-		ExclusiveFullscreen,
-		Fullscreen,
-		BorderlessWindowed,
-		Windowed,
-		Maximized,
-		Minimized
+		ExclusiveFullscreen = Window.ModeEnum.ExclusiveFullscreen,
+		Fullscreen = Window.ModeEnum.Fullscreen,
+		Windowed = Window.ModeEnum.Windowed,
+		Maximized = Window.ModeEnum.Maximized,
+		Minimized = Window.ModeEnum.Minimized,
+		BorderlessWindowed = -1
 	};
 
 	private const string VIDEO_SECTION = "Video";
@@ -46,29 +45,18 @@ public partial class VideoManager : Node
 			Window.ModeEnum modeEnum = GetWindow().Mode;
 			switch (modeEnum)
 			{
-				case Window.ModeEnum.ExclusiveFullscreen:
-					return WinMode.ExclusiveFullscreen;
-				case Window.ModeEnum.Fullscreen:
-					return WinMode.Fullscreen;
-				case Window.ModeEnum.Minimized:
-					return WinMode.Minimized;
-				case Window.ModeEnum.Maximized:
-					return WinMode.Maximized;
-				default:
+				case Window.ModeEnum.Windowed:
 					if (GetWindow().Borderless) return WinMode.BorderlessWindowed;
 					return WinMode.Windowed;
+				default:
+					return (WinMode)modeEnum;
+
 			}
 		}
 		set
 		{
 			switch (value)
 			{
-				case WinMode.ExclusiveFullscreen:
-					GetWindow().Mode = Window.ModeEnum.ExclusiveFullscreen;
-					break;
-				case WinMode.Fullscreen:
-					GetWindow().Mode = Window.ModeEnum.Fullscreen;
-					break;
 				case WinMode.BorderlessWindowed:
 					GetWindow().Mode = Window.ModeEnum.Windowed;
 					GetWindow().Borderless = true;
@@ -77,12 +65,10 @@ public partial class VideoManager : Node
 					GetWindow().Mode = Window.ModeEnum.Windowed;
 					GetWindow().Borderless = false;
 					break;
-				case WinMode.Maximized:
-					GetWindow().Mode = Window.ModeEnum.Maximized;
-					GetWindow().Borderless = false;
+				default:
+					GetWindow().Mode = (Window.ModeEnum)value;
 					break;
-				default: // Don't want to save any error states or minimized state
-					throw new ArgumentException($"WindowMode = {value} is not a valid ScreenMode");
+
 			}
 			Configuration.Instance.ChangeSetting(VIDEO_SECTION, PropertyName.WindowMode, (int)value);
 		}
