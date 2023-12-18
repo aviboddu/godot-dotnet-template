@@ -5,8 +5,10 @@ using Utilities;
 namespace UI;
 public abstract partial class VideoDropDownSetting : Node
 {
-	[Export]
-	public OptionButton dropDown;
+	[Export(PropertyHint.NodePathValidTypes, "OptionButton")]
+	public NodePath dropDown;
+
+	private OptionButton dropDownSetting;
 
 	protected string property;
 
@@ -14,16 +16,17 @@ public abstract partial class VideoDropDownSetting : Node
 	{
 		Debug.Assert(property is not null, "VideoDropDownSettings::_Ready() - property must not be null. Override _Ready() accordingly");
 
+		dropDownSetting = GetNode<OptionButton>(dropDown);
 		Callable valueSelected = new(this, MethodName._on_value_selected);
-		if (!dropDown.IsConnected(OptionButton.SignalName.ItemSelected, valueSelected))
-			dropDown.Connect(OptionButton.SignalName.ItemSelected, valueSelected);
+		if (!dropDownSetting.IsConnected(OptionButton.SignalName.ItemSelected, valueSelected))
+			dropDownSetting.Connect(OptionButton.SignalName.ItemSelected, valueSelected);
 
 		string res = PropertyToString(VideoManager.Instance.GetIndexed(property));
-		for (int i = 0; i < dropDown.ItemCount; i++)
+		for (int i = 0; i < dropDownSetting.ItemCount; i++)
 		{
-			if (res.Equals(dropDown.GetItemText(i)))
+			if (res.Equals(dropDownSetting.GetItemText(i)))
 			{
-				dropDown.Selected = i;
+				dropDownSetting.Selected = i;
 				break;
 			}
 		}
@@ -32,7 +35,7 @@ public abstract partial class VideoDropDownSetting : Node
 	public void _on_value_selected(long idx)
 	{
 		Logger.WriteInfo($"{GetClass()}::_on_value_selected({idx}) - User selected resolution {idx}");
-		VideoManager.Instance.SetDeferred(property, StringToProperty(dropDown.GetItemText((int)idx)));
+		VideoManager.Instance.SetDeferred(property, StringToProperty(dropDownSetting.GetItemText((int)idx)));
 	}
 
 	protected abstract string PropertyToString(Variant property);

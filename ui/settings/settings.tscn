@@ -29,7 +29,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Resolution" type="HBoxContainer" parent="Settings/Video/Video Container" node_paths=PackedStringArray("dropDown")]
+[node name="Resolution" type="HBoxContainer" parent="Settings/Video/Video Container"]
 layout_mode = 2
 script = ExtResource("3_vygjg")
 dropDown = NodePath("Resolution DropDown")
@@ -53,7 +53,7 @@ popup/item_3/id = 2
 popup/item_4/text = "1366x768"
 popup/item_4/id = 4
 
-[node name="Window Mode" type="HBoxContainer" parent="Settings/Video/Video Container" node_paths=PackedStringArray("dropDown")]
+[node name="Window Mode" type="HBoxContainer" parent="Settings/Video/Video Container"]
 layout_mode = 2
 script = ExtResource("4_dbqe7")
 dropDown = NodePath("Window Mode DropDown")
@@ -88,7 +88,7 @@ text = "VSync"
 layout_mode = 2
 size_flags_horizontal = 10
 
-[node name="Maximum Framerate" type="HBoxContainer" parent="Settings/Video/Video Container" node_paths=PackedStringArray("dropDown")]
+[node name="Maximum Framerate" type="HBoxContainer" parent="Settings/Video/Video Container"]
 layout_mode = 2
 script = ExtResource("6_rhmth")
 dropDown = NodePath("Maximum Framerate DropDown")
