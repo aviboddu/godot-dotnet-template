@@ -1,7 +1,7 @@
 using Godot;
-using System;
 using Utilities;
 
+namespace UI;
 public partial class InputSetting : Node
 {
 	[Export]

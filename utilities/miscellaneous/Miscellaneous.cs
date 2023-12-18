@@ -1,4 +1,3 @@
-using System;
 using Godot;
 
 namespace Utilities;
@@ -11,7 +10,7 @@ public static class Miscellaneous
 				&& !node.IsQueuedForDeletion();
 	}
 
-	public static Error CheckedConnect<T>(this T node, StringName signal, Callable callable, uint flags = 0) where T : Node
+	public static Error CheckedConnect<T>(this T node, in StringName signal, in Callable callable, uint flags = 0) where T : Node
 	{
 		if (!node.IsConnected(signal, callable)
 			|| ((GodotObject.ConnectFlags)flags).HasFlag(GodotObject.ConnectFlags.ReferenceCounted))

@@ -3,17 +3,19 @@ using Godot;
 namespace Utilities;
 public partial class SineWaveGenerator : AudioStreamPlayer
 {
-	private AudioStreamGeneratorPlayback _playback; // Will hold the AudioStreamGeneratorPlayback.
+	private AudioStreamGeneratorPlayback _playback { get => (AudioStreamGeneratorPlayback)GetStreamPlayback(); }
 	private float _increment;
-	private float _pulseHz = 440.0f; // The frequency of the sound wave.
+	private const float PULSE_HZ = 440f; // The frequency of the sound wave.
+
+	private Vector2[] _frames;
 
 	public override void _Ready()
 	{
 		if (Stream is AudioStreamGenerator generator)
 		{
-			_increment = _pulseHz / generator.MixRate;
+			_increment = Mathf.Tau * PULSE_HZ / generator.MixRate;
 			Play();
-			_playback = (AudioStreamGeneratorPlayback)GetStreamPlayback();
+			_frames = CreateFullBuffer();
 			FillBuffer();
 
 			Timer timer = new()
@@ -26,17 +28,19 @@ public partial class SineWaveGenerator : AudioStreamPlayer
 		}
 	}
 
-	private void FillBuffer()
+	private void FillBuffer() => _playback.PushBuffer(_frames);
+
+	private Vector2[] CreateFullBuffer()
 	{
 		float phase = 0;
 		int framesAvailable = _playback.GetFramesAvailable();
 		Vector2[] frames = new Vector2[framesAvailable];
-
 		for (int i = 0; i < framesAvailable; i++)
 		{
-			frames[i] = Vector2.One * Mathf.Sin(phase * Mathf.Tau);
-			phase = Mathf.PosMod(phase + _increment, 1f);
+			frames[i] = Vector2.One * Mathf.Sin(phase);
+			phase += _increment;
 		}
-		_playback.PushBuffer(frames);
+
+		return frames;
 	}
 }

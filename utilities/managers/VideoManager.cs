@@ -35,6 +35,7 @@ public partial class VideoManager : Node
 		get => GetWindow().Size;
 		set
 		{
+			if (value == Resolution) return;
 			// TODO: Changing resolutions and window mode gets a bit buggy
 			Debug.Assert(value.Sign().Equals(Vector2I.One), $"VideoManager::Resolution = {value} must be positive in both axes");
 			Configuration.Instance.ChangeSetting(VIDEO_SECTION, PropertyName.Resolution, value);
@@ -47,6 +48,7 @@ public partial class VideoManager : Node
 		get => Engine.MaxFps;
 		set
 		{
+			if (value == RefreshRate) return;
 			Debug.Assert(value >= 0, $"VideoManager::SetRefreshRate({value}) - {value} must be greater than or equal to zero");
 			Configuration.Instance.ChangeSetting(VIDEO_SECTION, PropertyName.RefreshRate, value);
 			Engine.MaxFps = value;
@@ -70,6 +72,7 @@ public partial class VideoManager : Node
 		}
 		set
 		{
+			if (value == WindowMode) return;
 			switch (value)
 			{
 				case WinMode.BorderlessWindowed:
@@ -94,6 +97,7 @@ public partial class VideoManager : Node
 		get => DisplayServer.WindowGetVsyncMode();
 		set
 		{
+			if (value == VSyncMode) return;
 			Configuration.Instance.ChangeSetting(VIDEO_SECTION, PropertyName.VSyncMode, (int)value);
 			DisplayServer.WindowSetVsyncMode(value);
 		}

@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Godot;
 using Godot.Collections;
 using Utilities;
@@ -37,6 +38,9 @@ public partial class LoadingScreen : Control
 				{
 					case Error.Ok:
 						Logger.WriteInfo($"LoadingScreen::_Process - Successfully loaded {sceneToLoad}");
+#if DEBUG
+						Logger.WriteDebug($"LoadingScreen::_Process - Time to load {sceneToLoad} = {Time.GetTicksMsec() - startTime} ms");
+#endif
 						break;
 					case Error.CantCreate:
 						Logger.WriteError($"LoadingScreen::_Process - Failed to load {sceneToLoad}");
@@ -45,9 +49,6 @@ public partial class LoadingScreen : Control
 						Logger.WriteError($"LoadingScreen::_Process - {sceneToLoad} is invalid");
 						break;
 				}
-#if DEBUG
-				Logger.WriteDebug($"LoadingScreen::_Process - Time to load {sceneToLoad} = {Time.GetTicksMsec() - startTime} ms");
-#endif
 				break;
 			case ResourceLoader.ThreadLoadStatus.InProgress:
 				progressBar.Value = (double)progressPercentage[0] * 100;

@@ -19,7 +19,7 @@ public partial class Logger : Node
 		base._EnterTree();
 	}
 
-	public enum LogLevel
+	public enum LogLevel : byte
 	{
 		Error = 4,
 		Warning = 3,

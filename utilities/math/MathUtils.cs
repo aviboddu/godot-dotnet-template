@@ -1,7 +1,7 @@
 using Godot;
 
 namespace Utilities;
-public static partial class Math
+public static partial class MathUtils
 {
         public static float DeltaLerp(float from, float to, float weight, float delta)
         {

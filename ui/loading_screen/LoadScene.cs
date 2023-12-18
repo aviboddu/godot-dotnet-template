@@ -10,8 +10,9 @@ public partial class LoadScene : Button
 
 	public override void _Ready()
 	{
-		Debug.Assert(sceneToLoad is not null, $"LoadScene::_Ready() - {PropertyName.sceneToLoad} is null");
 		base._Ready();
+
+		Debug.Assert(sceneToLoad is not null, $"LoadScene::_Ready() - {PropertyName.sceneToLoad} is null");
 		this.CheckedConnect(SignalName.Pressed, Callable.From(_on_pressed));
 	}
 

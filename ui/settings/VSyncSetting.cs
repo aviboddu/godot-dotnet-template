@@ -21,9 +21,7 @@ public partial class VSyncSetting : HBoxContainer
 	public void _on_button_toggled(bool toggled)
 	{
 		Logger.WriteInfo($"VSyncSetting::_on_button_toggled({toggled}) - User toggled VSync");
-		if (toggled)
-			VideoManager.Instance.SetDeferred(VideoManager.PropertyName.VSyncMode, Variant.From(DisplayServer.VSyncMode.Enabled));
-		else
-			VideoManager.Instance.SetDeferred(VideoManager.PropertyName.VSyncMode, Variant.From(DisplayServer.VSyncMode.Disabled));
+		VideoManager.Instance.SetDeferred(VideoManager.PropertyName.VSyncMode,
+				Variant.From(toggled ? DisplayServer.VSyncMode.Enabled : DisplayServer.VSyncMode.Disabled));
 	}
 }

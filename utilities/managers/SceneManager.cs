@@ -1,9 +1,11 @@
+using System;
 using Godot;
 
 namespace Utilities;
 public partial class SceneManager : Node
 {
 	public static SceneManager Instance { get; private set; }
+	private readonly Lazy<PackedScene> _loadingScreen = new(() => (PackedScene)GD.Load(LOADING_SCREEN_PATH), false);
 
 	public override void _EnterTree()
 	{
@@ -20,12 +22,12 @@ public partial class SceneManager : Node
 
 	public static string DesiredScene { get; private set; }
 
-	public static void ChangeScene(string sceneToLoad) => Instance._changeScene(sceneToLoad);
+	public static void ChangeScene(in string sceneToLoad) => Instance._changeScene(sceneToLoad);
 
-	private void _changeScene(string sceneToLoad)
+	private void _changeScene(in string sceneToLoad)
 	{
-		Logger.WriteDebug($"LoadScene::_on_pressed() - Loading {sceneToLoad}");
+		Logger.WriteDebug($"SceneManager::_changeScene({sceneToLoad}) - Loading {sceneToLoad}");
 		DesiredScene = sceneToLoad;
-		GetTree().ChangeSceneToFile(LOADING_SCREEN_PATH);
+		GetTree().ChangeSceneToPacked(_loadingScreen.Value);
 	}
 }

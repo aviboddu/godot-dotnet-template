@@ -24,12 +24,14 @@ public partial class Configuration : Node
 
 	private readonly ConfigFile configFile = new();
 
-	private Timer saveDelay = new();
+	private Timer saveDelay = new()
+	{
+		OneShot = true,
+		WaitTime = TIME_TO_FLUSH_IN_SECONDS
+	};
 
 	public override void _Ready()
 	{
-		saveDelay.OneShot = true;
-		saveDelay.WaitTime = TIME_TO_FLUSH_IN_SECONDS;
 		saveDelay.CheckedConnect(Timer.SignalName.Timeout, Callable.From(SaveInNewThread));
 		AddChild(saveDelay);
 
@@ -47,22 +49,13 @@ public partial class Configuration : Node
 		}
 	}
 
-	public T GetSetting<[MustBeVariant] T>(string section, string key)
-	{
-		return configFile.GetValue(section, key).As<T>();
-	}
+	public T GetSetting<[MustBeVariant] T>(in string section, in string key) => configFile.GetValue(section, key).As<T>();
 
-	public bool HasSection(string section)
-	{
-		return configFile.HasSection(section);
-	}
+	public bool HasSection(in string section) => configFile.HasSection(section);
 
-	public bool HasSetting(string section, string key)
-	{
-		return configFile.HasSectionKey(section, key);
-	}
+	public bool HasSetting(in string section, in string key) => configFile.HasSectionKey(section, key);
 
-	public void ChangeSetting(string section, string key, Variant value)
+	public void ChangeSetting(in string section, in string key, in Variant value)
 	{
 		if (HasSetting(section, key) && value.Equals(GetSetting<Variant>(section, key)))
 			return;
