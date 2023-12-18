@@ -17,7 +17,7 @@ public partial class Configuration : Singleton<Configuration>
 	{
 		saveDelay.OneShot = true;
 		saveDelay.WaitTime = TIME_TO_FLUSH_IN_SECONDS;
-		saveDelay.Timeout += () => CallDeferred(MethodName.SaveInNewThread);
+		saveDelay.CheckedConnect(Timer.SignalName.Timeout, Callable.From(SaveInNewThread));
 		AddChild(saveDelay);
 
 		if (File.Exists(CONFIG_FILE_PATH))
