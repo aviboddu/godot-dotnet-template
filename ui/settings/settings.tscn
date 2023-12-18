@@ -75,7 +75,7 @@ popup/item_2/id = 1
 popup/item_3/text = "Borderless Windowed"
 popup/item_3/id = 2
 
-[node name="VSync" type="HBoxContainer" parent="Settings/Video/Video Container" node_paths=PackedStringArray("VSyncButton")]
+[node name="VSync" type="HBoxContainer" parent="Settings/Video/Video Container"]
 layout_mode = 2
 script = ExtResource("5_ksbo5")
 VSyncButton = NodePath("VSync Check")
