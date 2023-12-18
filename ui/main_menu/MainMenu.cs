@@ -13,7 +13,7 @@ public partial class MainMenu : Control
 		Settings = GetNode<Control>("%Settings");
 		StartMenu = GetNode<Control>("%StartMenu");
 
-		Callable backPressed = new Callable(this, MethodName._on_back_pressed);
+		Callable backPressed = new(this, MethodName._on_back_pressed);
 		if (!Settings.IsConnected(UI.Settings.SignalName.BackPressed, backPressed))
 			Settings.Connect(UI.Settings.SignalName.BackPressed, backPressed);
 	}

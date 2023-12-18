@@ -134,7 +134,7 @@ public partial class VideoManager : Node
 			Configuration.Instance.ChangeSetting(VIDEO_SECTION, PropertyName.WindowMode, (int)WindowMode);
 			Configuration.Instance.ChangeSetting(VIDEO_SECTION, PropertyName.RefreshRate, RefreshRate);
 			Configuration.Instance.ChangeSetting(VIDEO_SECTION, PropertyName.VSyncMode, (int)VSyncMode);
-			Configuration.Instance.ChangeSetting(VIDEO_SECTION, PropertyName.Resolution, GetWindow().Size);
+			Resolution = DisplayServer.ScreenGetSize();
 		}
 
 #if DEBUG

@@ -75,7 +75,7 @@ public partial class Configuration : Node
 	{
 		if (saveDelay.IsStopped())
 			return;
-		saveDelay.EmitSignal(Timer.SignalName.Timeout);
+		CallDeferred(MethodName.SaveInNewThread);
 		saveDelay.Stop();
 	}
 

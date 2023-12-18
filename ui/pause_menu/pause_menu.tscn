@@ -49,6 +49,7 @@ text = "Quit to OS"
 
 [node name="Settings" parent="." instance=ExtResource("1_6whtp")]
 unique_name_in_owner = true
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -66,4 +67,3 @@ grow_vertical = 2
 [connection signal="pressed" from="MainPauseMenu/Settings" to="." method="_on_settings_pressed"]
 [connection signal="pressed" from="MainPauseMenu/Quit To Main Menu" to="." method="UnPause"]
 [connection signal="pressed" from="MainPauseMenu/Quit To OS" to="." method="_on_quit_to_os_pressed"]
-[connection signal="BackPressed" from="Settings" to="." method="_on_back_pressed"]
