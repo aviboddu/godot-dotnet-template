@@ -41,3 +41,5 @@ autoplay = "RotateSprite"
 layer = 0
 
 [node name="PauseMenu" parent="CanvasLayer" instance=ExtResource("2_d0q6i")]
+process_mode = 3
+visible = false

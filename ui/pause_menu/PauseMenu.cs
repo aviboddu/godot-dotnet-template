@@ -20,10 +20,12 @@ public partial class PauseMenu : Control
 		if (@event is InputEventKey key)
 		{
 			if (key.IsActionPressed("Pause"))
+			{
 				if (GetTree().Paused)
 					UnPause();
 				else
 					Pause();
+			}
 		}
 	}
 

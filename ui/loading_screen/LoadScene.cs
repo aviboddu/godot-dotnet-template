@@ -24,7 +24,7 @@ public partial class LoadScene : Button
 	public void _on_pressed()
 	{
 		Logger.WriteDebug($"LoadScene::_on_pressed() - Loading {sceneToLoad}");
-		LoadingScreen loadingScreen = ResourceLoader.Load<PackedScene>(LOADING_SCREEN_PATH).Instantiate<LoadingScreen>();
+		LoadingScreen loadingScreen = GD.Load<PackedScene>(LOADING_SCREEN_PATH).Instantiate<LoadingScreen>(PackedScene.GenEditState.Main);
 		loadingScreen.ScenePath = sceneToLoad;
 
 		Node CurrentScene = GetTree().Root.GetChild(GetTree().Root.GetChildCount() - 1);
