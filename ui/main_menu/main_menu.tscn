@@ -52,6 +52,7 @@ text = "Quit"
 
 [node name="Settings" parent="." instance=ExtResource("4_618k7")]
 unique_name_in_owner = true
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -67,4 +68,3 @@ grow_vertical = 2
 
 [connection signal="pressed" from="StartMenu/Settings" to="." method="_on_settings_pressed"]
 [connection signal="pressed" from="StartMenu/Quit" to="." method="_on_quit_pressed"]
-[connection signal="BackPressed" from="Settings" to="." method="_on_back_pressed"]

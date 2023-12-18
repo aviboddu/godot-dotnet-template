@@ -9,7 +9,6 @@
 [ext_resource type="PackedScene" uid="uid://daul3nlbhnenl" path="res://ui/settings/volume_slider.tscn" id="7_6rmts"]
 
 [node name="Settings Container" type="VBoxContainer"]
-visible = false
 script = ExtResource("1_cef2m")
 
 [node name="Settings" type="TabContainer" parent="."]
