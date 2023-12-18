@@ -7,13 +7,14 @@ namespace Utilities;
 public partial class Configuration : Node
 {
 	private const string CONFIG_FILE_PATH = "./config.ini";
+	private const float TIME_TO_FLUSH_IN_SECONDS = 1f;
+
 	private readonly ConfigFile configFile = new();
 
 	public static Configuration Instance { get; private set; }
 
 	private Timer saveDelay = new();
 
-	private bool goingToSave = false; // Makes sure that we don't try to save again if we have a save queued
 	public override void _EnterTree()
 	{
 		if (Instance != null)
@@ -23,9 +24,11 @@ public partial class Configuration : Node
 
 	public override void _Ready()
 	{
+		saveDelay.OneShot = true;
+		saveDelay.WaitTime = TIME_TO_FLUSH_IN_SECONDS;
+		saveDelay.Timeout += () => CallDeferred(MethodName.SaveInNewThread);
 		AddChild(saveDelay);
-		saveDelay.WaitTime = 1;
-		saveDelay.Timeout += () => Task.Run(Save);
+
 		if (File.Exists(CONFIG_FILE_PATH))
 		{
 			Error err = configFile.Load(CONFIG_FILE_PATH);
@@ -55,27 +58,31 @@ public partial class Configuration : Node
 		return configFile.HasSectionKey(section, key);
 	}
 
-	public void ChangeSetting(string section, string key, Variant value, bool saveNow = true)
+	public void ChangeSetting(string section, string key, Variant value)
 	{
 		if (HasSetting(section, key) && value.Equals(GetSetting<Variant>(section, key)))
 			return;
 		lock (configFile)
 			configFile.SetValue(section, key, value);
+
 		Logger.WriteDebug($"Configuration::ChangeSetting() - Changed {section}:{key} to {value}");
 
-		if (saveNow)
-		{
-			Task.Run(Save);
-			if (saveDelay.TimeLeft != 0)
-				saveDelay.Stop();
-		}
-		else if (saveDelay.TimeLeft == 0)
+		if (saveDelay.IsStopped())
 			saveDelay.Start();
 	}
 
-	public void Save()
+	public void Flush()
 	{
-		goingToSave = true;
+		if (saveDelay.IsStopped())
+			return;
+		saveDelay.EmitSignal(Timer.SignalName.Timeout);
+		saveDelay.Stop();
+	}
+
+	private void SaveInNewThread() => Task.Run(Save);
+
+	private void Save()
+	{
 		lock (configFile)
 		{
 			Error err = configFile.Save(CONFIG_FILE_PATH);
@@ -84,6 +91,5 @@ public partial class Configuration : Node
 			else
 				Logger.WriteDebug("Configuration::Save() - Saved config");
 		}
-		goingToSave = false;
 	}
 }

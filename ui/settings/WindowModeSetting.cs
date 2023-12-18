@@ -18,13 +18,13 @@ public partial class WindowModeSetting : VideoDropDownSetting
 
 	protected override string PropertyToString(Variant prop)
 	{
-		VideoManager.ScreenMode mode = prop.As<VideoManager.ScreenMode>();
+		VideoManager.WinMode mode = prop.As<VideoManager.WinMode>();
 		return mode switch
 		{
-			VideoManager.ScreenMode.Fullscreen => FULLSCREEN,
-			VideoManager.ScreenMode.ExclusiveFullscreen => EXCLUSIVE_FULLSCREEN,
-			VideoManager.ScreenMode.Windowed => WINDOWED,
-			VideoManager.ScreenMode.BorderlessWindowed => BORDERLESS_WINDOWED,
+			VideoManager.WinMode.Fullscreen => FULLSCREEN,
+			VideoManager.WinMode.ExclusiveFullscreen => EXCLUSIVE_FULLSCREEN,
+			VideoManager.WinMode.Windowed => WINDOWED,
+			VideoManager.WinMode.BorderlessWindowed => BORDERLESS_WINDOWED,
 			_ => throw new ArgumentException($"WindowModeSetting::ScreenModeToString({mode}) - {mode} was not valid"),
 		};
 	}
@@ -33,10 +33,10 @@ public partial class WindowModeSetting : VideoDropDownSetting
 	{
 		return s switch
 		{
-			FULLSCREEN => Variant.From(VideoManager.ScreenMode.Fullscreen),
-			EXCLUSIVE_FULLSCREEN => Variant.From(VideoManager.ScreenMode.ExclusiveFullscreen),
-			WINDOWED => Variant.From(VideoManager.ScreenMode.Windowed),
-			BORDERLESS_WINDOWED => Variant.From(VideoManager.ScreenMode.BorderlessWindowed),
+			FULLSCREEN => Variant.From(VideoManager.WinMode.Fullscreen),
+			EXCLUSIVE_FULLSCREEN => Variant.From(VideoManager.WinMode.ExclusiveFullscreen),
+			WINDOWED => Variant.From(VideoManager.WinMode.Windowed),
+			BORDERLESS_WINDOWED => Variant.From(VideoManager.WinMode.BorderlessWindowed),
 			_ => throw new ArgumentException($"WindowModeSetting::StringToScreenMode({s}) - {s} was not a valid string"),
 		};
 	}

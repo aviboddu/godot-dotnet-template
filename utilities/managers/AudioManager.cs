@@ -19,21 +19,39 @@ public partial class AudioManager : Node
 	public float MasterVolume
 	{
 		get => _masterVolume;
-		set => SetMasterVolume(value, false);
+		set
+		{
+			if (_masterVolume == value) return;
+			Configuration.Instance.ChangeSetting(AUDIO_SECTION, PropertyName.MasterVolume, value);
+			_masterVolume = value;
+			SetBusVolume(_masterBusIndex, value);
+		}
 	}
 
 	private float _musicVolume = float.NaN;
 	public float MusicVolume
 	{
 		get => _musicVolume;
-		set => SetMusicVolume(value, false);
+		set
+		{
+			if (_musicVolume == value) return;
+			Configuration.Instance.ChangeSetting(AUDIO_SECTION, PropertyName.MusicVolume, value);
+			_musicVolume = value;
+			SetBusVolume(_musicBusIndex, value);
+		}
 	}
 
 	private float _sfxVolume = float.NaN;
 	public float SfxVolume
 	{
 		get => _sfxVolume;
-		set => SetSfxVolume(value, false);
+		set
+		{
+			if (_sfxVolume == value) return;
+			Configuration.Instance.ChangeSetting(AUDIO_SECTION, PropertyName.SfxVolume, value);
+			_sfxVolume = value;
+			SetBusVolume(_sfxBusIndex, value);
+		}
 	}
 
 	public static AudioManager Instance { get; private set; }
@@ -70,45 +88,20 @@ public partial class AudioManager : Node
 
 			_sfxVolume = GetBusVolume(_sfxBusIndex);
 			Configuration.Instance.ChangeSetting(AUDIO_SECTION, PropertyName.SfxVolume, _sfxVolume);
+			Configuration.Instance.Flush();
 		}
 #if DEBUG
 		Logger.WriteDebug($"AudioManager::_Ready() - Time to Initialize {Time.GetTicksMsec() - ticks} ms");
 #endif
 	}
 
-	private void SetMasterVolume(float value, bool saveNow)
-	{
-		if (_masterVolume == value) return;
-		Configuration.Instance.ChangeSetting(AUDIO_SECTION, PropertyName.MasterVolume, value, saveNow);
-		_masterVolume = value;
-		SetBusVolume(_masterBusIndex, value);
-	}
-
-	private void SetMusicVolume(float value, bool saveNow)
-	{
-		if (_musicVolume == value) return;
-		Configuration.Instance.ChangeSetting(AUDIO_SECTION, PropertyName.MusicVolume, value, saveNow);
-		_musicVolume = value;
-		SetBusVolume(_musicBusIndex, value);
-	}
-
-	private void SetSfxVolume(float value, bool saveNow)
-	{
-		if (_sfxVolume == value) return;
-		Configuration.Instance.ChangeSetting(AUDIO_SECTION, PropertyName.SfxVolume, value, saveNow);
-		_sfxVolume = value;
-		SetBusVolume(_sfxBusIndex, value);
-	}
 	private static float ConvertToDecibels(float x)
 	{
 		Debug.Assert(x > 0, $"AudioManager::ConvertToDecibels({x}) - {x} must be greater than 0");
 		return 20 * (float)System.Math.Log10(x);
 	}
 
-	private static float ConvertFromDecibels(float db)
-	{
-		return (float)System.Math.Pow(10, db / 20);
-	}
+	private static float ConvertFromDecibels(float db) => Mathf.Pow(10, db / 20);
 
 	private static void SetBusVolume(int busIndex, float volume)
 	{

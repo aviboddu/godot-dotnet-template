@@ -36,9 +36,8 @@ public partial class InputManager : Node
 		{
 			Logger.WriteInfo("InputManager::_Ready() - Default Initialization");
 			foreach (StringName action in InputMap.GetActions())
-			{
-				Configuration.Instance.ChangeSetting(INPUT_SECTION, action, InputMap.ActionGetEvents(action), false);
-			}
+				Configuration.Instance.ChangeSetting(INPUT_SECTION, action, InputMap.ActionGetEvents(action));
+			Configuration.Instance.Flush();
 		}
 #if DEBUG
 		Logger.WriteDebug($"InputManager::_Ready() - Time to Initialize {Time.GetTicksMsec() - ticks} ms");
