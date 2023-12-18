@@ -5,8 +5,6 @@ using Utilities;
 namespace UI;
 public partial class LoadScene : Button
 {
-	const string LOADING_SCREEN_PATH = "res://ui/loading_screen/LoadingScreen.tscn";
-
 	[Export(PropertyHint.File, "*.tscn")]
 	public string sceneToLoad;
 
@@ -21,15 +19,5 @@ public partial class LoadScene : Button
 			Connect(SignalName.Pressed, onPressed);
 	}
 
-	public void _on_pressed()
-	{
-		Logger.WriteDebug($"LoadScene::_on_pressed() - Loading {sceneToLoad}");
-		LoadingScreen loadingScreen = GD.Load<PackedScene>(LOADING_SCREEN_PATH).Instantiate<LoadingScreen>(PackedScene.GenEditState.Main);
-		loadingScreen.ScenePath = sceneToLoad;
-
-		Node CurrentScene = GetTree().Root.GetChild(GetTree().Root.GetChildCount() - 1);
-		GetTree().Root.AddChild(loadingScreen);
-		GetTree().CurrentScene = loadingScreen;
-		CurrentScene.QueueFree();
-	}
+	public void _on_pressed() => SceneManager.ChangeScene(sceneToLoad);
 }

@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using Godot;
 using Godot.Collections;
 using Utilities;
@@ -6,12 +5,9 @@ using Utilities;
 namespace UI;
 public partial class LoadingScreen : Control
 {
-	[Export(PropertyHint.File, "*.tscn")]
-	public string ScenePath { get; set; }
-
 	private ProgressBar progressBar;
-
 	private Array progressPercentage;
+	private string sceneToLoad;
 
 #if DEBUG
 	private float startTime;
@@ -20,49 +16,48 @@ public partial class LoadingScreen : Control
 	public override void _Ready()
 	{
 		base._Ready();
-		Debug.Assert(ScenePath is not null, $"LoadingScreen::_Ready() - {PropertyName.ScenePath} is null");
 #if DEBUG
 		startTime = Time.GetTicksMsec();
 #endif
+		sceneToLoad = SceneManager.DesiredScene;
 		progressBar = GetNode<ProgressBar>("%ProgressBar");
 		progressPercentage = [];
 		progressPercentage.Resize(1);
-		progressBar.Value = 0;
-		ResourceLoader.LoadThreadedRequest(ScenePath);
+		ResourceLoader.LoadThreadedRequest(sceneToLoad);
 	}
 
 	public override void _Process(double delta)
 	{
-		ResourceLoader.ThreadLoadStatus loadStatus = ResourceLoader.LoadThreadedGetStatus(ScenePath, progressPercentage);
+		ResourceLoader.ThreadLoadStatus loadStatus = ResourceLoader.LoadThreadedGetStatus(sceneToLoad, progressPercentage);
 		switch (loadStatus)
 		{
 			case ResourceLoader.ThreadLoadStatus.Loaded:
-				Error err = GetTree().ChangeSceneToPacked((PackedScene)ResourceLoader.LoadThreadedGet(ScenePath));
+				Error err = GetTree().ChangeSceneToPacked((PackedScene)ResourceLoader.LoadThreadedGet(sceneToLoad));
 				switch (err)
 				{
 					case Error.Ok:
-						Logger.WriteInfo($"LoadingScreen::_Process - Successfully loaded {ScenePath}");
+						Logger.WriteInfo($"LoadingScreen::_Process - Successfully loaded {sceneToLoad}");
 						break;
 					case Error.CantCreate:
-						Logger.WriteError($"LoadingScreen::_Process - Failed to load {ScenePath}");
+						Logger.WriteError($"LoadingScreen::_Process - Failed to load {sceneToLoad}");
 						break;
 					case Error.InvalidParameter:
-						Logger.WriteError($"LoadingScreen::_Process - {ScenePath} is invalid");
+						Logger.WriteError($"LoadingScreen::_Process - {sceneToLoad} is invalid");
 						break;
 				}
 #if DEBUG
-				Logger.WriteDebug($"LoadingScreen::_Process - Time to load {ScenePath} = {Time.GetTicksMsec() - startTime} ms");
+				Logger.WriteDebug($"LoadingScreen::_Process - Time to load {sceneToLoad} = {Time.GetTicksMsec() - startTime} ms");
 #endif
 				break;
 			case ResourceLoader.ThreadLoadStatus.InProgress:
 				progressBar.Value = (double)progressPercentage[0] * 100;
 				break;
 			case ResourceLoader.ThreadLoadStatus.InvalidResource:
-				Logger.WriteError($"LoadingScreen::_Process - {ScenePath} is invalid");
+				Logger.WriteError($"LoadingScreen::_Process - {sceneToLoad} is invalid");
 				GetTree().Quit(-1);
 				break;
 			case ResourceLoader.ThreadLoadStatus.Failed:
-				Logger.WriteError($"LoadingScreen::_Process - {ScenePath} failed to load");
+				Logger.WriteError($"LoadingScreen::_Process - {sceneToLoad} failed to load");
 				GetTree().Quit(-1);
 				break;
 		}

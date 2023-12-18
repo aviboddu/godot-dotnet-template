@@ -21,6 +21,11 @@ Logger="*res://utilities/logging/Logger.cs"
 Configuration="*res://utilities/settings/Configuration.cs"
 AudioManager="*res://utilities/managers/AudioManager.cs"
 VideoManager="*res://utilities/managers/VideoManager.cs"
+SceneManager="*res://utilities/managers/SceneManager.cs"
+
+[debug]
+
+file_logging/enable_file_logging=true
 
 [display]
 
