@@ -4,8 +4,21 @@ using System;
 namespace Utilities;
 
 [System.Diagnostics.DebuggerDisplay("(minLogLevel: {MinLogLevel})")]
-public partial class Logger : Singleton<Logger>
+public partial class Logger : Node
 {
+	public static Logger Instance { get; private set; }
+
+	public override void _EnterTree()
+	{
+		if (Instance is not null)
+		{
+			QueueFree();
+			return;
+		}
+		Instance = this;
+		base._EnterTree();
+	}
+
 	public enum LogLevel
 	{
 		Error = 4,

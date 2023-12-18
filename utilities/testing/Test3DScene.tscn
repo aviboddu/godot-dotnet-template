@@ -1,6 +1,7 @@
-[gd_scene load_steps=14 format=3 uid="uid://cqfa8jqytmyng"]
+[gd_scene load_steps=16 format=3 uid="uid://cqfa8jqytmyng"]
 
 [ext_resource type="PackedScene" uid="uid://dyra5rvytwc1g" path="res://ui/pause_menu/pause_menu.tscn" id="1_dn4u2"]
+[ext_resource type="Script" path="res://utilities/testing/SineWaveGenerator.cs" id="2_2fh8i"]
 
 [sub_resource type="Animation" id="Animation_7cny2"]
 resource_name = "RotateLabel"
@@ -58,6 +59,8 @@ material = SubResource("StandardMaterial3D_n0pyp")
 subdivide_width = 16
 subdivide_depth = 16
 
+[sub_resource type="AudioStreamGenerator" id="AudioStreamGenerator_pcp4b"]
+
 [node name="Test3dScene" type="Node3D"]
 
 [node name="Label3D" type="Label3D" parent="."]
@@ -85,3 +88,8 @@ layer = 0
 [node name="PauseMenu" parent="CanvasLayer" instance=ExtResource("1_dn4u2")]
 process_mode = 3
 visible = false
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = SubResource("AudioStreamGenerator_pcp4b")
+bus = &"Music"
+script = ExtResource("2_2fh8i")

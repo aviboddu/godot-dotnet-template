@@ -3,8 +3,22 @@ using Godot.Collections;
 
 namespace Utilities;
 
-public partial class InputManager : Singleton<InputManager>
+public partial class InputManager : Node
 {
+
+	public static InputManager Instance { get; private set; }
+
+	public override void _EnterTree()
+	{
+		if (Instance is not null)
+		{
+			QueueFree();
+			return;
+		}
+		Instance = this;
+		base._EnterTree();
+	}
+
 	private const string INPUT_SECTION = "Input";
 
 	public override void _Ready()

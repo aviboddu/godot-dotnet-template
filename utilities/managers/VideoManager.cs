@@ -2,8 +2,23 @@ using System.Diagnostics;
 using Godot;
 
 namespace Utilities;
-public partial class VideoManager : Singleton<VideoManager>
+
+[DebuggerDisplay("(Resolution={Resolution}, WindowMode={WindowMode}, RefreshRate={RefreshRate}, VSyncMode={VSyncMode})")]
+public partial class VideoManager : Node
 {
+	public static VideoManager Instance { get; private set; }
+
+	public override void _EnterTree()
+	{
+		if (Instance is not null)
+		{
+			QueueFree();
+			return;
+		}
+		Instance = this;
+		base._EnterTree();
+	}
+
 	public enum WinMode : long
 	{
 		ExclusiveFullscreen = Window.ModeEnum.ExclusiveFullscreen,

@@ -4,8 +4,21 @@ using System.Threading.Tasks;
 
 namespace Utilities;
 
-public partial class Configuration : Singleton<Configuration>
+public partial class Configuration : Node
 {
+	public static Configuration Instance { get; private set; }
+
+	public override void _EnterTree()
+	{
+		if (Instance is not null)
+		{
+			QueueFree();
+			return;
+		}
+		Instance = this;
+		base._EnterTree();
+	}
+
 	private const string CONFIG_FILE_PATH = "./config.ini";
 	private const float TIME_TO_FLUSH_IN_SECONDS = 1f;
 

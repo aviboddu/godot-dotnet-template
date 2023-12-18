@@ -3,8 +3,21 @@ using Godot;
 
 namespace Utilities;
 
-public partial class AudioManager : Singleton<AudioManager>
+[DebuggerDisplay("(MasterVolume={MasterVolume}, MusicVolume={MusicVolume}, SFXVolume={SfxVolume})")]
+public partial class AudioManager : Node
 {
+	public static AudioManager Instance { get; private set; }
+
+	public override void _EnterTree()
+	{
+		if (Instance is not null)
+		{
+			QueueFree();
+			return;
+		}
+		Instance = this;
+		base._EnterTree();
+	}
 
 	private const string AUDIO_SECTION = "Audio";
 	private const string MASTER_BUS_NAME = "Master";
