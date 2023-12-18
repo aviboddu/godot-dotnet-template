@@ -11,12 +11,8 @@ public partial class LoadScene : Button
 	public override void _Ready()
 	{
 		Debug.Assert(sceneToLoad is not null, $"LoadScene::_Ready() - {PropertyName.sceneToLoad} is null");
-
 		base._Ready();
-
-		Callable onPressed = new(this, MethodName._on_pressed);
-		if (!IsConnected(SignalName.Pressed, onPressed))
-			Connect(SignalName.Pressed, onPressed);
+		this.CheckedConnect(SignalName.Pressed, Callable.From(_on_pressed));
 	}
 
 	public void _on_pressed() => SceneManager.ChangeScene(sceneToLoad);

@@ -3,18 +3,9 @@ using Godot.Collections;
 
 namespace Utilities;
 
-public partial class InputManager : Node
+public partial class InputManager : Singleton<InputManager>
 {
 	private const string INPUT_SECTION = "Input";
-
-	public static InputManager Instance { get; private set; }
-
-	public override void _EnterTree()
-	{
-		if (Instance != null)
-			QueueFree(); // The singleton is already loaded, kill this instance
-		Instance = this;
-	}
 
 	public override void _Ready()
 	{

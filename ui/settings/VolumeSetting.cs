@@ -17,12 +17,8 @@ public partial class VolumeSetting : HBoxContainer
 		volumeSlider = GetNode<Slider>("%Volume Slider");
 		volumeValue = GetNode<Label>("%Volume Value");
 
-		Callable dragEnded = new(this, MethodName._on_drag_ended);
-		Callable valueChanged = new(this, MethodName._on_value_changed);
-		if (!volumeSlider.IsConnected(Slider.SignalName.DragEnded, dragEnded))
-			volumeSlider.Connect(Slider.SignalName.DragEnded, dragEnded);
-		if (!volumeSlider.IsConnected(Slider.SignalName.ValueChanged, valueChanged))
-			volumeSlider.Connect(Slider.SignalName.ValueChanged, valueChanged);
+		volumeSlider.CheckedConnect(Slider.SignalName.DragEnded, Callable.From<bool>(_on_drag_ended));
+		volumeSlider.CheckedConnect(Slider.SignalName.ValueChanged, Callable.From<double>(_on_value_changed));
 
 		float volume = (float)AudioManager.Instance.GetIndexed(volumeName) * 100f;
 		volumeSlider.SetValueNoSignal(volume);

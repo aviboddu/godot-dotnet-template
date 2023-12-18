@@ -13,10 +13,7 @@ public partial class PauseMenu : Control
 		settings = GetNode<Settings>("%Settings");
 		MainPauseMenu = GetNode<Control>("%MainPauseMenu");
 
-
-		Callable backPressed = new(this, MethodName._on_back_pressed);
-		if (!settings.IsConnected(Settings.SignalName.BackPressed, backPressed))
-			settings.Connect(Settings.SignalName.BackPressed, backPressed);
+		settings.CheckedConnect(Settings.SignalName.BackPressed, Callable.From(_on_back_pressed));
 	}
 
 	public override void _Input(InputEvent @event)

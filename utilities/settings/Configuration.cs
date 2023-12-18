@@ -4,23 +4,14 @@ using System.Threading.Tasks;
 
 namespace Utilities;
 
-public partial class Configuration : Node
+public partial class Configuration : Singleton<Configuration>
 {
 	private const string CONFIG_FILE_PATH = "./config.ini";
 	private const float TIME_TO_FLUSH_IN_SECONDS = 1f;
 
 	private readonly ConfigFile configFile = new();
 
-	public static Configuration Instance { get; private set; }
-
 	private Timer saveDelay = new();
-
-	public override void _EnterTree()
-	{
-		if (Instance != null)
-			QueueFree(); // The singleton is already loaded, kill this instance
-		Instance = this;
-	}
 
 	public override void _Ready()
 	{

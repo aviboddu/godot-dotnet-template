@@ -2,7 +2,7 @@ using System.Diagnostics;
 using Godot;
 
 namespace Utilities;
-public partial class VideoManager : Node
+public partial class VideoManager : Singleton<VideoManager>
 {
 	public enum WinMode : long
 	{
@@ -82,15 +82,6 @@ public partial class VideoManager : Node
 			Configuration.Instance.ChangeSetting(VIDEO_SECTION, PropertyName.VSyncMode, (int)value);
 			DisplayServer.WindowSetVsyncMode(value);
 		}
-	}
-
-	public static VideoManager Instance { get; private set; }
-
-	public override void _EnterTree()
-	{
-		if (Instance != null)
-			QueueFree(); // The singleton is already loaded, kill this instance
-		Instance = this;
 	}
 
 	public override void _Ready()

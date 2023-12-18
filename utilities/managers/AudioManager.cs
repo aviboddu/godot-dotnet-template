@@ -3,7 +3,7 @@ using Godot;
 
 namespace Utilities;
 
-public partial class AudioManager : Node
+public partial class AudioManager : Singleton<AudioManager>
 {
 
 	private const string AUDIO_SECTION = "Audio";
@@ -52,15 +52,6 @@ public partial class AudioManager : Node
 			_sfxVolume = value;
 			SetBusVolume(_sfxBusIndex, value);
 		}
-	}
-
-	public static AudioManager Instance { get; private set; }
-
-	public override void _EnterTree()
-	{
-		if (Instance != null)
-			QueueFree(); // The singleton is already loaded, kill this instance
-		Instance = this;
 	}
 
 	public override void _Ready()

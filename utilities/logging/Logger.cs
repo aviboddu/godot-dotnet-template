@@ -4,7 +4,7 @@ using System;
 namespace Utilities;
 
 [System.Diagnostics.DebuggerDisplay("(minLogLevel: {MinLogLevel})")]
-public partial class Logger : Node
+public partial class Logger : Singleton<Logger>
 {
 	public enum LogLevel
 	{
@@ -17,14 +17,6 @@ public partial class Logger : Node
 	// The minimum log level to write
 	[Export]
 	public LogLevel minLogLevel = LogLevel.Debug;
-
-	public static Logger Instance { get; private set; }
-	public override void _EnterTree()
-	{
-		if (Instance != null)
-			QueueFree(); // The singleton is already loaded, kill this instance
-		Instance = this;
-	}
 
 	public void Write(in object message, LogLevel logLevel)
 	{
