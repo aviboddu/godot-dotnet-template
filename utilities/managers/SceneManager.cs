@@ -20,6 +20,7 @@ public partial class SceneManager : Node
 
 	const string LOADING_SCREEN_PATH = "res://ui/loading_screen/LoadingScreen.tscn";
 
+	// This should always be the scene we want to load.
 	public static string DesiredScene { get; private set; }
 
 	public static void ChangeScene(in string sceneToLoad) => Instance._changeScene(sceneToLoad);

@@ -43,7 +43,12 @@ public partial class PauseMenu : Control
 		MainPauseMenu.Visible = false;
 	}
 
-	public void _on_quit_to_os_pressed() => GetTree().Quit();
+	public void _on_quit_to_os_pressed()
+	{
+		Logger.WriteInfo($"User Quit");
+		GetTree().Root.PropagateNotification((int)NotificationWMCloseRequest);
+		GetTree().Quit();
+	}
 
 	public void Pause()
 	{

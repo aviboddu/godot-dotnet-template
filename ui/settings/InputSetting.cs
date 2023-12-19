@@ -10,7 +10,6 @@ public partial class InputSetting : Node
 	[Export]
 	StringName action;
 
-	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		inputKey.Text = InputMap.ActionGetEvents(action)[0].AsText();

@@ -16,6 +16,7 @@ script = ExtResource("1_pnte5")
 
 [node name="MainPauseMenu" type="VBoxContainer" parent="."]
 unique_name_in_owner = true
+process_mode = 2
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -49,6 +50,7 @@ text = "Quit to OS"
 
 [node name="Settings" parent="." instance=ExtResource("1_6whtp")]
 unique_name_in_owner = true
+process_mode = 2
 visible = false
 layout_mode = 1
 anchors_preset = 8

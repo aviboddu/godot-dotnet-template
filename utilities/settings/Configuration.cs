@@ -24,7 +24,7 @@ public partial class Configuration : Node
 
 	private readonly ConfigFile configFile = new();
 
-	private Timer saveDelay = new()
+	private readonly Timer saveDelay = new()
 	{
 		OneShot = true,
 		WaitTime = TIME_TO_FLUSH_IN_SECONDS
@@ -68,6 +68,7 @@ public partial class Configuration : Node
 			saveDelay.Start();
 	}
 
+	// Writes any pending changes to file at the end of the frame
 	public void Flush()
 	{
 		if (saveDelay.IsStopped())

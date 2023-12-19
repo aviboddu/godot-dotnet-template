@@ -35,6 +35,7 @@ public partial class AudioManager : Node
 		set
 		{
 			if (_masterVolume == value) return;
+			Debug.Assert(0 <= value && value <= 1, $"MasterVolume = {value} must be between 0 and 1");
 			Configuration.Instance.ChangeSetting(AUDIO_SECTION, PropertyName.MasterVolume, value);
 			_masterVolume = value;
 			SetBusVolume(_masterBusIndex, value);
@@ -48,6 +49,7 @@ public partial class AudioManager : Node
 		set
 		{
 			if (_musicVolume == value) return;
+			Debug.Assert(0 <= value && value <= 1, $"MusicVolume = {value} must be between 0 and 1");
 			Configuration.Instance.ChangeSetting(AUDIO_SECTION, PropertyName.MusicVolume, value);
 			_musicVolume = value;
 			SetBusVolume(_musicBusIndex, value);
@@ -61,6 +63,7 @@ public partial class AudioManager : Node
 		set
 		{
 			if (_sfxVolume == value) return;
+			Debug.Assert(0 <= value && value <= 1, $"SfxVolume = {value} must be between 0 and 1");
 			Configuration.Instance.ChangeSetting(AUDIO_SECTION, PropertyName.SfxVolume, value);
 			_sfxVolume = value;
 			SetBusVolume(_sfxBusIndex, value);
