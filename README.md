@@ -16,7 +16,7 @@ Using .NET 8 and the latest stable release of Godot Mono.
 - Improve Loading to load resources with multiple threads (not just one background thread)
 - Adjust Configuration's saving functionality to minimize the performance cost of file writes while maintaining atomic writes
 - Add comments explaining design decisions and weird code
-- Refactor code to avoid Exceptions
+- ~~Refactor code to avoid Exceptions~~
 - Profile and Optimize
 - Try cloning and creating a new project to identify any potential issues
 
