@@ -41,12 +41,14 @@ public partial class VolumeSetting : HBoxContainer
 
 	private string VolumeToLabel()
 	{
-		return volumeName switch
+		switch (volumeName)
 		{
-			"MasterVolume" => "Master Volume",
-			"MusicVolume" => "Music Volume",
-			"SfxVolume" => "SFX Volume",
-			_ => throw new System.ComponentModel.InvalidEnumArgumentException($"VolumeSetting::volumeToLabel - {volumeName} is not one of the possible values")
-		};
+			case "MasterVolume": return "Master Volume";
+			case "MusicVolume": return "Music Volume";
+			case "SfxVolume": return "SFX Volume";
+			default:
+				Logger.WriteError($"VolumeSetting::volumeToLabel - {volumeName} is not one of the possible values");
+				return null;
+		}
 	}
 }
