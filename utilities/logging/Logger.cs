@@ -7,7 +7,6 @@ namespace Utilities;
 public partial class Logger : Node
 {
 	public static Logger Instance { get; private set; }
-
 	public override void _EnterTree()
 	{
 		if (Instance is not null)

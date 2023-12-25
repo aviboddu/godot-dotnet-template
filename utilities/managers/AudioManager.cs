@@ -28,44 +28,38 @@ public partial class AudioManager : Node
 	private readonly int _musicBusIndex = AudioServer.GetBusIndex(MUSIC_BUS_NAME);
 	private readonly int _sfxBusIndex = AudioServer.GetBusIndex(SFX_BUS_NAME);
 
-	private float _masterVolume = float.NaN;
 	public float MasterVolume
 	{
-		get => _masterVolume;
+		get => GetBusVolume(_masterBusIndex);
 		set
 		{
-			if (_masterVolume == value) return;
+			if (MasterVolume == value) return;
 			Debug.Assert(0 <= value && value <= 1, $"MasterVolume = {value} must be between 0 and 1");
 			Configuration.Instance.ChangeSetting(AUDIO_SECTION, PropertyName.MasterVolume, value);
-			_masterVolume = value;
 			SetBusVolume(_masterBusIndex, value);
 		}
 	}
 
-	private float _musicVolume = float.NaN;
 	public float MusicVolume
 	{
-		get => _musicVolume;
+		get => GetBusVolume(_musicBusIndex);
 		set
 		{
-			if (_musicVolume == value) return;
+			if (MusicVolume == value) return;
 			Debug.Assert(0 <= value && value <= 1, $"MusicVolume = {value} must be between 0 and 1");
 			Configuration.Instance.ChangeSetting(AUDIO_SECTION, PropertyName.MusicVolume, value);
-			_musicVolume = value;
 			SetBusVolume(_musicBusIndex, value);
 		}
 	}
 
-	private float _sfxVolume = float.NaN;
 	public float SfxVolume
 	{
-		get => _sfxVolume;
+		get => GetBusVolume(_sfxBusIndex);
 		set
 		{
-			if (_sfxVolume == value) return;
+			if (SfxVolume == value) return;
 			Debug.Assert(0 <= value && value <= 1, $"SfxVolume = {value} must be between 0 and 1");
 			Configuration.Instance.ChangeSetting(AUDIO_SECTION, PropertyName.SfxVolume, value);
-			_sfxVolume = value;
 			SetBusVolume(_sfxBusIndex, value);
 		}
 	}
@@ -79,22 +73,16 @@ public partial class AudioManager : Node
 		if (Configuration.Instance.HasSection(AUDIO_SECTION))
 		{
 			Logger.WriteInfo("AudioManager::_Ready() - Initializing Volumes from Configuration");
-			MasterVolume = Configuration.Instance.GetSetting<float>(AUDIO_SECTION, PropertyName.MasterVolume);
-			MusicVolume = Configuration.Instance.GetSetting<float>(AUDIO_SECTION, PropertyName.MusicVolume);
-			SfxVolume = Configuration.Instance.GetSetting<float>(AUDIO_SECTION, PropertyName.SfxVolume);
+			SetBusVolume(_masterBusIndex, Configuration.Instance.GetSetting<float>(AUDIO_SECTION, PropertyName.MasterVolume));
+			SetBusVolume(_musicBusIndex, Configuration.Instance.GetSetting<float>(AUDIO_SECTION, PropertyName.MusicVolume));
+			SetBusVolume(_sfxBusIndex, Configuration.Instance.GetSetting<float>(AUDIO_SECTION, PropertyName.SfxVolume));
 		}
 		else
 		{
 			Logger.WriteInfo("AudioManager::_Ready() - Default Initialization");
-			// Initialize without calling audio configuration methods
-			_masterVolume = GetBusVolume(_masterBusIndex);
-			Configuration.Instance.ChangeSetting(AUDIO_SECTION, PropertyName.MasterVolume, _masterVolume);
-
-			_musicVolume = GetBusVolume(_musicBusIndex);
-			Configuration.Instance.ChangeSetting(AUDIO_SECTION, PropertyName.MusicVolume, _musicVolume);
-
-			_sfxVolume = GetBusVolume(_sfxBusIndex);
-			Configuration.Instance.ChangeSetting(AUDIO_SECTION, PropertyName.SfxVolume, _sfxVolume);
+			Configuration.Instance.ChangeSetting(AUDIO_SECTION, PropertyName.MasterVolume, MasterVolume);
+			Configuration.Instance.ChangeSetting(AUDIO_SECTION, PropertyName.MusicVolume, MusicVolume);
+			Configuration.Instance.ChangeSetting(AUDIO_SECTION, PropertyName.SfxVolume, SfxVolume);
 			Configuration.Instance.Flush();
 		}
 #if DEBUG

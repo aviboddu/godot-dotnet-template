@@ -55,12 +55,12 @@ public partial class LoadingScreen : Control
 			case ResourceLoader.ThreadLoadStatus.InvalidResource:
 				Logger.WriteError($"LoadingScreen::_Process - {sceneToLoad} is invalid");
 				GetTree().Root.PropagateNotification((int)NotificationCrash);
-				GetTree().Quit(-1);
+				GetTree().Quit(1);
 				break;
 			case ResourceLoader.ThreadLoadStatus.Failed:
 				Logger.WriteError($"LoadingScreen::_Process - {sceneToLoad} failed to load");
 				GetTree().Root.PropagateNotification((int)NotificationCrash);
-				GetTree().Quit(-1);
+				GetTree().Quit(1);
 				break;
 		}
 	}

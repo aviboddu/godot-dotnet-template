@@ -12,7 +12,7 @@ Using .NET 8 and the latest stable release of Godot Mono.
 - Improve Input Management (ensure the configuration file is more readable)
 - Add Input Settings Functionality
 - Fix Video Manager's handling of WindowMode
-- Make Video, Audio, Scene and Input Managers Static
+- ~~Make Video, Audio, Scene and Input Managers Static~~
 - Improve Loading to load resources with multiple threads (not just one background thread)
 - Adjust Configuration's saving functionality to minimize the performance cost of file writes while maintaining atomic writes
 - Add comments explaining design decisions and weird code

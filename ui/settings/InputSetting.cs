@@ -23,7 +23,7 @@ public partial class InputSetting : Node
 
 	public void _update_input(InputEvent inputEvent)
 	{
-		InputManager.Instance.SwapEvent(action, InputMap.ActionGetEvents(action)[0], inputEvent);
+		InputManager.SwapEvent(action, InputMap.ActionGetEvents(action)[0], inputEvent);
 		inputKey.Text = InputMap.ActionGetEvents(action)[0].AsText();
 	}
 }

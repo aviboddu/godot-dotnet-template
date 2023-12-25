@@ -7,7 +7,6 @@ public partial class InputManager : Node
 {
 
 	public static InputManager Instance { get; private set; }
-
 	public override void _EnterTree()
 	{
 		if (Instance is not null)
@@ -49,7 +48,7 @@ public partial class InputManager : Node
 #endif
 	}
 
-	public void SwapEvent(StringName action, InputEvent remove, InputEvent add)
+	public static void SwapEvent(StringName action, InputEvent remove, InputEvent add)
 	{
 		if (remove != null) InputMap.ActionEraseEvent(action, remove);
 		if (add != null) InputMap.ActionAddEvent(action, add);

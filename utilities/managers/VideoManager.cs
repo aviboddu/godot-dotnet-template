@@ -7,7 +7,6 @@ namespace Utilities;
 public partial class VideoManager : Node
 {
 	public static VideoManager Instance { get; private set; }
-
 	public override void _EnterTree()
 	{
 		if (Instance is not null)
@@ -30,6 +29,7 @@ public partial class VideoManager : Node
 	};
 
 	private const string VIDEO_SECTION = "Video";
+
 	public Vector2I Resolution
 	{
 		get => GetWindow().Size;
