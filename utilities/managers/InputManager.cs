@@ -5,7 +5,6 @@ namespace Utilities;
 
 public partial class InputManager : Node
 {
-
 	public static InputManager Instance { get; private set; }
 	public override void _EnterTree()
 	{

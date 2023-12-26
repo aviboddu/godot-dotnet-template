@@ -20,15 +20,17 @@ public partial class Configuration : Node
 	}
 
 	private const string CONFIG_FILE_PATH = "./config.ini";
+	private const string TEMP_FILE_PATH = "./config_temp.ini"; // Must be in the save volume as CONFIG_FILE_PATH
 	private const float TIME_TO_FLUSH_IN_SECONDS = 1f;
 
 	private readonly ConfigFile configFile = new();
-
 	private readonly Timer saveDelay = new()
 	{
 		OneShot = true,
 		WaitTime = TIME_TO_FLUSH_IN_SECONDS
 	};
+
+	private bool savePending = false;
 
 	public override void _Ready()
 	{
@@ -71,9 +73,10 @@ public partial class Configuration : Node
 	// Writes any pending changes to file at the end of the frame
 	public void Flush()
 	{
-		if (saveDelay.IsStopped())
+		if (saveDelay.IsStopped() || savePending)
 			return;
-		CallDeferred(MethodName.SaveInNewThread);
+		Logger.WriteDebug($"Configuration::Flush() - Queued Save");
+		savePending = true;
 		saveDelay.Stop();
 	}
 
@@ -83,11 +86,29 @@ public partial class Configuration : Node
 	{
 		lock (configFile)
 		{
-			Error err = configFile.Save(CONFIG_FILE_PATH);
+			Error err = configFile.Save(TEMP_FILE_PATH);
 			if (err != Error.Ok)
+			{
 				Logger.WriteError($"Configuration::Save() - Failed to save config. Error {err}");
+				if (File.Exists(TEMP_FILE_PATH)) File.Delete(TEMP_FILE_PATH);
+			}
 			else
+			{
+				System.IO.File.Move(TEMP_FILE_PATH, CONFIG_FILE_PATH, true);
+				File.Delete(TEMP_FILE_PATH);
 				Logger.WriteDebug("Configuration::Save() - Saved config");
+			}
+			savePending = false;
 		}
+	}
+
+	public override void _Notification(int what)
+	{
+		if (what == NotificationWMCloseRequest && !saveDelay.IsStopped())
+		{
+			Logger.WriteInfo($"Configuration::_Notification({what}) - User Quit While Save Pending");
+			Save(); // Force a save if user tries to quit while save is pending.
+		}
+		base._Notification(what);
 	}
 }

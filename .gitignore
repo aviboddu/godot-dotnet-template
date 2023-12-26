@@ -22,4 +22,4 @@ Export/
 Logs/
 
 # Ignores config
-config.ini
+config*.ini
