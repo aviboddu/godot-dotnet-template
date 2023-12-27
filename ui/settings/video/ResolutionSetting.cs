@@ -1,4 +1,5 @@
 using Godot;
+using Utilities;
 
 namespace UI;
 public partial class ResolutionSetting : VideoDropDownSetting
@@ -6,6 +7,7 @@ public partial class ResolutionSetting : VideoDropDownSetting
 	public override void _Ready()
 	{
 		property = "Resolution";
+		VideoManager.Instance.CheckedConnect(VideoManager.SignalName.WindowModeChanged, Callable.From(LoadProperty));
 		base._Ready();
 	}
 

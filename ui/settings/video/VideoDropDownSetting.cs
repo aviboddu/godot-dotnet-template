@@ -17,7 +17,12 @@ public abstract partial class VideoDropDownSetting : Node
 		Debug.Assert(property is not null, "VideoDropDownSettings::_Ready() - property must not be null. Override _Ready() accordingly");
 
 		dropDownSetting = GetNode<OptionButton>(dropDown);
+		LoadProperty();
+		dropDownSetting.CheckedConnect(OptionButton.SignalName.ItemSelected, Callable.From<long>(_on_value_selected));
+	}
 
+	protected void LoadProperty()
+	{
 		string res = PropertyToString(VideoManager.Instance.GetIndexed(property));
 		for (int i = 0; i < dropDownSetting.ItemCount; i++)
 		{
@@ -27,8 +32,6 @@ public abstract partial class VideoDropDownSetting : Node
 				break;
 			}
 		}
-
-		dropDownSetting.CheckedConnect(OptionButton.SignalName.ItemSelected, Callable.From<long>(_on_value_selected));
 	}
 
 	public void _on_value_selected(long idx)

@@ -30,13 +30,18 @@ public partial class VideoManager : Node
 
 	private const string VIDEO_SECTION = "Video";
 
+	[Signal]
+	public delegate void ResolutionChangedEventHandler();
+
+	[Signal]
+	public delegate void WindowModeChangedEventHandler();
+
 	public Vector2I Resolution
 	{
-		get => GetWindow().Size;
+		get => GetWindow().GetSizeWithDecorations();
 		set
 		{
 			if (value == Resolution) return;
-			// TODO: Changing resolutions and window mode gets a bit buggy
 			Debug.Assert(value.Sign().Equals(Vector2I.One), $"VideoManager::Resolution = {value} must be positive in both axes");
 			Configuration.Instance.ChangeSetting(VIDEO_SECTION, PropertyName.Resolution, value);
 			GetWindow().Size = value;
@@ -88,6 +93,7 @@ public partial class VideoManager : Node
 					break;
 
 			}
+			EmitSignal(SignalName.WindowModeChanged);
 			Configuration.Instance.ChangeSetting(VIDEO_SECTION, PropertyName.WindowMode, (int)value);
 		}
 	}
@@ -112,6 +118,7 @@ public partial class VideoManager : Node
 		DisplayServer.WindowSetFlag(DisplayServer.WindowFlags.ResizeDisabled, true);
 		GetWindow().Position = Vector2I.Zero;
 		GetWindow().MinSize = new Vector2I(320, 180);
+		GetWindow().CheckedConnect(Window.SignalName.SizeChanged, Callable.From(() => EmitSignal(SignalName.ResolutionChanged)));
 
 		if (Configuration.Instance.HasSection(VIDEO_SECTION))
 		{
