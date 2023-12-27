@@ -27,7 +27,8 @@ public partial class Configuration : Node
 	private readonly Timer saveDelay = new()
 	{
 		OneShot = true,
-		WaitTime = TIME_TO_FLUSH_IN_SECONDS
+		WaitTime = TIME_TO_FLUSH_IN_SECONDS,
+		ProcessMode = ProcessModeEnum.Always
 	};
 
 	private bool savePending = false;

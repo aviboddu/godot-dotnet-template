@@ -1,3 +1,4 @@
+using System.Linq;
 using Godot;
 using Godot.Collections;
 
@@ -17,6 +18,21 @@ public partial class InputManager : Node
 		base._EnterTree();
 	}
 
+	[Signal]
+	public delegate void IsControllerChangedEventHandler(bool isController);
+	private bool _isController = false;
+	public bool IsController
+	{
+		get => _isController;
+		private set
+		{
+			if (IsController == value)
+				return;
+			_isController = value;
+			EmitSignal(SignalName.IsControllerChanged, value);
+		}
+	}
+
 	private const string INPUT_SECTION = "Input";
 
 	public override void _Ready()
@@ -28,7 +44,7 @@ public partial class InputManager : Node
 		if (Configuration.Instance.HasSection(INPUT_SECTION))
 		{
 			Logger.WriteInfo("InputManager::_Ready() - Initializing Bindings from Configuration");
-			foreach (StringName action in InputMap.GetActions())
+			foreach (StringName action in GetCustomActions())
 			{
 				InputMap.ActionEraseEvents(action);
 				foreach (InputEvent inputEvent in Configuration.Instance.GetSetting<Array<InputEvent>>(INPUT_SECTION, action))
@@ -38,7 +54,7 @@ public partial class InputManager : Node
 		else
 		{
 			Logger.WriteInfo("InputManager::_Ready() - Default Initialization");
-			foreach (StringName action in InputMap.GetActions())
+			foreach (StringName action in GetCustomActions())
 				Configuration.Instance.ChangeSetting(INPUT_SECTION, action, InputMap.ActionGetEvents(action));
 			Configuration.Instance.Flush();
 		}
@@ -49,8 +65,29 @@ public partial class InputManager : Node
 
 	public static void SwapEvent(StringName action, InputEvent remove, InputEvent add)
 	{
-		if (remove != null) InputMap.ActionEraseEvent(action, remove);
-		if (add != null) InputMap.ActionAddEvent(action, add);
+		if (remove != default) InputMap.ActionEraseEvent(action, remove);
+		if (add != default) InputMap.ActionAddEvent(action, add);
 		Configuration.Instance.ChangeSetting(INPUT_SECTION, action, InputMap.ActionGetEvents(action));
+	}
+
+	public static Array<InputEvent> GetInputEvents(StringName action)
+	{
+		Array<InputEvent> events = InputMap.ActionGetEvents(action);
+		return new Array<InputEvent>(events.Where((e) => Instance.IsController == IsControllerEvent(e)));
+	}
+
+
+	public static Array<StringName> GetCustomActions()
+	{
+		Array<StringName> actions = InputMap.GetActions();
+		return new Array<StringName>(actions.Where((s) => !IsBuiltIn(s)));
+	}
+	private static bool IsControllerEvent(InputEvent inputEvent) => inputEvent is InputEventJoypadButton || inputEvent is InputEventJoypadMotion;
+	private static bool IsBuiltIn(StringName action) => action.ToString().StartsWith("ui") && InputMap.HasAction(action);
+
+	public override void _Input(InputEvent @event)
+	{
+		IsController = IsControllerEvent(@event);
+		base._Input(@event);
 	}
 }

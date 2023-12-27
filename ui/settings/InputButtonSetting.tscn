@@ -1,0 +1,39 @@
+[gd_scene load_steps=3 format=3 uid="uid://cdauwlcln1ib5"]
+
+[ext_resource type="Script" path="res://ui/settings/InputButtonSetting.cs" id="1_hpkrm"]
+[ext_resource type="Script" path="res://ui/settings/InputButtonPopupListener.cs" id="2_l1hsi"]
+
+[node name="InputButtonSetting" type="Button"]
+script = ExtResource("1_hpkrm")
+
+[node name="PopupListener" type="PopupPanel" parent="."]
+unique_name_in_owner = true
+initial_position = 2
+size = Vector2i(300, 300)
+script = ExtResource("2_l1hsi")
+
+[node name="MarginContainer" type="MarginContainer" parent="PopupListener"]
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 296.0
+offset_bottom = 296.0
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PopupListener/MarginContainer"]
+layout_mode = 2
+
+[node name="Instructions" type="Label" parent="PopupListener/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 6
+text = "Press Any Button"
+horizontal_alignment = 1
+
+[node name="Exit" type="Label" parent="PopupListener/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+text = "Press Backspace to Cancel"
+horizontal_alignment = 2
+vertical_alignment = 2

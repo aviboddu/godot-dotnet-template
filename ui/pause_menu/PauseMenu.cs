@@ -4,6 +4,7 @@ using Utilities;
 namespace UI;
 public partial class PauseMenu : Control
 {
+	private const string PAUSE = "Pause";
 	private Settings settings;
 	private Control MainPauseMenu;
 
@@ -19,16 +20,11 @@ public partial class PauseMenu : Control
 	public override void _Input(InputEvent @event)
 	{
 		base._Input(@event);
-		if (@event is InputEventKey key)
-		{
-			if (key.IsActionPressed("Pause"))
-			{
-				if (GetTree().Paused)
-					UnPause();
-				else
-					Pause();
-			}
-		}
+		if (@event.IsActionPressed(PAUSE))
+			if (GetTree().Paused)
+				UnPause();
+			else
+				Pause();
 	}
 
 	public void _on_back_pressed()

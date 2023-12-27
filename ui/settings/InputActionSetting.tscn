@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=3 uid="uid://bg0c1keykc6op"]
+
+[ext_resource type="Script" path="res://ui/settings/InputActionSetting.cs" id="1_i871g"]
+[ext_resource type="PackedScene" uid="uid://cdauwlcln1ib5" path="res://ui/settings/InputButtonSetting.tscn" id="2_jod45"]
+
+[node name="InputActionSetting" type="HBoxContainer" node_paths=PackedStringArray("InputKeys")]
+size_flags_horizontal = 3
+script = ExtResource("1_i871g")
+InputKeys = [NodePath("FirstInputButton"), NodePath("SecondInputButton")]
+
+[node name="Action" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 2
+text = "Not Set"
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.2
+
+[node name="FirstInputButton" parent="." instance=ExtResource("2_jod45")]
+layout_mode = 2
+
+[node name="SecondInputButton" parent="." instance=ExtResource("2_jod45")]
+layout_mode = 2

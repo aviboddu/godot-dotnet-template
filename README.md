@@ -9,8 +9,8 @@ A general template for Godot 4 Mono. Includes:
 Using .NET 8 and the latest stable release of Godot Mono.
 
 ## TODO
-- Improve Input Management (ensure the configuration file is more readable)
-- Add Input Settings Functionality
+- ~~Improve Input Management (ensure the configuration file is more readable)~~
+- ~~Add Input Settings Functionality~~
 - Fix Video Manager's handling of WindowMode
 - ~~Make Video, Audio, Scene and Input Managers Static~~
 - ~~Adjust Configuration's saving functionality to minimize the performance cost of file writes while maintaining atomic writes~~

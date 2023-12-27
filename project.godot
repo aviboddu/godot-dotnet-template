@@ -21,6 +21,7 @@ Logger="*res://utilities/logging/Logger.cs"
 Configuration="*res://utilities/settings/Configuration.cs"
 AudioManager="*res://utilities/managers/AudioManager.cs"
 VideoManager="*res://utilities/managers/VideoManager.cs"
+InputManager="*res://utilities/managers/InputManager.cs"
 SceneManager="*res://utilities/managers/SceneManager.cs"
 
 [debug]
@@ -43,5 +44,6 @@ project/assembly_name="NetTemplate"
 Pause={
 "deadzone": 0.5,
 "events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":80,"key_label":0,"unicode":112,"echo":false,"script":null)
+, Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"button_index":6,"pressure":0.0,"pressed":false,"script":null)
 ]
 }

@@ -1,29 +1,27 @@
+using System.Linq;
 using Godot;
 using Utilities;
 
 namespace UI;
-public partial class InputSetting : Node
+public partial class InputSetting : Container
 {
-	[Export]
-	Button inputKey;
-
-	[Export]
-	StringName action;
-
+	private const string INPUT_ACTION_SETTING_PATH = "res://ui/settings/InputActionSetting.tscn";
 	public override void _Ready()
 	{
-		inputKey.Text = InputMap.ActionGetEvents(action)[0].AsText();
+		ResourceLoader.LoadThreadedRequest(INPUT_ACTION_SETTING_PATH);
+		this.CheckedConnect(SignalName.VisibilityChanged, Callable.From(LoadActions));
 	}
 
-	public void _on_button_pressed()
+	private void LoadActions()
 	{
-		// Spawn Popup Listener
-		// Connect listener
-	}
-
-	public void _update_input(InputEvent inputEvent)
-	{
-		InputManager.SwapEvent(action, InputMap.ActionGetEvents(action)[0], inputEvent);
-		inputKey.Text = InputMap.ActionGetEvents(action)[0].AsText();
+		foreach (StringName action in InputManager.GetCustomActions())
+		{
+			if (InputMap.ActionGetEvents(action).Any((e) => e is InputEventMouseMotion || e is InputEventJoypadMotion))
+				continue;
+			InputActionSetting actionSetting = ((PackedScene)ResourceLoader.LoadThreadedGet(INPUT_ACTION_SETTING_PATH)).Instantiate<InputActionSetting>();
+			AddChild(actionSetting);
+			actionSetting.Action = action;
+		}
+		this.Disconnect(SignalName.VisibilityChanged, Callable.From(LoadActions));
 	}
 }
