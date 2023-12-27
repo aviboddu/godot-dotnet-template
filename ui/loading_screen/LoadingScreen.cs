@@ -6,7 +6,7 @@ namespace UI;
 public partial class LoadingScreen : Control
 {
 	private ProgressBar progressBar;
-	private Array progressPercentage;
+	private Array progressPercentage = [];
 	private string sceneToLoad;
 
 #if DEBUG
@@ -21,8 +21,7 @@ public partial class LoadingScreen : Control
 #endif
 		sceneToLoad = SceneManager.DesiredScene;
 		progressBar = GetNode<ProgressBar>("%ProgressBar");
-		progressPercentage = [];
-		progressPercentage.Resize(1);
+		progressPercentage.Resize(1); // Only need capacity of 1
 		Error err = ResourceLoader.LoadThreadedRequest(sceneToLoad, useSubThreads: true);
 		if (err == Error.Failed)
 		{

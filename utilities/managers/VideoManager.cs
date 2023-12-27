@@ -30,6 +30,7 @@ public partial class VideoManager : Node
 
 	private const string VIDEO_SECTION = "Video";
 
+	// Sometimes other things (outside the game) can change these values, which is why we need a signal
 	[Signal]
 	public delegate void ResolutionChangedEventHandler();
 

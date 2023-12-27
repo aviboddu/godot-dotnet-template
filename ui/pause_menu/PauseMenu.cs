@@ -60,6 +60,9 @@ public partial class PauseMenu : Control
 		settings.Visible = false;
 		MainPauseMenu.Visible = true;
 
+		// Flush any pending settings
+		Configuration.Instance.Flush();
+
 		Visible = false;
 		GetTree().Paused = false;
 	}

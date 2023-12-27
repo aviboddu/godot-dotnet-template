@@ -5,7 +5,7 @@ namespace UI;
 public partial class VolumeSetting : HBoxContainer
 {
 	[Export(PropertyHint.Enum, "MasterVolume,MusicVolume,SfxVolume")]
-	string volumeName;
+	string volumeName; // Allows the same class to modify different properties
 
 	private Slider volumeSlider;
 	private Label volumeValue;

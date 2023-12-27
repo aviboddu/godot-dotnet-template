@@ -1,8 +1,10 @@
+using System.Diagnostics;
 using Godot;
 
 namespace Utilities;
 public static class Miscellaneous
 {
+	// Node is valid.
 	public static bool IsValid<T>(this T node) where T : GodotObject
 	{
 		return node is not null
@@ -10,6 +12,7 @@ public static class Miscellaneous
 				&& !node.IsQueuedForDeletion();
 	}
 
+	// Same as connect but doesn't throw an error if trying to connect a duplicate.
 	public static Error CheckedConnect<T>(this T node, in StringName signal, in Callable callable, uint flags = 0) where T : Node
 	{
 		if (!node.IsConnected(signal, callable)
@@ -18,12 +21,16 @@ public static class Miscellaneous
 		return Error.InvalidParameter;
 	}
 
+	// Crash the game with correct notifications and exit codes. https://docs.godotengine.org/en/stable/tutorials/inputs/handling_quit_requests.html
 	public static void Crash<T>(this T tree, int exitCode) where T : SceneTree
 	{
+		Debug.Assert(exitCode > 0, $"SceneTree.Crash({exitCode}) - exitCode must be greater than 0");
+		Debug.Assert(exitCode < 256, $"SceneTree.Crash({exitCode}) - exitCode must be less than 256");
 		tree.Root.PropagateNotification((int)Node.NotificationCrash);
 		tree.Quit(exitCode);
 	}
 
+	// Exit the game with correct notifications. https://docs.godotengine.org/en/stable/tutorials/inputs/handling_quit_requests.html
 	public static void Exit<T>(this T tree) where T : SceneTree
 	{
 		tree.Root.PropagateNotification((int)Node.NotificationWMCloseRequest);

@@ -7,6 +7,8 @@ public partial class ResolutionSetting : VideoDropDownSetting
 	public override void _Ready()
 	{
 		property = "Resolution";
+
+		// Changing window mode can change resolution, so we connect this to reload properties just in case
 		VideoManager.Instance.CheckedConnect(VideoManager.SignalName.WindowModeChanged, Callable.From(LoadProperty));
 		base._Ready();
 	}

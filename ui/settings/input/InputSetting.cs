@@ -11,7 +11,7 @@ public partial class InputSetting : Container
 		Error err = ResourceLoader.LoadThreadedRequest(INPUT_ACTION_SETTING_PATH);
 		if (err == Error.Failed)
 			Logger.WriteError($"InputSettings::_Ready() - ResourceLoader returned Error.Failed");
-		this.CheckedConnect(SignalName.VisibilityChanged, Callable.From(LoadActions));
+		this.CheckedConnect(SignalName.VisibilityChanged, Callable.From(LoadActions)); // Create nodes only if user opens input menu
 	}
 
 	private void LoadActions()
@@ -26,8 +26,10 @@ public partial class InputSetting : Container
 				Logger.WriteError($"InputSettings::LoadActions() - ResourceLoader returns Status.Failed");
 				return;
 		}
+
 		foreach (StringName action in InputManager.GetCustomActions())
 		{
+			// Can only change events with buttons (for now), not analog movements
 			if (InputMap.ActionGetEvents(action).Any((e) => e is InputEventMouseMotion || e is InputEventJoypadMotion))
 				continue;
 			InputActionSetting actionSetting = ((PackedScene)ResourceLoader.LoadThreadedGet(INPUT_ACTION_SETTING_PATH)).Instantiate<InputActionSetting>();

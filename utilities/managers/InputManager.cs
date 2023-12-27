@@ -70,13 +70,15 @@ public partial class InputManager : Node
 		Configuration.Instance.ChangeSetting(INPUT_SECTION, action, InputMap.ActionGetEvents(action));
 	}
 
+	// Gets all relevant events. If the user is using a controller, then we return all controller events,
+	// 		if the user is using KB+M, we return all KB+M events
 	public static Array<InputEvent> GetInputEvents(StringName action)
 	{
 		Array<InputEvent> events = InputMap.ActionGetEvents(action);
 		return new Array<InputEvent>(events.Where((e) => Instance.IsController == IsControllerEvent(e)));
 	}
 
-
+	// Gets custom (not built-in) events
 	public static Array<StringName> GetCustomActions()
 	{
 		Array<StringName> actions = InputMap.GetActions();
@@ -85,6 +87,7 @@ public partial class InputManager : Node
 	private static bool IsControllerEvent(InputEvent inputEvent) => inputEvent is InputEventJoypadButton || inputEvent is InputEventJoypadMotion;
 	private static bool IsBuiltIn(StringName action) => action.ToString().StartsWith("ui") && InputMap.HasAction(action);
 
+	// Keeps track of whether user is using a controller or KB+M
 	public override void _Input(InputEvent @event)
 	{
 		IsController = IsControllerEvent(@event);

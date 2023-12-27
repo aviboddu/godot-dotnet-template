@@ -90,6 +90,7 @@ public partial class AudioManager : Node
 #endif
 	}
 
+	// Based on the decibel conversion described here: https://docs.godotengine.org/en/stable/tutorials/audio/audio_buses.html#decibel-scale
 	private static float ConvertToDecibels(float x)
 	{
 		Debug.Assert(x > 0, $"AudioManager::ConvertToDecibels({x}) - {x} must be greater than 0");

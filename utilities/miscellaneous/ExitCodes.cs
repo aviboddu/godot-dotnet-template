@@ -1,5 +1,6 @@
 namespace Utilities;
 
+// Standard Exit Codes to use when crashing. Add relevant codes as needed.
 public static class ExitCodes
 {
     public const int EXIT_OK = 0; // successful termination

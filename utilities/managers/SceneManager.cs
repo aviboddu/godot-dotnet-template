@@ -5,7 +5,7 @@ namespace Utilities;
 public partial class SceneManager : Node
 {
 	const string LOADING_SCREEN_PATH = "res://ui/loading_screen/LoadingScreen.tscn";
-	private static readonly Lazy<PackedScene> _loadingScreen = new(() => GD.Load<PackedScene>(LOADING_SCREEN_PATH), false);
+	private static readonly PackedScene _loadingScreen = GD.Load<PackedScene>(LOADING_SCREEN_PATH);
 
 	private static SceneManager Instance;
 	public override void _EnterTree()
@@ -28,6 +28,6 @@ public partial class SceneManager : Node
 	{
 		Logger.WriteDebug($"SceneManager::_changeScene({sceneToLoad}) - Loading {sceneToLoad}");
 		DesiredScene = sceneToLoad;
-		GetTree().ChangeSceneToPacked(_loadingScreen.Value);
+		GetTree().ChangeSceneToPacked(_loadingScreen);
 	}
 }

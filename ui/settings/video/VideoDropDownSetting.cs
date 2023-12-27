@@ -3,6 +3,8 @@ using Godot;
 using Utilities;
 
 namespace UI;
+
+// General class to connect drop down to a video setting
 public abstract partial class VideoDropDownSetting : Node
 {
 	[Export(PropertyHint.NodePathValidTypes, "OptionButton")]

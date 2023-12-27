@@ -21,7 +21,6 @@ public partial class InputActionSetting : Node
 		}
 	}
 	private StringName _action;
-
 	private Label actionLabel;
 
 	public override void _Ready()
@@ -50,6 +49,7 @@ public partial class InputActionSetting : Node
 		{
 			if (InputKey.Event != default && EventsConflict(InputKey.Event, newEvent))
 			{
+				// The new value set conflicts with one of the other values, swap accordingly
 				InputKey.SetEventNoSignal(oldEvent);
 				return;
 			}

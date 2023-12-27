@@ -21,7 +21,7 @@ public partial class Configuration : Node
 
 	private const string CONFIG_FILE_PATH = "./config.ini";
 	private const string TEMP_FILE_PATH = "./config_temp.ini"; // Must be in the save volume as CONFIG_FILE_PATH
-	private const float TIME_TO_FLUSH_IN_SECONDS = 1f;
+	private const float TIME_TO_FLUSH_IN_SECONDS = 0.5f;
 
 	private readonly ConfigFile configFile = new();
 	private readonly Timer saveDelay = new()
@@ -31,7 +31,7 @@ public partial class Configuration : Node
 		ProcessMode = ProcessModeEnum.Always
 	};
 
-	private bool savePending = false;
+	private bool saveQueued = false;
 
 	public override void _Ready()
 	{
@@ -74,10 +74,10 @@ public partial class Configuration : Node
 	// Writes any pending changes to file at the end of the frame
 	public void Flush()
 	{
-		if (saveDelay.IsStopped() || savePending)
+		if (saveDelay.IsStopped() || saveQueued) // Either there is no delta, or a save is queued anyway.
 			return;
 		Logger.WriteDebug($"Configuration::Flush() - Queued Save");
-		savePending = true;
+		saveQueued = true;
 		saveDelay.Stop();
 	}
 
@@ -87,7 +87,7 @@ public partial class Configuration : Node
 	{
 		lock (configFile)
 		{
-			Error err = configFile.Save(TEMP_FILE_PATH);
+			Error err = configFile.Save(TEMP_FILE_PATH); // Uses a temporary file path to ensure atomic file writes. Old config will be used if write fails.
 			if (err != Error.Ok)
 			{
 				Logger.WriteError($"Configuration::Save() - Failed to save config. Error {err}");
@@ -99,7 +99,7 @@ public partial class Configuration : Node
 				File.Delete(TEMP_FILE_PATH);
 				Logger.WriteDebug("Configuration::Save() - Saved config");
 			}
-			savePending = false;
+			saveQueued = false;
 		}
 	}
 
