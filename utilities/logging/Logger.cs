@@ -4,19 +4,8 @@ using System;
 namespace Utilities;
 
 [System.Diagnostics.DebuggerDisplay("(minLogLevel: {MinLogLevel})")]
-public partial class Logger : Node
+public static class Logger
 {
-	public static Logger Instance { get; private set; }
-	public override void _EnterTree()
-	{
-		if (Instance is not null)
-		{
-			QueueFree();
-			return;
-		}
-		Instance = this;
-		base._EnterTree();
-	}
 
 	public enum LogLevel : byte
 	{
@@ -28,12 +17,12 @@ public partial class Logger : Node
 
 	// The minimum log level to write
 	[Export]
-	public LogLevel MinLogLevel = LogLevel.Debug;
+	public const LogLevel MIN_LOG_LEVEL = LogLevel.Debug;
 
-	public void Write(in object message, LogLevel logLevel)
+	public static void Write(in object message, LogLevel logLevel)
 	{
 #if DEBUG
-		if (MinLogLevel > logLevel)
+		if (MIN_LOG_LEVEL > logLevel)
 			return;
 
 		string formattedMessage = FormatMessage(message, logLevel);
@@ -52,10 +41,10 @@ public partial class Logger : Node
 #endif
 	}
 
-	public static void WriteError(in object message) => Instance.Write(message, LogLevel.Error);
-	public static void WriteWarning(in object message) => Instance.Write(message, LogLevel.Warning);
-	public static void WriteInfo(in object message) => Instance.Write(message, LogLevel.Info);
-	public static void WriteDebug(in object message) => Instance.Write(message, LogLevel.Debug);
+	public static void WriteError(in object message) => Write(message, LogLevel.Error);
+	public static void WriteWarning(in object message) => Write(message, LogLevel.Warning);
+	public static void WriteInfo(in object message) => Write(message, LogLevel.Info);
+	public static void WriteDebug(in object message) => Write(message, LogLevel.Debug);
 
 	private static string FormatMessage(in object message, LogLevel level) => $"[{FormatDateTime(Miscellaneous.FastNow())}][{LevelToString(level)}] {message}";
 

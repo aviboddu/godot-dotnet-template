@@ -17,7 +17,6 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-Logger="*res://utilities/logging/Logger.cs"
 Configuration="*res://utilities/settings/Configuration.cs"
 AudioManager="*res://utilities/managers/AudioManager.cs"
 VideoManager="*res://utilities/managers/VideoManager.cs"
