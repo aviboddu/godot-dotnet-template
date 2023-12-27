@@ -119,7 +119,7 @@ public partial class VideoManager : Node
 		DisplayServer.WindowSetFlag(DisplayServer.WindowFlags.ResizeDisabled, true);
 		GetWindow().Position = Vector2I.Zero;
 		GetWindow().MinSize = new Vector2I(320, 180);
-		GetWindow().CheckedConnect(Window.SignalName.SizeChanged, Callable.From(() => EmitSignal(SignalName.ResolutionChanged)));
+		GetWindow().CheckedConnect(Viewport.SignalName.SizeChanged, Callable.From(() => EmitSignal(SignalName.ResolutionChanged)));
 
 		if (Configuration.Instance.HasSection(VIDEO_SECTION))
 		{

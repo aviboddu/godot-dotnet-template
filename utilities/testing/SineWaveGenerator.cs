@@ -6,8 +6,8 @@ public partial class SineWaveGenerator : AudioStreamPlayer
 	private const float PULSE_HZ = 440f; // The frequency of the sound wave.
 
 	// Saved buffer to push to generator repeatedly.
-	private Vector2[] _frames;
-	private AudioStreamGeneratorPlayback Playback { get => (AudioStreamGeneratorPlayback)GetStreamPlayback(); }
+	private Vector2[] frames;
+	private AudioStreamGeneratorPlayback Playback => (AudioStreamGeneratorPlayback)GetStreamPlayback();
 
 	public override void _Ready()
 	{
@@ -27,18 +27,18 @@ public partial class SineWaveGenerator : AudioStreamPlayer
 		}
 	}
 
-	private void FillBuffer() => Playback.PushBuffer(_frames);
+	private void FillBuffer() => Playback.PushBuffer(frames);
 
 	private void CreateFullBuffer()
 	{
-		float _increment = Mathf.Tau * PULSE_HZ / ((AudioStreamGenerator)Stream).MixRate;
+		float increment = Mathf.Tau * PULSE_HZ / ((AudioStreamGenerator)Stream).MixRate;
 		float phase = 0;
 		int framesAvailable = Playback.GetFramesAvailable();
-		_frames = new Vector2[framesAvailable];
+		frames = new Vector2[framesAvailable];
 		for (int i = 0; i < framesAvailable; i++)
 		{
-			_frames[i] = Vector2.One * Mathf.Sin(phase);
-			phase += _increment;
+			frames[i] = Vector2.One * Mathf.Sin(phase);
+			phase += increment;
 		}
 	}
 }

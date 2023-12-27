@@ -32,7 +32,7 @@ size_flags_vertical = 3
 [node name="Resolution" type="HBoxContainer" parent="Settings/Video/Video Container"]
 layout_mode = 2
 script = ExtResource("3_vygjg")
-dropDown = NodePath("Resolution DropDown")
+DropDown = NodePath("Resolution DropDown")
 
 [node name="Resolution Label" type="Label" parent="Settings/Video/Video Container/Resolution"]
 layout_mode = 2
@@ -56,7 +56,7 @@ popup/item_4/id = 4
 [node name="Window Mode" type="HBoxContainer" parent="Settings/Video/Video Container"]
 layout_mode = 2
 script = ExtResource("4_dbqe7")
-dropDown = NodePath("Window Mode DropDown")
+DropDown = NodePath("Window Mode DropDown")
 
 [node name="Window Mode Label" type="Label" parent="Settings/Video/Video Container/Window Mode"]
 layout_mode = 2
@@ -91,7 +91,7 @@ size_flags_horizontal = 10
 [node name="Maximum Framerate" type="HBoxContainer" parent="Settings/Video/Video Container"]
 layout_mode = 2
 script = ExtResource("6_rhmth")
-dropDown = NodePath("Maximum Framerate DropDown")
+DropDown = NodePath("Maximum Framerate DropDown")
 
 [node name="Maximum Framerate Label" type="Label" parent="Settings/Video/Video Container/Maximum Framerate"]
 layout_mode = 2
@@ -127,14 +127,15 @@ size_flags_vertical = 3
 
 [node name="Master Volume" parent="Settings/Audio/Audio Settings" instance=ExtResource("7_6rmts")]
 layout_mode = 2
+VolumeName = "MasterVolume"
 
 [node name="Music Volume" parent="Settings/Audio/Audio Settings" instance=ExtResource("7_6rmts")]
 layout_mode = 2
-volumeName = "MusicVolume"
+VolumeName = "MusicVolume"
 
 [node name="SFX Volume" parent="Settings/Audio/Audio Settings" instance=ExtResource("7_6rmts")]
 layout_mode = 2
-volumeName = "SfxVolume"
+VolumeName = "SfxVolume"
 
 [node name="Input" type="ScrollContainer" parent="Settings"]
 visible = false

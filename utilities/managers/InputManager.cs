@@ -20,15 +20,15 @@ public partial class InputManager : Node
 
 	[Signal]
 	public delegate void IsControllerChangedEventHandler(bool isController);
-	private bool _isController = false;
+	private bool isController;
 	public bool IsController
 	{
-		get => _isController;
+		get => isController;
 		private set
 		{
 			if (IsController == value)
 				return;
-			_isController = value;
+			isController = value;
 			EmitSignal(SignalName.IsControllerChanged, value);
 		}
 	}

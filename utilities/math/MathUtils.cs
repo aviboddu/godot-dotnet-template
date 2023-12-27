@@ -1,7 +1,7 @@
 using Godot;
 
 namespace Utilities;
-public static partial class MathUtils
+public static class MathUtils
 {
         /*
         * Linearly interpolates between two values by a normalized value, correctly adjusted by delta

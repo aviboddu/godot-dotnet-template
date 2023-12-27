@@ -48,13 +48,13 @@ horizontal_alignment = 1
 layout_mode = 2
 text = "Play 2D Scene"
 script = ExtResource("2_lluh2")
-sceneToLoad = "res://utilities/testing/Test2DScene.tscn"
+SceneToLoad = "res://utilities/testing/Test2DScene.tscn"
 
 [node name="Play3D" type="Button" parent="StartMenu/MarginContainer/StartMenu"]
 layout_mode = 2
 text = "Play 3D Scene"
 script = ExtResource("2_lluh2")
-sceneToLoad = "res://utilities/testing/Test3DScene.tscn"
+SceneToLoad = "res://utilities/testing/Test3DScene.tscn"
 
 [node name="Settings" type="Button" parent="StartMenu/MarginContainer/StartMenu"]
 layout_mode = 2

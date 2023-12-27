@@ -66,7 +66,7 @@ layout_mode = 2
 size_flags_vertical = 3
 text = "Quit to Main Menu"
 script = ExtResource("1_u8u0p")
-sceneToLoad = "res://ui/main_menu/main_menu.tscn"
+SceneToLoad = "res://ui/main_menu/main_menu.tscn"
 
 [node name="Quit To OS" type="Button" parent="MainPauseMenu/MarginContainer/PauseMenu"]
 layout_mode = 2

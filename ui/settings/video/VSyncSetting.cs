@@ -5,17 +5,17 @@ namespace UI;
 public partial class VSyncSetting : HBoxContainer
 {
 	[Export(PropertyHint.NodePathValidTypes, "CheckButton")]
-	NodePath VSyncButton;
+	public NodePath VSyncButton;
 
-	private CheckButton VSyncCheckButton;
+	private CheckButton vSyncCheckButton;
 
 	public override void _Ready()
 	{
-		VSyncCheckButton = GetNode<CheckButton>(VSyncButton);
-		VSyncCheckButton.CheckedConnect(CheckBox.SignalName.Toggled, Callable.From<bool>(_on_button_toggled));
+		vSyncCheckButton = GetNode<CheckButton>(VSyncButton);
+		vSyncCheckButton.CheckedConnect(BaseButton.SignalName.Toggled, Callable.From<bool>(_on_button_toggled));
 
 		bool isVsync = VideoManager.Instance.VSyncMode == DisplayServer.VSyncMode.Enabled;
-		VSyncCheckButton.SetPressedNoSignal(isVsync);
+		vSyncCheckButton.SetPressedNoSignal(isVsync);
 	}
 
 	public void _on_button_toggled(bool toggled)

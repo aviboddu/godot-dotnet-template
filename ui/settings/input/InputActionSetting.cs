@@ -10,21 +10,21 @@ public partial class InputActionSetting : Node
 	public delegate void ChangedEventEventHandler(InputEvent oldEvent, InputEvent newEvent);
 
 	[Export]
-	Array<InputButtonSetting> InputKeys;
+	public Array<InputButtonSetting> InputKeys;
 
 	[Export]
 	public StringName Action
 	{
-		get => _action;
+		get => action;
 		set
 		{
 			if (Action == value) return;
-			_action = value;
+			action = value;
 			actionLabel.Text = value.ToString();
 			LoadEvents();
 		}
 	}
-	private StringName _action;
+	private StringName action;
 	private Label actionLabel;
 
 	public override void _Ready()
@@ -42,7 +42,7 @@ public partial class InputActionSetting : Node
 		{
 			if (EventsConflict(inputKey.Event, oldEvent))
 			{
-				InputManager.SwapEvent(_action, inputKey.Event, newEvent);
+				InputManager.SwapEvent(action, inputKey.Event, newEvent);
 				inputKey.SetEventNoSignal(newEvent);
 				return;
 			}
@@ -56,21 +56,18 @@ public partial class InputActionSetting : Node
 		Array<InputEvent> inputEvents = InputManager.GetInputEvents(Action);
 		for (int i = 0; i < InputKeys.Count; i++)
 		{
-			if (i >= inputEvents.Count)
-				InputKeys[i].SetEventNoSignal(default);
-			else
-				InputKeys[i].SetEventNoSignal(inputEvents[i]);
+			InputKeys[i].SetEventNoSignal(i >= inputEvents.Count ? default : inputEvents[i]);
 		}
 	}
 
 	private void SwapEvents(InputEvent oldEvent, InputEvent newEvent)
 	{
-		foreach (InputButtonSetting InputKey in InputKeys)
+		foreach (InputButtonSetting inputKey in InputKeys)
 		{
-			if (InputKey.Event != default && EventsConflict(InputKey.Event, newEvent))
+			if (inputKey.Event != default && EventsConflict(inputKey.Event, newEvent))
 			{
 				// The new value set conflicts with one of the other values, swap accordingly
-				InputKey.SetEventNoSignal(oldEvent);
+				inputKey.SetEventNoSignal(oldEvent);
 				return;
 			}
 		}
@@ -89,13 +86,13 @@ public partial class InputActionSetting : Node
 		{
 			case InputEventKey eventOneKey:
 				InputEventKey eventTwoKey = eventTwo as InputEventKey;
-				return eventOneKey.PhysicalKeycode == eventTwoKey.PhysicalKeycode;
+				return eventOneKey.PhysicalKeycode == eventTwoKey!.PhysicalKeycode;
 			case InputEventJoypadButton eventOneJoypad:
 				InputEventJoypadButton eventTwoJoypad = eventTwo as InputEventJoypadButton;
-				return eventOneJoypad.ButtonIndex == eventTwoJoypad.ButtonIndex;
+				return eventOneJoypad.ButtonIndex == eventTwoJoypad!.ButtonIndex;
 			case InputEventMouseButton eventOneMouseButton:
 				InputEventMouseButton eventTwoMouseButton = eventTwo as InputEventMouseButton;
-				return eventOneMouseButton.ButtonIndex == eventTwoMouseButton.ButtonIndex;
+				return eventOneMouseButton.ButtonIndex == eventTwoMouseButton!.ButtonIndex;
 			default:
 				return false;
 		}

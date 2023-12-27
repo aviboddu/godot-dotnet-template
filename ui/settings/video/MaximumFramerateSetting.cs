@@ -7,7 +7,7 @@ public partial class MaximumFramerateSetting : VideoDropDownSetting
 
 	public override void _Ready()
 	{
-		property = "RefreshRate";
+		Property = "RefreshRate";
 		base._Ready();
 	}
 
@@ -22,7 +22,7 @@ public partial class MaximumFramerateSetting : VideoDropDownSetting
 	{
 		if (UNLIMITED.Equals(s))
 			return 0;
-		return int.Parse(s);
+		return int.Parse(s ?? string.Empty);
 	}
 
 }

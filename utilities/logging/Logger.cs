@@ -28,12 +28,12 @@ public partial class Logger : Node
 
 	// The minimum log level to write
 	[Export]
-	public LogLevel minLogLevel = LogLevel.Debug;
+	public LogLevel MinLogLevel = LogLevel.Debug;
 
 	public void Write(in object message, LogLevel logLevel)
 	{
 #if DEBUG
-		if (minLogLevel > logLevel)
+		if (MinLogLevel > logLevel)
 			return;
 
 		string formattedMessage = FormatMessage(message, logLevel);

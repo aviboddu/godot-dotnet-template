@@ -31,7 +31,7 @@ public partial class Configuration : Node
 		ProcessMode = ProcessModeEnum.Always
 	};
 
-	private bool saveQueued = false;
+	private bool saveQueued;
 
 	public override void _Ready()
 	{
@@ -95,7 +95,7 @@ public partial class Configuration : Node
 			}
 			else
 			{
-				System.IO.File.Move(TEMP_FILE_PATH, CONFIG_FILE_PATH, true);
+				File.Move(TEMP_FILE_PATH, CONFIG_FILE_PATH, true);
 				File.Delete(TEMP_FILE_PATH);
 				Logger.WriteDebug("Configuration::Save() - Saved config");
 			}

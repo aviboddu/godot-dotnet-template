@@ -6,13 +6,13 @@ public partial class PauseMenu : Control
 {
 	private const string PAUSE = "Pause";
 	private Settings settings;
-	private Control MainPauseMenu;
+	private Control mainPauseMenu;
 
 	public override void _Ready()
 	{
 		base._Ready();
 		settings = GetNode<Settings>("%Settings");
-		MainPauseMenu = GetNode<Control>("%MainPauseMenu");
+		mainPauseMenu = GetNode<Control>("%MainPauseMenu");
 
 		settings.CheckedConnect(Settings.SignalName.BackPressed, Callable.From(_on_back_pressed));
 	}
@@ -30,13 +30,13 @@ public partial class PauseMenu : Control
 	public void _on_back_pressed()
 	{
 		settings.Visible = false;
-		MainPauseMenu.Visible = true;
+		mainPauseMenu.Visible = true;
 	}
 
 	public void _on_settings_pressed()
 	{
 		settings.Visible = true;
-		MainPauseMenu.Visible = false;
+		mainPauseMenu.Visible = false;
 	}
 
 	public void _on_quit_to_os_pressed()
@@ -58,7 +58,7 @@ public partial class PauseMenu : Control
 
 		// Ensures next pause will be from normal state
 		settings.Visible = false;
-		MainPauseMenu.Visible = true;
+		mainPauseMenu.Visible = true;
 
 		// Flush any pending settings
 		Configuration.Instance.Flush();

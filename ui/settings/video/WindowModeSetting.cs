@@ -1,4 +1,3 @@
-using System;
 using Godot;
 using Utilities;
 
@@ -12,7 +11,7 @@ public partial class WindowModeSetting : VideoDropDownSetting
 
 	public override void _Ready()
 	{
-		property = "WindowMode";
+		Property = "WindowMode";
 		base._Ready();
 	}
 
@@ -42,7 +41,7 @@ public partial class WindowModeSetting : VideoDropDownSetting
 			default:
 				Logger.WriteError($"WindowModeSetting::StringToScreenMode({s}) - {s} was not a valid string");
 				return default;
-		};
+		}
 	}
 
 }

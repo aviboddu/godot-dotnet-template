@@ -5,7 +5,7 @@ using Godot;
 namespace Utilities;
 public static class Miscellaneous
 {
-	private static readonly TimeSpan _localUtcOffset = TimeZoneInfo.Local.GetUtcOffset(DateTime.Now);
+	private static readonly TimeSpan LocalUtcOffset = TimeZoneInfo.Local.GetUtcOffset(DateTime.Now);
 
 	// Node is valid.
 	public static bool IsValid<T>(this T node) where T : GodotObject
@@ -25,12 +25,12 @@ public static class Miscellaneous
 	}
 
 	// Crash the game with correct notifications and exit codes. https://docs.godotengine.org/en/stable/tutorials/inputs/handling_quit_requests.html
-	public static void Crash<T>(this T tree, int exitCode) where T : SceneTree
+	public static void Crash<T>(this T tree, ExitCodes exitCode) where T : SceneTree
 	{
 		Debug.Assert(exitCode > 0, $"SceneTree.Crash({exitCode}) - exitCode must be greater than 0");
-		Debug.Assert(exitCode < 256, $"SceneTree.Crash({exitCode}) - exitCode must be less than 256");
+		Debug.Assert((int)exitCode < 256, $"SceneTree.Crash({exitCode}) - exitCode must be less than 256");
 		tree.Root.PropagateNotification((int)Node.NotificationCrash);
-		tree.Quit(exitCode);
+		tree.Quit((int)exitCode);
 	}
 
 	// Exit the game with correct notifications. https://docs.godotengine.org/en/stable/tutorials/inputs/handling_quit_requests.html
@@ -42,5 +42,5 @@ public static class Miscellaneous
 
 	// A faster Now method which doesn't adjust for local time in between the game.
 	// Which makes our logs easier to understand if they happen in between daylight savings as well.
-	public static DateTime FastNow() => DateTime.SpecifyKind(DateTime.UtcNow + _localUtcOffset, DateTimeKind.Local);
+	public static DateTime FastNow() => DateTime.SpecifyKind(DateTime.UtcNow + LocalUtcOffset, DateTimeKind.Local);
 }

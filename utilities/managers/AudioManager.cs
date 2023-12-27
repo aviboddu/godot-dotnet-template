@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Godot;
+// ReSharper disable CompareOfFloatsByEqualityOperator
 
 namespace Utilities;
 
@@ -24,43 +25,43 @@ public partial class AudioManager : Node
 	private const string MUSIC_BUS_NAME = "Music";
 	private const string SFX_BUS_NAME = "SFX";
 
-	private readonly int _masterBusIndex = AudioServer.GetBusIndex(MASTER_BUS_NAME);
-	private readonly int _musicBusIndex = AudioServer.GetBusIndex(MUSIC_BUS_NAME);
-	private readonly int _sfxBusIndex = AudioServer.GetBusIndex(SFX_BUS_NAME);
+	private readonly int masterBusIndex = AudioServer.GetBusIndex(MASTER_BUS_NAME);
+	private readonly int musicBusIndex = AudioServer.GetBusIndex(MUSIC_BUS_NAME);
+	private readonly int sfxBusIndex = AudioServer.GetBusIndex(SFX_BUS_NAME);
 
 	public float MasterVolume
 	{
-		get => GetBusVolume(_masterBusIndex);
+		get => GetBusVolume(masterBusIndex);
 		set
 		{
 			if (MasterVolume == value) return;
-			Debug.Assert(0 <= value && value <= 1, $"MasterVolume = {value} must be between 0 and 1");
+			Debug.Assert(value is >= 0 and <= 1, $"MasterVolume = {value} must be between 0 and 1");
 			Configuration.Instance.ChangeSetting(AUDIO_SECTION, PropertyName.MasterVolume, value);
-			SetBusVolume(_masterBusIndex, value);
+			SetBusVolume(masterBusIndex, value);
 		}
 	}
 
 	public float MusicVolume
 	{
-		get => GetBusVolume(_musicBusIndex);
+		get => GetBusVolume(musicBusIndex);
 		set
 		{
 			if (MusicVolume == value) return;
-			Debug.Assert(0 <= value && value <= 1, $"MusicVolume = {value} must be between 0 and 1");
+			Debug.Assert(value is >= 0 and <= 1, $"MusicVolume = {value} must be between 0 and 1");
 			Configuration.Instance.ChangeSetting(AUDIO_SECTION, PropertyName.MusicVolume, value);
-			SetBusVolume(_musicBusIndex, value);
+			SetBusVolume(musicBusIndex, value);
 		}
 	}
 
 	public float SfxVolume
 	{
-		get => GetBusVolume(_sfxBusIndex);
+		get => GetBusVolume(sfxBusIndex);
 		set
 		{
 			if (SfxVolume == value) return;
-			Debug.Assert(0 <= value && value <= 1, $"SfxVolume = {value} must be between 0 and 1");
+			Debug.Assert(value is >= 0 and <= 1, $"SfxVolume = {value} must be between 0 and 1");
 			Configuration.Instance.ChangeSetting(AUDIO_SECTION, PropertyName.SfxVolume, value);
-			SetBusVolume(_sfxBusIndex, value);
+			SetBusVolume(sfxBusIndex, value);
 		}
 	}
 
@@ -73,9 +74,9 @@ public partial class AudioManager : Node
 		if (Configuration.Instance.HasSection(AUDIO_SECTION))
 		{
 			Logger.WriteInfo("AudioManager::_Ready() - Initializing Volumes from Configuration");
-			SetBusVolume(_masterBusIndex, Configuration.Instance.GetSetting<float>(AUDIO_SECTION, PropertyName.MasterVolume));
-			SetBusVolume(_musicBusIndex, Configuration.Instance.GetSetting<float>(AUDIO_SECTION, PropertyName.MusicVolume));
-			SetBusVolume(_sfxBusIndex, Configuration.Instance.GetSetting<float>(AUDIO_SECTION, PropertyName.SfxVolume));
+			SetBusVolume(masterBusIndex, Configuration.Instance.GetSetting<float>(AUDIO_SECTION, PropertyName.MasterVolume));
+			SetBusVolume(musicBusIndex, Configuration.Instance.GetSetting<float>(AUDIO_SECTION, PropertyName.MusicVolume));
+			SetBusVolume(sfxBusIndex, Configuration.Instance.GetSetting<float>(AUDIO_SECTION, PropertyName.SfxVolume));
 		}
 		else
 		{

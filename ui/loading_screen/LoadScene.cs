@@ -6,15 +6,15 @@ namespace UI;
 public partial class LoadScene : Button
 {
 	[Export(PropertyHint.File, "*.tscn")]
-	public string sceneToLoad;
+	public string SceneToLoad;
 
 	public override void _Ready()
 	{
 		base._Ready();
 
-		Debug.Assert(sceneToLoad is not null, $"LoadScene::_Ready() - {PropertyName.sceneToLoad} is null");
-		this.CheckedConnect(SignalName.Pressed, Callable.From(_on_pressed));
+		Debug.Assert(SceneToLoad is not null, $"LoadScene::_Ready() - {PropertyName.SceneToLoad} is null");
+		this.CheckedConnect(BaseButton.SignalName.Pressed, Callable.From(_on_pressed));
 	}
 
-	public void _on_pressed() => SceneManager.ChangeScene(sceneToLoad);
+	public void _on_pressed() => SceneManager.ChangeScene(SceneToLoad);
 }

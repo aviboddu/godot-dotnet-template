@@ -17,6 +17,7 @@ public partial class InputButtonSetting : Button
 			SetEventNoSignal(value);
 		}
 	}
+	// ReSharper disable once InconsistentNaming
 	private InputEvent _event;
 
 	[Signal]
@@ -46,13 +47,16 @@ public partial class InputButtonSetting : Button
 		base._GuiInput(@event);
 		if (@event is InputEventMouseButton mouseButtonEvent && @event.IsPressed())
 		{
-			if (mouseButtonEvent.ButtonIndex == MouseButton.Left)
+			switch (mouseButtonEvent.ButtonIndex)
 			{
-				popupListener.Visible = true;
-				GetViewport().SetInputAsHandled();
+				case MouseButton.Left:
+					popupListener.Visible = true;
+					GetViewport().SetInputAsHandled();
+					break;
+				case MouseButton.Middle:
+					Event = default;
+					break;
 			}
-			else if (mouseButtonEvent.ButtonIndex == MouseButton.Middle)
-				Event = default;
 		}
 	}
 }
