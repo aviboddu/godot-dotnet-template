@@ -9,8 +9,14 @@ public partial class ResolutionSetting : VideoDropDownSetting
 		Property = "Resolution";
 
 		// Changing window mode can change resolution, so we connect this to reload properties just in case
-		VideoManager.Instance.CheckedConnect(VideoManager.SignalName.WindowModeChanged, Callable.From(LoadProperty));
+		VideoManager.Instance.CheckedConnect(VideoManager.SignalName.WindowModeChanged, Callable.From(ReloadResolution));
 		base._Ready();
+	}
+
+	private void ReloadResolution()
+	{
+		LoadProperty();
+		VideoManager.Instance.Resolution = (Vector2I)StringToProperty(dropDownSetting.GetItemText(dropDownSetting.Selected));
 	}
 
 	protected override string PropertyToString(Variant prop)

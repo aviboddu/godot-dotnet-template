@@ -10,7 +10,7 @@ public abstract partial class VideoDropDownSetting : Node
 	[Export(PropertyHint.NodePathValidTypes, "OptionButton")]
 	public NodePath DropDown;
 
-	private OptionButton dropDownSetting;
+	protected OptionButton dropDownSetting;
 
 	protected string Property;
 
