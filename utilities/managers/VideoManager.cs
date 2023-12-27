@@ -124,10 +124,10 @@ public partial class VideoManager : Node
 		if (Configuration.Instance.HasSection(VIDEO_SECTION))
 		{
 			Logger.WriteInfo("VideoManager::_Ready() - Initializing Settings from Configuration");
+			Resolution = Configuration.Instance.GetSetting<Vector2I>(VIDEO_SECTION, PropertyName.Resolution); // Must be after changing window mode, otherwise might be overwritten
 			WindowMode = (WinMode)Configuration.Instance.GetSetting<int>(VIDEO_SECTION, PropertyName.WindowMode);
 			RefreshRate = Configuration.Instance.GetSetting<int>(VIDEO_SECTION, PropertyName.RefreshRate);
 			VSyncMode = (DisplayServer.VSyncMode)Configuration.Instance.GetSetting<int>(VIDEO_SECTION, PropertyName.VSyncMode);
-			Resolution = Configuration.Instance.GetSetting<Vector2I>(VIDEO_SECTION, PropertyName.Resolution); // Must be after changing window mode, otherwise might be overwritten
 			Configuration.Instance.Flush();
 		}
 		else
@@ -138,7 +138,7 @@ public partial class VideoManager : Node
 			Configuration.Instance.ChangeSetting(VIDEO_SECTION, PropertyName.WindowMode, (int)WindowMode);
 			Configuration.Instance.ChangeSetting(VIDEO_SECTION, PropertyName.RefreshRate, RefreshRate);
 			Configuration.Instance.ChangeSetting(VIDEO_SECTION, PropertyName.VSyncMode, (int)VSyncMode);
-			Resolution = DisplayServer.ScreenGetSize();
+			Configuration.Instance.ChangeSetting(VIDEO_SECTION, PropertyName.Resolution, Resolution);
 			Configuration.Instance.Flush();
 		}
 
