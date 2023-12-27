@@ -9,8 +9,9 @@ public partial class InputActionSetting : Node
 	[Signal]
 	public delegate void ChangedEventEventHandler(InputEvent oldEvent, InputEvent newEvent);
 
-	[Export]
-	public Array<InputButtonSetting> InputKeys;
+	[Export(PropertyHint.NodePathValidTypes, "InputButtonSetting")]
+	public Array<NodePath> InputKeyPaths;
+	private Array<InputButtonSetting> InputKeys;
 
 	[Export]
 	public StringName Action
@@ -30,6 +31,7 @@ public partial class InputActionSetting : Node
 	public override void _Ready()
 	{
 		actionLabel = GetNode<Label>("%Action");
+		InputKeys = new Array<InputButtonSetting>(InputKeyPaths.Select(GetNode<InputButtonSetting>));
 		InputManager.Instance.CheckedConnect(InputManager.SignalName.IsControllerChanged, Callable.From(LoadEvents));
 		foreach (InputButtonSetting inputKey in InputKeys)
 			inputKey.CheckedConnect(InputButtonSetting.SignalName.EventChanged, Callable.From<InputEvent, InputEvent>(SwapEvents));
