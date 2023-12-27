@@ -42,7 +42,8 @@ public partial class InputActionSetting : Node
 		{
 			if (EventsConflict(inputKey.Event, oldEvent))
 			{
-				inputKey.SetDeferred(InputButtonSetting.PropertyName.Event, newEvent);
+				InputManager.SwapEvent(_action, inputKey.Event, newEvent);
+				inputKey.SetEventNoSignal(newEvent);
 				return;
 			}
 		}
