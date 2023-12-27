@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Godot;
 using Utilities;
@@ -6,6 +7,9 @@ namespace UI;
 public partial class InputSetting : Container
 {
 	private const string INPUT_ACTION_SETTING_PATH = "res://ui/settings/input/InputActionSetting.tscn";
+
+	private readonly Lazy<PackedScene> InputActionPackedScene = new(() => (PackedScene)ResourceLoader.LoadThreadedGet(INPUT_ACTION_SETTING_PATH));
+
 	public override void _Ready()
 	{
 		Error err = ResourceLoader.LoadThreadedRequest(INPUT_ACTION_SETTING_PATH);
@@ -16,26 +20,29 @@ public partial class InputSetting : Container
 
 	private void LoadActions()
 	{
-		ResourceLoader.ThreadLoadStatus status = ResourceLoader.LoadThreadedGetStatus(INPUT_ACTION_SETTING_PATH);
-		switch (status)
-		{
-			case ResourceLoader.ThreadLoadStatus.InvalidResource:
-				Logger.WriteError($"InputSettings::LoadActions() - ResourceLoader returned InvalidResource");
-				return;
-			case ResourceLoader.ThreadLoadStatus.Failed:
-				Logger.WriteError($"InputSettings::LoadActions() - ResourceLoader returns Status.Failed");
-				return;
-		}
-
 		foreach (StringName action in InputManager.GetCustomActions())
 		{
 			// Can only change events with buttons (for now), not analog movements
 			if (InputMap.ActionGetEvents(action).Any((e) => e is InputEventMouseMotion || e is InputEventJoypadMotion))
 				continue;
-			InputActionSetting actionSetting = ((PackedScene)ResourceLoader.LoadThreadedGet(INPUT_ACTION_SETTING_PATH)).Instantiate<InputActionSetting>();
+			InputActionSetting actionSetting = InputActionPackedScene.Value.Instantiate<InputActionSetting>();
 			AddChild(actionSetting);
 			actionSetting.Action = action;
+			actionSetting.CheckedConnect(InputActionSetting.SignalName.ChangedEvent, Callable.From<InputEvent, InputEvent>(PreventConflicts));
 		}
-		this.Disconnect(SignalName.VisibilityChanged, Callable.From(LoadActions));
+		Disconnect(SignalName.VisibilityChanged, Callable.From(LoadActions));
+	}
+
+	// Checks that no other actions have events which will conflict with the newEvent, and replaces them with oldEvent accordingly.
+	public void PreventConflicts(InputEvent oldEvent, InputEvent newEvent)
+	{
+		foreach (InputActionSetting actionSetting in GetChildren().Cast<InputActionSetting>())
+		{
+			if (actionSetting.GetInputEvents().Any(e => InputActionSetting.EventsConflict(newEvent, e)))
+			{
+				actionSetting.ForceChangeEvent(newEvent, oldEvent);
+				return;
+			}
+		}
 	}
 }

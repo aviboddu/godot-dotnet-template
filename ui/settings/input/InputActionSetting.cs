@@ -1,3 +1,4 @@
+using System.Linq;
 using Godot;
 using Godot.Collections;
 using Utilities;
@@ -5,6 +6,9 @@ using Utilities;
 namespace UI;
 public partial class InputActionSetting : Node
 {
+	[Signal]
+	public delegate void ChangedEventEventHandler(InputEvent oldEvent, InputEvent newEvent);
+
 	[Export]
 	Array<InputButtonSetting> InputKeys;
 
@@ -31,6 +35,21 @@ public partial class InputActionSetting : Node
 			inputKey.CheckedConnect(InputButtonSetting.SignalName.EventChanged, Callable.From<InputEvent, InputEvent>(SwapEvents));
 	}
 
+	// This is called by the parent when this action's event conflicts with another action's desired event.
+	public void ForceChangeEvent(InputEvent oldEvent, InputEvent newEvent)
+	{
+		foreach (InputButtonSetting inputKey in InputKeys)
+		{
+			if (EventsConflict(inputKey.Event, oldEvent))
+			{
+				inputKey.SetDeferred(InputButtonSetting.PropertyName.Event, newEvent);
+				return;
+			}
+		}
+	}
+
+	public Array<InputEvent> GetInputEvents() => new(InputKeys.Select(button => button.Event));
+
 	private void LoadEvents()
 	{
 		Array<InputEvent> inputEvents = InputManager.GetInputEvents(Action);
@@ -54,26 +73,30 @@ public partial class InputActionSetting : Node
 				return;
 			}
 		}
+		EmitSignal(SignalName.ChangedEvent, oldEvent, newEvent);
 		InputManager.SwapEvent(Action, oldEvent, newEvent);
 	}
 
-	private static bool EventsConflict(InputEvent eventOne, InputEvent eventTwo)
+	public static bool EventsConflict(InputEvent eventOne, InputEvent eventTwo)
 	{
+		if (eventOne == default || eventTwo == default)
+			return false;
 		if (eventOne.GetType() != eventTwo.GetType())
 			return false;
 
 		switch (eventOne)
 		{
 			case InputEventKey eventOneKey:
-				InputEventKey eventTwoKey = (InputEventKey)eventTwo;
+				InputEventKey eventTwoKey = eventTwo as InputEventKey;
 				return eventOneKey.PhysicalKeycode == eventTwoKey.PhysicalKeycode;
 			case InputEventJoypadButton eventOneJoypad:
-				InputEventJoypadButton eventTwoJoypad = (InputEventJoypadButton)eventTwo;
+				InputEventJoypadButton eventTwoJoypad = eventTwo as InputEventJoypadButton;
 				return eventOneJoypad.ButtonIndex == eventTwoJoypad.ButtonIndex;
 			case InputEventMouseButton eventOneMouseButton:
-				InputEventMouseButton eventTwoMouseButton = (InputEventMouseButton)eventTwo;
+				InputEventMouseButton eventTwoMouseButton = eventTwo as InputEventMouseButton;
 				return eventOneMouseButton.ButtonIndex == eventTwoMouseButton.ButtonIndex;
+			default:
+				return false;
 		}
-		return false;
 	}
 }
