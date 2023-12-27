@@ -1,9 +1,12 @@
+using System;
 using System.Diagnostics;
 using Godot;
 
 namespace Utilities;
 public static class Miscellaneous
 {
+	private static readonly TimeSpan _localUtcOffset = TimeZoneInfo.Local.GetUtcOffset(DateTime.Now);
+
 	// Node is valid.
 	public static bool IsValid<T>(this T node) where T : GodotObject
 	{
@@ -36,4 +39,8 @@ public static class Miscellaneous
 		tree.Root.PropagateNotification((int)Node.NotificationWMCloseRequest);
 		tree.Quit();
 	}
+
+	// A faster Now method which doesn't adjust for local time in between the game.
+	// Which makes our logs easier to understand if they happen in between daylight savings as well.
+	public static DateTime FastNow() => DateTime.SpecifyKind(DateTime.UtcNow + _localUtcOffset, DateTimeKind.Local);
 }

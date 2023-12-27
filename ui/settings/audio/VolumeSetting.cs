@@ -20,7 +20,7 @@ public partial class VolumeSetting : HBoxContainer
 		volumeSlider.CheckedConnect(Slider.SignalName.DragEnded, Callable.From<bool>(_on_drag_ended));
 		volumeSlider.CheckedConnect(Slider.SignalName.ValueChanged, Callable.From<double>(_on_value_changed));
 
-		float volume = (float)AudioManager.Instance.GetIndexed(volumeName) * 100f;
+		int volume = (int)((float)AudioManager.Instance.GetIndexed(volumeName) * 100f);
 		volumeSlider.SetValueNoSignal(volume);
 		volumeValue.Text = volume.ToString();
 	}
