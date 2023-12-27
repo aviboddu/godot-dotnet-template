@@ -42,8 +42,7 @@ public partial class PauseMenu : Control
 	public void _on_quit_to_os_pressed()
 	{
 		Logger.WriteInfo($"User Quit");
-		GetTree().Root.PropagateNotification((int)NotificationWMCloseRequest);
-		GetTree().Quit();
+		GetTree().Exit();
 	}
 
 	public void Pause()

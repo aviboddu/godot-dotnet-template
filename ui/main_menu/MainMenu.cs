@@ -33,7 +33,6 @@ public partial class MainMenu : Control
 	public void _on_quit_pressed()
 	{
 		Logger.WriteInfo("User Quit");
-		GetTree().Root.PropagateNotification((int)NotificationWMCloseRequest);
-		GetTree().Quit();
+		GetTree().Exit();
 	}
 }

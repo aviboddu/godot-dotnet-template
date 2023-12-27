@@ -17,4 +17,16 @@ public static class Miscellaneous
 			return node.Connect(signal, callable, flags);
 		return Error.InvalidParameter;
 	}
+
+	public static void Crash<T>(this T tree, int exitCode) where T : SceneTree
+	{
+		tree.Root.PropagateNotification((int)Node.NotificationCrash);
+		tree.Quit(exitCode);
+	}
+
+	public static void Exit<T>(this T tree) where T : SceneTree
+	{
+		tree.Root.PropagateNotification((int)Node.NotificationWMCloseRequest);
+		tree.Quit();
+	}
 }

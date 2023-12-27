@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://bg0c1keykc6op"]
 
-[ext_resource type="Script" path="res://ui/settings/InputActionSetting.cs" id="1_i871g"]
-[ext_resource type="PackedScene" uid="uid://cdauwlcln1ib5" path="res://ui/settings/InputButtonSetting.tscn" id="2_jod45"]
+[ext_resource type="Script" path="res://ui/settings/input/InputActionSetting.cs" id="1_i871g"]
+[ext_resource type="PackedScene" uid="uid://cdauwlcln1ib5" path="res://ui/settings/input/InputButtonSetting.tscn" id="2_jod45"]
 
 [node name="InputActionSetting" type="HBoxContainer" node_paths=PackedStringArray("InputKeys")]
 size_flags_horizontal = 3

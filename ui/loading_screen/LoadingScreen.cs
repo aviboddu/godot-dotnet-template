@@ -23,7 +23,12 @@ public partial class LoadingScreen : Control
 		progressBar = GetNode<ProgressBar>("%ProgressBar");
 		progressPercentage = [];
 		progressPercentage.Resize(1);
-		ResourceLoader.LoadThreadedRequest(sceneToLoad);
+		Error err = ResourceLoader.LoadThreadedRequest(sceneToLoad, useSubThreads: true);
+		if (err == Error.Failed)
+		{
+			Logger.WriteError($"LoadingScreen::_Ready() - ResourceLoader returned Error.Failed");
+			GetTree().Crash(ExitCodes.EXIT_LOAD);
+		}
 	}
 
 	public override void _Process(double delta)
@@ -43,9 +48,11 @@ public partial class LoadingScreen : Control
 						break;
 					case Error.CantCreate:
 						Logger.WriteError($"LoadingScreen::_Process - Failed to load {sceneToLoad}");
+						GetTree().Crash(ExitCodes.EXIT_LOAD);
 						break;
 					case Error.InvalidParameter:
 						Logger.WriteError($"LoadingScreen::_Process - {sceneToLoad} is invalid");
+						GetTree().Crash(ExitCodes.EXIT_LOAD);
 						break;
 				}
 				break;
@@ -54,13 +61,11 @@ public partial class LoadingScreen : Control
 				break;
 			case ResourceLoader.ThreadLoadStatus.InvalidResource:
 				Logger.WriteError($"LoadingScreen::_Process - {sceneToLoad} is invalid");
-				GetTree().Root.PropagateNotification((int)NotificationCrash);
-				GetTree().Quit(1);
+				GetTree().Crash(ExitCodes.EXIT_NOFILE);
 				break;
 			case ResourceLoader.ThreadLoadStatus.Failed:
 				Logger.WriteError($"LoadingScreen::_Process - {sceneToLoad} failed to load");
-				GetTree().Root.PropagateNotification((int)NotificationCrash);
-				GetTree().Quit(1);
+				GetTree().Crash(ExitCodes.EXIT_LOAD);
 				break;
 		}
 	}

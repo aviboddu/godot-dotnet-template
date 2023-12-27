@@ -61,6 +61,7 @@ public partial class InputActionSetting : Node
 	{
 		if (eventOne.GetType() != eventTwo.GetType())
 			return false;
+
 		switch (eventOne)
 		{
 			case InputEventKey eventOneKey:

@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://cdauwlcln1ib5"]
 
-[ext_resource type="Script" path="res://ui/settings/InputButtonSetting.cs" id="1_hpkrm"]
-[ext_resource type="Script" path="res://ui/settings/InputButtonPopupListener.cs" id="2_l1hsi"]
+[ext_resource type="Script" path="res://ui/settings/input/InputButtonSetting.cs" id="1_hpkrm"]
+[ext_resource type="Script" path="res://ui/settings/input/InputButtonPopupListener.cs" id="2_l1hsi"]
 
 [node name="InputButtonSetting" type="Button"]
 script = ExtResource("1_hpkrm")

@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://daul3nlbhnenl"]
 
-[ext_resource type="Script" path="res://ui/settings/VolumeSetting.cs" id="1_cqdpd"]
+[ext_resource type="Script" path="res://ui/settings/audio/VolumeSetting.cs" id="1_cqdpd"]
 
 [node name="Volume" type="HBoxContainer"]
 script = ExtResource("1_cqdpd")

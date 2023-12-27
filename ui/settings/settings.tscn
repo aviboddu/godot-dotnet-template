@@ -2,12 +2,12 @@
 
 [ext_resource type="Script" path="res://ui/settings/Settings.cs" id="1_cef2m"]
 [ext_resource type="StyleBox" uid="uid://h4njscbkx150" path="res://ui/settings/ScrollMarginContainer.tres" id="2_un10f"]
-[ext_resource type="Script" path="res://ui/settings/ResolutionSetting.cs" id="3_vygjg"]
-[ext_resource type="Script" path="res://ui/settings/WindowModeSetting.cs" id="4_dbqe7"]
-[ext_resource type="Script" path="res://ui/settings/VSyncSetting.cs" id="5_ksbo5"]
-[ext_resource type="Script" path="res://ui/settings/MaximumFramerateSetting.cs" id="6_rhmth"]
-[ext_resource type="PackedScene" uid="uid://daul3nlbhnenl" path="res://ui/settings/volume_slider.tscn" id="7_6rmts"]
-[ext_resource type="Script" path="res://ui/settings/InputSetting.cs" id="8_k6x66"]
+[ext_resource type="Script" path="res://ui/settings/video/ResolutionSetting.cs" id="3_vygjg"]
+[ext_resource type="Script" path="res://ui/settings/video/WindowModeSetting.cs" id="4_dbqe7"]
+[ext_resource type="Script" path="res://ui/settings/video/VSyncSetting.cs" id="5_ksbo5"]
+[ext_resource type="Script" path="res://ui/settings/video/MaximumFramerateSetting.cs" id="6_rhmth"]
+[ext_resource type="PackedScene" uid="uid://daul3nlbhnenl" path="res://ui/settings/audio/volume_slider.tscn" id="7_6rmts"]
+[ext_resource type="Script" path="res://ui/settings/input/InputSetting.cs" id="8_k6x66"]
 
 [node name="Settings Container" type="VBoxContainer"]
 script = ExtResource("1_cef2m")
