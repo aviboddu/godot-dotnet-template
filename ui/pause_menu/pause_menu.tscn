@@ -14,9 +14,8 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_pnte5")
 
-[node name="MainPauseMenu" type="VBoxContainer" parent="."]
+[node name="MainPauseMenu" type="PanelContainer" parent="."]
 unique_name_in_owner = true
-process_mode = 2
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -30,22 +29,48 @@ offset_bottom = 68.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Resume" type="Button" parent="MainPauseMenu"]
+[node name="MarginContainer" type="MarginContainer" parent="MainPauseMenu"]
 layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="PauseMenu" type="VBoxContainer" parent="MainPauseMenu/MarginContainer"]
+process_mode = 2
+layout_mode = 2
+
+[node name="Pause" type="Label" parent="MainPauseMenu/MarginContainer/PauseMenu"]
+layout_mode = 2
+size_flags_vertical = 2
+theme_type_variation = &"HeaderLarge"
+text = "Pause Menu"
+horizontal_alignment = 1
+
+[node name="Control" type="Control" parent="MainPauseMenu/MarginContainer/PauseMenu"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Resume" type="Button" parent="MainPauseMenu/MarginContainer/PauseMenu"]
+layout_mode = 2
+size_flags_vertical = 3
 text = "Resume"
 
-[node name="Settings" type="Button" parent="MainPauseMenu"]
+[node name="Settings" type="Button" parent="MainPauseMenu/MarginContainer/PauseMenu"]
 layout_mode = 2
+size_flags_vertical = 3
 text = "Settings"
 
-[node name="Quit To Main Menu" type="Button" parent="MainPauseMenu"]
+[node name="Quit To Main Menu" type="Button" parent="MainPauseMenu/MarginContainer/PauseMenu"]
 layout_mode = 2
+size_flags_vertical = 3
 text = "Quit to Main Menu"
 script = ExtResource("1_u8u0p")
 sceneToLoad = "res://ui/main_menu/main_menu.tscn"
 
-[node name="Quit To OS" type="Button" parent="MainPauseMenu"]
+[node name="Quit To OS" type="Button" parent="MainPauseMenu/MarginContainer/PauseMenu"]
 layout_mode = 2
+size_flags_vertical = 3
 text = "Quit to OS"
 
 [node name="Settings" parent="." instance=ExtResource("1_6whtp")]
@@ -65,7 +90,7 @@ offset_bottom = 283.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[connection signal="pressed" from="MainPauseMenu/Resume" to="." method="UnPause"]
-[connection signal="pressed" from="MainPauseMenu/Settings" to="." method="_on_settings_pressed"]
-[connection signal="pressed" from="MainPauseMenu/Quit To Main Menu" to="." method="UnPause"]
-[connection signal="pressed" from="MainPauseMenu/Quit To OS" to="." method="_on_quit_to_os_pressed"]
+[connection signal="pressed" from="MainPauseMenu/MarginContainer/PauseMenu/Resume" to="." method="UnPause"]
+[connection signal="pressed" from="MainPauseMenu/MarginContainer/PauseMenu/Settings" to="." method="_on_settings_pressed"]
+[connection signal="pressed" from="MainPauseMenu/MarginContainer/PauseMenu/Quit To Main Menu" to="." method="UnPause"]
+[connection signal="pressed" from="MainPauseMenu/MarginContainer/PauseMenu/Quit To OS" to="." method="_on_quit_to_os_pressed"]

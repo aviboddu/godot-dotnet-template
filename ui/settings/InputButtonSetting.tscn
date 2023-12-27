@@ -28,6 +28,7 @@ layout_mode = 2
 [node name="Instructions" type="Label" parent="PopupListener/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 6
+theme_type_variation = &"HeaderLarge"
 text = "Press Any Button"
 horizontal_alignment = 1
 
