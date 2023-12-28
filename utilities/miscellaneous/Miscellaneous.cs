@@ -5,7 +5,7 @@ using Godot;
 namespace Utilities;
 public static class Miscellaneous
 {
-	private static readonly TimeSpan LocalUtcOffset = TimeZoneInfo.Local.GetUtcOffset(DateTime.Now);
+	private static readonly Lazy<TimeSpan> LocalUtcOffset = new(() => TimeZoneInfo.Local.GetUtcOffset(DateTime.Now));
 
 	// Node is valid.
 	public static bool IsValid<T>(this T node) where T : GodotObject
@@ -42,5 +42,5 @@ public static class Miscellaneous
 
 	// A faster Now method which doesn't adjust for local time in between the game.
 	// Which makes our logs easier to understand if they happen in between daylight savings as well.
-	public static DateTime FastNow() => DateTime.SpecifyKind(DateTime.UtcNow + LocalUtcOffset, DateTimeKind.Local);
+	public static DateTime FastNow() => DateTime.SpecifyKind(DateTime.UtcNow + LocalUtcOffset.Value, DateTimeKind.Local);
 }

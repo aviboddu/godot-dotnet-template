@@ -3,17 +3,19 @@ using System;
 
 namespace Utilities;
 
-[System.Diagnostics.DebuggerDisplay("(minLogLevel: {MinLogLevel})")]
+[System.Diagnostics.DebuggerDisplay("(minLogLevel: {MIN_LOG_LEVEL})")]
 public static class Logger
 {
 
 	public enum LogLevel : byte
 	{
-		Error = 4,
-		Warning = 3,
-		Info = 2,
-		Debug = 1
+		Error = 3,
+		Warning = 2,
+		Info = 1,
+		Debug = 0
 	}
+	// Prevents reallocation of the same string.
+	private static readonly string[] LogLevelToString = ["DEBUG", "INFO", "WARN", "ERROR"];
 
 	// The minimum log level to write
 	[Export]
@@ -71,25 +73,16 @@ public static class Logger
 
 	private static void WriteNChars(in Span<char> chars, int offset, int value, int n)
 	{
-		for (int i = 0; i < n; i++)
+		for (int i = offset + n - 1; i >= offset; i--)
 		{
-			chars[offset + i] = FromDigit(value % 10);
+			chars[i] = FromDigit(value % 10);
 			value /= 10;
 		}
 	}
 
 	private static char FromDigit(int digit) => (char)('0' + digit);
 
-	// Having a direct method here improves performance and removes Enum.GetName calls
-	private static string LevelToString(LogLevel level)
-	{
-		return level switch
-		{
-			LogLevel.Error => "Error",
-			LogLevel.Warning => "Warning",
-			LogLevel.Info => "Info",
-			LogLevel.Debug => "Debug",
-			_ => default
-		};
-	}
+	// Having a direct method here improves performance and removes Enum.GetName calls.
+	// Also allows custom text for different enums.
+	private static string LevelToString(LogLevel level) => LogLevelToString[(byte)level];
 }
