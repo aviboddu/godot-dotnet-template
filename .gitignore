@@ -15,8 +15,9 @@ mono_crash.*.json
 # Ignores Build Output
 Export/
 
-# Ignores vscode metadata
+# Ignores IDE metadata
 # .vscode/
+# .idea/
 
 # Ignores Logs
 Logs/
