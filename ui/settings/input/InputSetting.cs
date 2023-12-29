@@ -36,6 +36,7 @@ public partial class InputSetting : Container
 	// Checks that no other actions have events which will conflict with the newEvent, and replaces them with oldEvent accordingly.
 	public void PreventConflicts(InputEvent oldEvent, InputEvent newEvent)
 	{
+		if (newEvent == default) return;
 		foreach (InputActionSetting actionSetting in GetChildren().Cast<InputActionSetting>())
 		{
 			if (actionSetting.GetInputEvents().Any(e => InputActionSetting.EventsConflict(newEvent, e)))

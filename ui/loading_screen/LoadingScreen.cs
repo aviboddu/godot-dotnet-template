@@ -23,9 +23,9 @@ public partial class LoadingScreen : Control
 		progressBar = GetNode<ProgressBar>("%ProgressBar");
 		progressPercentage.Resize(1); // Only need capacity of 1
 		Error err = ResourceLoader.LoadThreadedRequest(sceneToLoad, useSubThreads: true);
-		if (err == Error.Failed)
+		if (err != Error.Ok)
 		{
-			Logger.WriteError($"LoadingScreen::_Ready() - ResourceLoader returned Error.Failed");
+			Logger.WriteError($"LoadingScreen::_Ready() - ResourceLoader returned {err}");
 			GetTree().Crash(ExitCodes.EXIT_LOAD);
 		}
 	}
@@ -45,12 +45,8 @@ public partial class LoadingScreen : Control
 						Logger.WriteDebug($"LoadingScreen::_Process - Time to load {sceneToLoad} = {Time.GetTicksMsec() - startTime} ms");
 #endif
 						break;
-					case Error.CantCreate:
-						Logger.WriteError($"LoadingScreen::_Process - Failed to load {sceneToLoad}");
-						GetTree().Crash(ExitCodes.EXIT_LOAD);
-						break;
-					case Error.InvalidParameter:
-						Logger.WriteError($"LoadingScreen::_Process - {sceneToLoad} is invalid");
+					default:
+						Logger.WriteError($"LoadingScreen::_Process - Failed to load {sceneToLoad} - Error {err}");
 						GetTree().Crash(ExitCodes.EXIT_LOAD);
 						break;
 				}

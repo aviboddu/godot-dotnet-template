@@ -40,7 +40,7 @@ public static class Miscellaneous
 		tree.Quit();
 	}
 
-	// A faster Now method which doesn't adjust for local time in between the game.
+	// A faster Now method which doesn't adjust for local time during the game.
 	// Which makes our logs easier to understand if they happen in between daylight savings as well.
 	public static DateTime FastNow() => DateTime.SpecifyKind(DateTime.UtcNow + LocalUtcOffset.Value, DateTimeKind.Local);
 }

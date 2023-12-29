@@ -19,9 +19,9 @@ public static class Logger
 
 	// The minimum log level to write
 	[Export]
-	public const LogLevel MIN_LOG_LEVEL = LogLevel.Debug;
+	private const LogLevel MIN_LOG_LEVEL = LogLevel.Debug;
 
-	public static void Write(in object message, LogLevel logLevel)
+	private static void Write(in object message, LogLevel logLevel)
 	{
 #if DEBUG
 		if (MIN_LOG_LEVEL > logLevel)
