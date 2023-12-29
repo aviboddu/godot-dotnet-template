@@ -45,7 +45,6 @@ Using .NET 8.0 and the latest stable release of Godot Mono.
 ### Potential TODO
 - Create a `setup.sh` script
 - Add Unit Testing with automatic testing via Github Actions
-- Create plug-in to easily change the logging level
+- ~~Create plug-in to easily change the logging level~~
 - Incorporate CLI arguments into configuration setup
 - Improve build action to include build versions and use rcedit
-- Create a documentation system
