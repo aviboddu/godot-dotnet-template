@@ -6,8 +6,8 @@ namespace Utilities;
 [System.Diagnostics.DebuggerDisplay("(minLogLevel: {MIN_LOG_LEVEL})")]
 public static class Logger
 {
-
-	public enum LogLevel : byte
+	public const string LOG_LEVEL_SETTING = "plugins/logger/level";
+	public enum LogLevel : int
 	{
 		Error = 3,
 		Warning = 2,
@@ -18,8 +18,7 @@ public static class Logger
 	private static readonly string[] LogLevelToString = ["DEBUG", "INFO", "WARN", "ERROR"];
 
 	// The minimum log level to write
-	[Export]
-	private const LogLevel MIN_LOG_LEVEL = LogLevel.Debug;
+	private static readonly LogLevel MIN_LOG_LEVEL = (LogLevel)(int)ProjectSettings.GetSetting(LOG_LEVEL_SETTING);
 
 	private static void Write(in object message, LogLevel logLevel)
 	{
