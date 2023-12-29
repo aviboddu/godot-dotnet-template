@@ -8,17 +8,12 @@ public partial class LoadingScreen : Control
 	private ProgressBar progressBar;
 	private Array progressPercentage = [];
 	private string sceneToLoad;
-
-#if DEBUG
 	private float startTime;
-#endif
 
 	public override void _Ready()
 	{
 		base._Ready();
-#if DEBUG
 		startTime = Time.GetTicksMsec();
-#endif
 		sceneToLoad = SceneManager.DesiredScene;
 		progressBar = GetNode<ProgressBar>("%ProgressBar");
 		progressPercentage.Resize(1); // Only need capacity of 1
@@ -41,9 +36,7 @@ public partial class LoadingScreen : Control
 				{
 					case Error.Ok:
 						Logger.WriteInfo($"LoadingScreen::_Process - Successfully loaded {sceneToLoad}");
-#if DEBUG
 						Logger.WriteDebug($"LoadingScreen::_Process - Time to load {sceneToLoad} = {Time.GetTicksMsec() - startTime} ms");
-#endif
 						break;
 					default:
 						Logger.WriteError($"LoadingScreen::_Process - Failed to load {sceneToLoad} - Error {err}");

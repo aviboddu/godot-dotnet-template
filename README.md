@@ -5,7 +5,8 @@ A general template for Godot 4 Mono. Includes:
 - Core System Managers (Video, Audio, Scenes, Input) with persistent and atomic configurations.
 - Loading Screens with Multithreaded Loading.
 - Barebones Main and Pause Menu with Video, Audio and Input Settings.
-- Miscellaneous Utilities, including Logging.
+- Simple and Performant Logging plugin
+- Miscellaneous Utilities
 
 Using .NET 8.0 and the latest stable release of Godot Mono.
 

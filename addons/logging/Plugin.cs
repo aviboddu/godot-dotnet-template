@@ -19,6 +19,8 @@ public partial class Plugin : EditorPlugin
 			{"hint_string", "Debug:0,Info:1,Warning:2,Error:3"}
 		};
 		ProjectSettings.AddPropertyInfo(propertyInfo);
+		ProjectSettings.SetInitialValue(Logger.LOG_LEVEL_SETTING, (int)Logger.LogLevel.Info);
+		ProjectSettings.SetAsBasic(Logger.LOG_LEVEL_SETTING, true);
 	}
 }
 #endif

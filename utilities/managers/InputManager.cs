@@ -37,9 +37,7 @@ public partial class InputManager : Node
 
 	public override void _Ready()
 	{
-#if DEBUG
 		ulong ticks = Time.GetTicksMsec();
-#endif
 
 		if (Configuration.Instance.HasSection(INPUT_SECTION))
 		{
@@ -58,9 +56,7 @@ public partial class InputManager : Node
 				Configuration.Instance.ChangeSetting(INPUT_SECTION, action, InputMap.ActionGetEvents(action));
 			Configuration.Instance.Flush();
 		}
-#if DEBUG
 		Logger.WriteDebug($"InputManager::_Ready() - Time to Initialize {Time.GetTicksMsec() - ticks} ms");
-#endif
 	}
 
 	public static void SwapEvent(StringName action, InputEvent remove, InputEvent add)

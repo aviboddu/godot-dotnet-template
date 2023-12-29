@@ -27,8 +27,8 @@ public static class Miscellaneous
 	// Crash the game with correct notifications and exit codes. https://docs.godotengine.org/en/stable/tutorials/inputs/handling_quit_requests.html
 	public static void Crash<T>(this T tree, ExitCodes exitCode) where T : SceneTree
 	{
-		Debug.Assert(exitCode > 0, $"SceneTree.Crash({exitCode}) - exitCode must be greater than 0");
-		Debug.Assert((int)exitCode < 256, $"SceneTree.Crash({exitCode}) - exitCode must be less than 256");
+		Debug.Assert(exitCode > ExitCodes.EXIT_OK, $"SceneTree.Crash({exitCode}) - exitCode must be greater than 0");
+		Debug.Assert((int)exitCode < 256, $"SceneTree.Crash({exitCode}) - exitCode must be less than 256 for compatibility purposes");
 		tree.Root.PropagateNotification((int)Node.NotificationCrash);
 		tree.Quit((int)exitCode);
 	}

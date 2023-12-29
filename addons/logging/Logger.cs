@@ -1,9 +1,9 @@
 using Godot;
 using System;
+using System.Diagnostics;
 
 namespace Utilities;
 
-[System.Diagnostics.DebuggerDisplay("(minLogLevel: {MIN_LOG_LEVEL})")]
 public static class Logger
 {
 	public const string LOG_LEVEL_SETTING = "plugins/logger/level";
@@ -14,15 +14,16 @@ public static class Logger
 		Info = 1,
 		Debug = 0
 	}
+
 	// Prevents reallocation of the same string.
 	private static readonly string[] LogLevelToString = ["DEBUG", "INFO", "WARN", "ERROR"];
 
 	// The minimum log level to write
-	private static readonly LogLevel MIN_LOG_LEVEL = (LogLevel)(int)ProjectSettings.GetSetting(LOG_LEVEL_SETTING);
+	private static readonly LogLevel MIN_LOG_LEVEL = (LogLevel)(int)ProjectSettings.GetSetting(LOG_LEVEL_SETTING, defaultValue: (int)LogLevel.Info);
 
+	[Conditional("DEBUG")]
 	private static void Write(in object message, LogLevel logLevel)
 	{
-#if DEBUG
 		if (MIN_LOG_LEVEL > logLevel)
 			return;
 
@@ -39,12 +40,15 @@ public static class Logger
 				GD.Print(formattedMessage);
 				break;
 		}
-#endif
 	}
 
+	[Conditional("DEBUG")]
 	public static void WriteError(in object message) => Write(message, LogLevel.Error);
+	[Conditional("DEBUG")]
 	public static void WriteWarning(in object message) => Write(message, LogLevel.Warning);
+	[Conditional("DEBUG")]
 	public static void WriteInfo(in object message) => Write(message, LogLevel.Info);
+	[Conditional("DEBUG")]
 	public static void WriteDebug(in object message) => Write(message, LogLevel.Debug);
 
 	private static string FormatMessage(in object message, LogLevel level) => $"[{FormatDateTime(Miscellaneous.FastNow())}][{LevelToString(level)}] {message}";
@@ -83,5 +87,5 @@ public static class Logger
 
 	// Having a direct method here improves performance and removes Enum.GetName calls.
 	// Also allows custom text for different enums.
-	private static string LevelToString(LogLevel level) => LogLevelToString[(byte)level];
+	private static string LevelToString(LogLevel level) => LogLevelToString[(int)level];
 }

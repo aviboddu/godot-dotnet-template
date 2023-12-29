@@ -30,10 +30,6 @@ public partial class VideoManager : Node
 
 	private const string VIDEO_SECTION = "Video";
 
-	// Sometimes other things (outside the game) can change these values, which is why we need a signal
-	[Signal]
-	public delegate void ResolutionChangedEventHandler();
-
 	[Signal]
 	public delegate void WindowModeChangedEventHandler();
 
@@ -112,14 +108,11 @@ public partial class VideoManager : Node
 
 	public override void _Ready()
 	{
-#if DEBUG
 		ulong ticks = Time.GetTicksMsec();
-#endif
 
 		DisplayServer.WindowSetFlag(DisplayServer.WindowFlags.ResizeDisabled, true);
 		GetWindow().Position = Vector2I.Zero;
 		GetWindow().MinSize = new Vector2I(320, 180);
-		GetWindow().CheckedConnect(Viewport.SignalName.SizeChanged, Callable.From(() => EmitSignal(SignalName.ResolutionChanged)));
 
 		if (Configuration.Instance.HasSection(VIDEO_SECTION))
 		{
@@ -141,8 +134,6 @@ public partial class VideoManager : Node
 			Configuration.Instance.Flush();
 		}
 
-#if DEBUG
 		Logger.WriteDebug($"VideoManager::_Ready() - Time to Initialize {Time.GetTicksMsec() - ticks} ms");
-#endif
 	}
 }
