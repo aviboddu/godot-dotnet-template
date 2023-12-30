@@ -30,6 +30,6 @@ jobs:
         with: 
           allowUpdates: true
           artifacts: "/home/runner/.local/share/godot/archives/*"
-          tag: ${{ inputs.version }}
-          name: Release ${{ inputs.version }}
+          tag: v${{ inputs.version }}
+          name: Release v${{ inputs.version }}
           generateReleaseNotes: true
