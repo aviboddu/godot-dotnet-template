@@ -30,21 +30,3 @@ Using .NET 8.0 and the latest stable release of Godot Mono.
 12. Uncomment relevant lines from .gitignore
 13. Give actions more permissions in the github repository
 14. Git commit and push, verify that everything is working
-
-## TODO
-- ~~Improve Input Management (ensure the configuration file is more readable)~~
-- ~~Add Input Settings Functionality~~
-- ~~Fix Video Manager's handling of WindowMode~~
-- ~~Make Video, Audio, Scene and Input Managers Static~~
-- ~~Adjust Configuration's saving functionality to minimize the performance cost of file writes while maintaining atomic writes~~
-- ~~Add comments explaining design decisions and weird code~~
-- ~~Refactor code to avoid Exceptions~~
-- ~~Profile and Optimize~~
-- ~~Try cloning and creating a new project to identify any potential issues~~
-
-### Potential TODO
-- Create a `setup.sh` script
-- Add Unit Testing with automatic testing via Github Actions
-- ~~Create plug-in to easily change the logging level~~
-- Incorporate CLI arguments into configuration setup
-- Improve build action to include build versions and use rcedit
