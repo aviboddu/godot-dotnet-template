@@ -1,4 +1,8 @@
+using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
+using System.Linq;
 using Godot;
 
 namespace Utilities;
@@ -117,10 +121,20 @@ public partial class VideoManager : Node
 		if (Configuration.Instance.HasSection(VIDEO_SECTION))
 		{
 			Logger.WriteInfo("VideoManager::_Ready() - Initializing Settings from Configuration");
-			Resolution = Configuration.Instance.GetSetting<Vector2I>(VIDEO_SECTION, PropertyName.Resolution); // Must be after changing window mode, otherwise might be overwritten
-			WindowMode = (WinMode)Configuration.Instance.GetSetting<int>(VIDEO_SECTION, PropertyName.WindowMode);
-			RefreshRate = Configuration.Instance.GetSetting<int>(VIDEO_SECTION, PropertyName.RefreshRate);
-			VSyncMode = (DisplayServer.VSyncMode)Configuration.Instance.GetSetting<int>(VIDEO_SECTION, PropertyName.VSyncMode);
+
+			HashSet<string> cmdArgs = ParseCmdKeys();
+			if (!cmdArgs.Contains("resolution"))
+				Resolution = Configuration.Instance.GetSetting<Vector2I>(VIDEO_SECTION, PropertyName.Resolution);
+
+			string[] windowModeRelatedArgs = ["f", "w", "m", "fullscreen", "windowed", "maximized"];
+			if (!windowModeRelatedArgs.Any(cmdArgs.Contains))
+				WindowMode = (WinMode)Configuration.Instance.GetSetting<int>(VIDEO_SECTION, PropertyName.WindowMode);
+
+			if (!cmdArgs.Contains("fixed-fps"))
+				RefreshRate = Configuration.Instance.GetSetting<int>(VIDEO_SECTION, PropertyName.RefreshRate);
+
+			if (!cmdArgs.Contains("disable-vsync"))
+				VSyncMode = (DisplayServer.VSyncMode)Configuration.Instance.GetSetting<int>(VIDEO_SECTION, PropertyName.VSyncMode);
 		}
 		else
 		{
@@ -135,5 +149,25 @@ public partial class VideoManager : Node
 		}
 
 		Logger.WriteDebug($"VideoManager::_Ready() - Time to Initialize {Time.GetTicksMsec() - ticks} ms");
+	}
+
+	private static HashSet<string> ParseCmdKeys()
+	{
+		HashSet<string> cmd = new(OS.GetCmdlineArgs().Length + OS.GetCmdlineUserArgs().Length);
+		foreach (string s in OS.GetCmdlineArgs())
+			cmd.Add(ParseArgKey(s));
+		foreach (string s in OS.GetCmdlineUserArgs())
+			cmd.Add(ParseArgKey(s));
+		return cmd;
+	}
+
+	private static string ParseArgKey(string s)
+	{
+		int equalsIndex = s.IndexOf('=');
+
+		s = s.TrimStart('-');
+		if (equalsIndex != -1)
+			return s[..(equalsIndex - 1)];
+		return s;
 	}
 }
