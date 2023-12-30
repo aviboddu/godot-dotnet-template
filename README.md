@@ -26,7 +26,8 @@ Using .NET 8.0 and the latest stable release of Godot Mono.
 8. Change text editor to Rider in Editor Settings/Dotnet/Editor/External Editor
 9. Open and run the project in Rider (with tracing)
 10. Change the editor back to VS Code
-11. Open and run the project in VS Code
-12. Uncomment relevant lines from .gitignore
-13. Give actions more permissions in the github repository
-14. Git commit and push, verify that everything is working
+11. You will either need to adjust the `launch.json` commands to use your godot path, or add your Godot installation to your PATH (and rename the godot executable to `godot-mono.exe`)
+12. Open and run the project in VS Code
+13. Uncomment relevant lines from .gitignore
+14. Give actions more permissions in the github repository
+15. Git commit and push, verify that everything is working
