@@ -13,7 +13,7 @@ Using .NET 8.0 and the latest stable release of Godot Mono.
 ## Prerequisites
 - Godot Mono (Latest Stable Release)
 - .NET 8.0
-- Visual Studio Code and/or JetBrains Rider
+- (Optionally) Visual Studio Code and/or JetBrains Rider
 
 ## How to use this template
 1. Create new repository using template.
