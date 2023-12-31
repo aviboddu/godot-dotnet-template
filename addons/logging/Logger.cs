@@ -7,7 +7,7 @@ namespace Utilities;
 public static class Logger
 {
 	public const string LOG_LEVEL_SETTING = "plugins/logger/level";
-	public enum LogLevel : int
+	public enum LogLevel: int
 	{
 		Error = 3,
 		Warning = 2,
@@ -51,7 +51,12 @@ public static class Logger
 	[Conditional("DEBUG")]
 	public static void WriteDebug(in object message) => Write(message, LogLevel.Debug);
 
-	private static string FormatMessage(in object message, LogLevel level) => $"[{FormatDateTime(Miscellaneous.FastNow())}][{LevelToString(level)}] {message}";
+	private static string FormatMessage(in object message, LogLevel level)
+	{
+		// string.Format is 2x faster than string interpolation.
+		// ReSharper disable once UseStringInterpolation
+		return string.Format("[{0}][{1}] {2}", FormatDateTime(Miscellaneous.FastNow()), LevelToString(level), message);
+	}
 
 	// Custom formatter is faster and means logging is less of a performance hit.
 	private static string FormatDateTime(DateTime dateTime)
