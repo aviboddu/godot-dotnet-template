@@ -53,9 +53,8 @@ public static class Logger
 
 	private static string FormatMessage(in object message, LogLevel level)
 	{
-		// string.Format is 2x faster than string interpolation.
 		// ReSharper disable once UseStringInterpolation
-		return string.Format("[{0}][{1}] {2}", FormatDateTime(Miscellaneous.FastNow()), LevelToString(level), message);
+		return string.Format("[{0}][{1}] {2}", FormatDateTime(Miscellaneous.FastNow()), LogLevelToString[(int)level], message);
 	}
 
 	// Custom formatter is faster and means logging is less of a performance hit.
@@ -89,8 +88,4 @@ public static class Logger
 	}
 
 	private static char FromDigit(int digit) => (char)('0' + digit);
-
-	// Having a direct method here improves performance and removes Enum.GetName calls.
-	// Also allows custom text for different enums.
-	private static string LevelToString(LogLevel level) => LogLevelToString[(int)level];
 }
