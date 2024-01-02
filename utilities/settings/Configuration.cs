@@ -1,115 +1,134 @@
-using Godot;
 using System.IO;
 using System.Threading.Tasks;
+using Godot;
 
 namespace Utilities;
 
 public partial class Configuration : Node
 {
-	public static Configuration Instance { get; private set; }
+    private const string CONFIG_FILE_PATH = "./config.ini";
+    private const string TEMP_FILE_PATH = "./config_temp.ini"; // Must be in the save volume as CONFIG_FILE_PATH
+    private const float TIME_TO_FLUSH_IN_SECONDS = 0.5f;
 
-	public override void _EnterTree()
-	{
-		if (Instance is not null)
-		{
-			QueueFree();
-			return;
-		}
-		Instance = this;
-		base._EnterTree();
-	}
+    private readonly ConfigFile _configFile = new();
 
-	private const string CONFIG_FILE_PATH = "./config.ini";
-	private const string TEMP_FILE_PATH = "./config_temp.ini"; // Must be in the save volume as CONFIG_FILE_PATH
-	private const float TIME_TO_FLUSH_IN_SECONDS = 0.5f;
+    private readonly Timer _saveDelay = new()
+    {
+        OneShot = true,
+        WaitTime = TIME_TO_FLUSH_IN_SECONDS,
+        ProcessMode = ProcessModeEnum.Always
+    };
 
-	private readonly ConfigFile configFile = new();
-	private readonly Timer saveDelay = new()
-	{
-		OneShot = true,
-		WaitTime = TIME_TO_FLUSH_IN_SECONDS,
-		ProcessMode = ProcessModeEnum.Always
-	};
+    private bool _saveQueued;
+    public static Configuration Instance { get; private set; }
 
-	private bool saveQueued;
+    public override void _EnterTree()
+    {
+        if (Instance is not null)
+        {
+            QueueFree();
+            return;
+        }
 
-	public override void _Ready()
-	{
-		saveDelay.CheckedConnect(Timer.SignalName.Timeout, Callable.From(SaveInNewThread));
-		AddChild(saveDelay);
+        Instance = this;
+        base._EnterTree();
+    }
 
-		if (File.Exists(CONFIG_FILE_PATH))
-		{
-			Error err = configFile.Load(CONFIG_FILE_PATH);
-			if (err != Error.Ok)
-				Logger.WriteError($"Configuration::_Ready() - Failed to load config file. Error {err}");
-			else
-				Logger.WriteInfo("Configuration::_Ready() - Loaded config file");
-		}
-		else
-		{
-			Logger.WriteInfo("Configuration::_Ready() - No config file found");
-		}
-	}
+    public override void _Ready()
+    {
+        _saveDelay.CheckedConnect(Timer.SignalName.Timeout, Callable.From(SaveInNewThread));
+        AddChild(_saveDelay);
 
-	public T GetSetting<[MustBeVariant] T>(in string section, in string key) => configFile.GetValue(section, key).As<T>();
+        if (File.Exists(CONFIG_FILE_PATH))
+        {
+            Error err = _configFile.Load(CONFIG_FILE_PATH);
+            if (err != Error.Ok)
+                Logger.WriteError($"Configuration::_Ready() - Failed to load config file. Error {err}");
+            else
+                Logger.WriteInfo("Configuration::_Ready() - Loaded config file");
+        }
+        else
+        {
+            Logger.WriteInfo("Configuration::_Ready() - No config file found");
+        }
+    }
 
-	public bool HasSection(in string section) => configFile.HasSection(section);
+    public T GetSetting<[MustBeVariant] T>(in string section, in string key)
+    {
+        return _configFile.GetValue(section, key).As<T>();
+    }
 
-	public bool HasSetting(in string section, in string key) => configFile.HasSectionKey(section, key);
+    public bool HasSection(in string section)
+    {
+        return _configFile.HasSection(section);
+    }
 
-	public void ChangeSetting(in string section, in string key, in Variant value)
-	{
-		if (HasSetting(section, key) && value.Equals(GetSetting<Variant>(section, key)))
-			return;
-		lock (configFile)
-			configFile.SetValue(section, key, value);
+    public bool HasSetting(in string section, in string key)
+    {
+        return _configFile.HasSectionKey(section, key);
+    }
 
-		Logger.WriteDebug($"Configuration::ChangeSetting() - Changed {section}:{key} to {value}");
+    public void ChangeSetting(in string section, in string key, in Variant value)
+    {
+        if (HasSetting(section, key) && value.Equals(GetSetting<Variant>(section, key)))
+            return;
+        lock (_configFile)
+        {
+            _configFile.SetValue(section, key, value);
+        }
 
-		if (saveDelay.IsStopped())
-			saveDelay.Start();
-	}
+        Logger.WriteDebug($"Configuration::ChangeSetting() - Changed {section}:{key} to {value}");
 
-	// Writes any pending changes to file at the end of the frame
-	public void Flush()
-	{
-		if (saveDelay.IsStopped() || saveQueued) // Either there is no delta, or a save is queued anyway.
-			return;
-		Logger.WriteDebug($"Configuration::Flush() - Queued Save");
-		saveQueued = true;
-		saveDelay.Stop();
-	}
+        if (_saveDelay.IsStopped())
+            _saveDelay.Start();
+    }
 
-	private void SaveInNewThread() => Task.Run(Save);
+    // Writes any pending changes to file at the end of the frame
+    public void Flush()
+    {
+        if (_saveDelay.IsStopped() || _saveQueued) // Either there is no delta, or a save is queued anyway.
+            return;
+        Logger.WriteDebug("Configuration::Flush() - Queued Save");
+        _saveQueued = true;
+        _saveDelay.Stop();
+    }
 
-	private void Save()
-	{
-		lock (configFile)
-		{
-			Error err = configFile.Save(TEMP_FILE_PATH); // Uses a temporary file path to ensure atomic file writes. Old config will be used if write fails.
-			if (err != Error.Ok)
-			{
-				Logger.WriteError($"Configuration::Save() - Failed to save config. Error {err}");
-				if (File.Exists(TEMP_FILE_PATH)) File.Delete(TEMP_FILE_PATH);
-			}
-			else
-			{
-				File.Move(TEMP_FILE_PATH, CONFIG_FILE_PATH, true);
-				File.Delete(TEMP_FILE_PATH);
-				Logger.WriteDebug("Configuration::Save() - Saved config");
-			}
-			saveQueued = false;
-		}
-	}
+    private void SaveInNewThread()
+    {
+        Task.Run(Save);
+    }
 
-	public override void _Notification(int what)
-	{
-		if (what == NotificationWMCloseRequest && !saveDelay.IsStopped())
-		{
-			Logger.WriteInfo($"Configuration::_Notification({what}) - User Quit While Save Pending");
-			Save(); // Force a save if user tries to quit while save is pending.
-		}
-		base._Notification(what);
-	}
+    private void Save()
+    {
+        lock (_configFile)
+        {
+            Error
+                err = _configFile.Save(
+                    TEMP_FILE_PATH); // Uses a temporary file path to ensure atomic file writes. Old config will be used if write fails.
+            if (err != Error.Ok)
+            {
+                Logger.WriteError($"Configuration::Save() - Failed to save config. Error {err}");
+                if (File.Exists(TEMP_FILE_PATH)) File.Delete(TEMP_FILE_PATH);
+            }
+            else
+            {
+                File.Move(TEMP_FILE_PATH, CONFIG_FILE_PATH, true);
+                File.Delete(TEMP_FILE_PATH);
+                Logger.WriteDebug("Configuration::Save() - Saved config");
+            }
+
+            _saveQueued = false;
+        }
+    }
+
+    public override void _Notification(int what)
+    {
+        if (what == NotificationWMCloseRequest && !_saveDelay.IsStopped())
+        {
+            Logger.WriteInfo($"Configuration::_Notification({what}) - User Quit While Save Pending");
+            Save(); // Force a save if user tries to quit while save is pending.
+        }
+
+        base._Notification(what);
+    }
 }

@@ -6,87 +6,99 @@ namespace Utilities;
 
 public partial class InputManager : Node
 {
-	public static InputManager Instance { get; private set; }
-	public override void _EnterTree()
-	{
-		if (Instance is not null)
-		{
-			QueueFree();
-			return;
-		}
-		Instance = this;
-		base._EnterTree();
-	}
+    [Signal]
+    public delegate void IsControllerChangedEventHandler(bool isController);
 
-	[Signal]
-	public delegate void IsControllerChangedEventHandler(bool isController);
-	private bool isController;
-	public bool IsController
-	{
-		get => isController;
-		private set
-		{
-			if (IsController == value)
-				return;
-			isController = value;
-			EmitSignal(SignalName.IsControllerChanged, value);
-		}
-	}
+    private const string INPUT_SECTION = "Input";
+    private bool _isController;
+    public static InputManager Instance { get; private set; }
 
-	private const string INPUT_SECTION = "Input";
+    public bool IsController
+    {
+        get => _isController;
+        private set
+        {
+            if (IsController == value)
+                return;
+            _isController = value;
+            EmitSignal(SignalName.IsControllerChanged, value);
+        }
+    }
 
-	public override void _Ready()
-	{
-		ulong ticks = Time.GetTicksMsec();
+    public override void _EnterTree()
+    {
+        if (Instance is not null)
+        {
+            QueueFree();
+            return;
+        }
 
-		if (Configuration.Instance.HasSection(INPUT_SECTION))
-		{
-			Logger.WriteInfo("InputManager::_Ready() - Initializing Bindings from Configuration");
-			foreach (StringName action in GetCustomActions())
-			{
-				InputMap.ActionEraseEvents(action);
-				foreach (InputEvent inputEvent in Configuration.Instance.GetSetting<Array<InputEvent>>(INPUT_SECTION, action))
-					InputMap.ActionAddEvent(action, inputEvent);
-			}
-		}
-		else
-		{
-			Logger.WriteInfo("InputManager::_Ready() - Default Initialization");
-			foreach (StringName action in GetCustomActions())
-				Configuration.Instance.ChangeSetting(INPUT_SECTION, action, InputMap.ActionGetEvents(action));
-			Configuration.Instance.Flush();
-		}
-		Logger.WriteDebug($"InputManager::_Ready() - Time to Initialize {Time.GetTicksMsec() - ticks} ms");
-	}
+        Instance = this;
+        base._EnterTree();
+    }
 
-	public static void SwapEvent(StringName action, InputEvent remove, InputEvent add)
-	{
-		if (remove != default) InputMap.ActionEraseEvent(action, remove);
-		if (add != default) InputMap.ActionAddEvent(action, add);
-		Configuration.Instance.ChangeSetting(INPUT_SECTION, action, InputMap.ActionGetEvents(action));
-	}
+    public override void _Ready()
+    {
+        ulong ticks = Time.GetTicksMsec();
 
-	// Gets all relevant events. If the user is using a controller, then we return all controller events,
-	// 		if the user is using KB+M, we return all KB+M events
-	public static Array<InputEvent> GetInputEvents(StringName action)
-	{
-		Array<InputEvent> events = InputMap.ActionGetEvents(action);
-		return new Array<InputEvent>(events.Where((e) => Instance.IsController == IsControllerEvent(e)));
-	}
+        if (Configuration.Instance.HasSection(INPUT_SECTION))
+        {
+            Logger.WriteInfo("InputManager::_Ready() - Initializing Bindings from Configuration");
+            foreach (StringName action in GetCustomActions())
+            {
+                InputMap.ActionEraseEvents(action);
+                foreach (InputEvent inputEvent in Configuration.Instance.GetSetting<Array<InputEvent>>(
+                             INPUT_SECTION, action))
+                    InputMap.ActionAddEvent(action, inputEvent);
+            }
+        }
+        else
+        {
+            Logger.WriteInfo("InputManager::_Ready() - Default Initialization");
+            foreach (StringName action in GetCustomActions())
+                Configuration.Instance.ChangeSetting(INPUT_SECTION, action, InputMap.ActionGetEvents(action));
+            Configuration.Instance.Flush();
+        }
 
-	// Gets custom (not built-in) events
-	public static Array<StringName> GetCustomActions()
-	{
-		Array<StringName> actions = InputMap.GetActions();
-		return new Array<StringName>(actions.Where((s) => !IsBuiltIn(s)));
-	}
-	private static bool IsControllerEvent(InputEvent inputEvent) => inputEvent is InputEventJoypadButton || inputEvent is InputEventJoypadMotion;
-	private static bool IsBuiltIn(StringName action) => action.ToString().StartsWith("ui") && InputMap.HasAction(action);
+        Logger.WriteDebug($"InputManager::_Ready() - Time to Initialize {Time.GetTicksMsec() - ticks} ms");
+    }
 
-	// Keeps track of whether user is using a controller or KB+M
-	public override void _Input(InputEvent @event)
-	{
-		IsController = IsControllerEvent(@event);
-		base._Input(@event);
-	}
+    public static void SwapEvent(StringName action, InputEvent remove, InputEvent add)
+    {
+        if (remove != default) InputMap.ActionEraseEvent(action, remove);
+        if (add != default) InputMap.ActionAddEvent(action, add);
+        Configuration.Instance.ChangeSetting(INPUT_SECTION, action, InputMap.ActionGetEvents(action));
+    }
+
+    // Gets all relevant events. If the user is using a controller, then we return all controller events,
+    // 		if the user is using KB+M, we return all KB+M events
+    public static Array<InputEvent> GetInputEvents(StringName action)
+    {
+        Array<InputEvent> events = InputMap.ActionGetEvents(action);
+        return new Array<InputEvent>(events.Where(e => Instance.IsController == IsControllerEvent(e)));
+    }
+
+    // Gets custom (not built-in) events
+    public static Array<StringName> GetCustomActions()
+    {
+        Array<StringName> actions = InputMap.GetActions();
+        return new Array<StringName>(actions.Where(s => !IsBuiltIn(s)));
+    }
+
+    private static bool IsControllerEvent(InputEvent inputEvent)
+    {
+        return inputEvent is InputEventJoypadButton || inputEvent is InputEventJoypadMotion;
+    }
+
+    private static bool IsBuiltIn(StringName action)
+    {
+        return action.ToString().StartsWith("ui") && InputMap.HasAction(action);
+    }
+
+    // Keeps track of whether user is using a controller or KB+M
+    public override void _Input(InputEvent @event)
+    {
+        IsController = IsControllerEvent(@event);
+        base._Input(@event);
+    }
 }

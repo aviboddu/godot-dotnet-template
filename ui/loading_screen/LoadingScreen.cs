@@ -3,58 +3,61 @@ using Godot.Collections;
 using Utilities;
 
 namespace UI;
+
 public partial class LoadingScreen : Control
 {
-	private ProgressBar progressBar;
-	private Array progressPercentage = [];
-	private string sceneToLoad;
-	private float startTime;
+    private readonly float _startTime = Time.GetTicksMsec();
+    private ProgressBar _progressBar;
+    private Array _progressPercentage = [];
+    private string _sceneToLoad;
 
-	public override void _Ready()
-	{
-		base._Ready();
-		startTime = Time.GetTicksMsec();
-		sceneToLoad = SceneManager.DesiredScene;
-		progressBar = GetNode<ProgressBar>("%ProgressBar");
-		progressPercentage.Resize(1); // Only need capacity of 1
-		Error err = ResourceLoader.LoadThreadedRequest(sceneToLoad, useSubThreads: true);
-		if (err != Error.Ok)
-		{
-			Logger.WriteError($"LoadingScreen::_Ready() - ResourceLoader returned {err}");
-			GetTree().Crash(ExitCodes.EXIT_LOAD);
-		}
-	}
+    public override void _Ready()
+    {
+        base._Ready();
+        _sceneToLoad = SceneManager.DesiredScene;
+        _progressBar = GetNode<ProgressBar>("%ProgressBar");
+        _progressPercentage.Resize(1); // Only need capacity of 1
+        Error err = ResourceLoader.LoadThreadedRequest(_sceneToLoad, useSubThreads: true);
+        if (err != Error.Ok)
+        {
+            Logger.WriteError($"LoadingScreen::_Ready() - ResourceLoader returned {err}");
+            GetTree().Crash(ExitCodes.LOAD);
+        }
+    }
 
-	public override void _Process(double delta)
-	{
-		ResourceLoader.ThreadLoadStatus loadStatus = ResourceLoader.LoadThreadedGetStatus(sceneToLoad, progressPercentage);
-		switch (loadStatus)
-		{
-			case ResourceLoader.ThreadLoadStatus.Loaded:
-				Error err = GetTree().ChangeSceneToPacked((PackedScene)ResourceLoader.LoadThreadedGet(sceneToLoad));
-				switch (err)
-				{
-					case Error.Ok:
-						Logger.WriteInfo($"LoadingScreen::_Process - Successfully loaded {sceneToLoad}");
-						Logger.WriteDebug($"LoadingScreen::_Process - Time to load {sceneToLoad} = {Time.GetTicksMsec() - startTime} ms");
-						break;
-					default:
-						Logger.WriteError($"LoadingScreen::_Process - Failed to load {sceneToLoad} - Error {err}");
-						GetTree().Crash(ExitCodes.EXIT_LOAD);
-						break;
-				}
-				break;
-			case ResourceLoader.ThreadLoadStatus.InProgress:
-				progressBar.Value = (double)progressPercentage[0] * 100;
-				break;
-			case ResourceLoader.ThreadLoadStatus.InvalidResource:
-				Logger.WriteError($"LoadingScreen::_Process - {sceneToLoad} is invalid");
-				GetTree().Crash(ExitCodes.EXIT_NOFILE);
-				break;
-			case ResourceLoader.ThreadLoadStatus.Failed:
-				Logger.WriteError($"LoadingScreen::_Process - {sceneToLoad} failed to load");
-				GetTree().Crash(ExitCodes.EXIT_LOAD);
-				break;
-		}
-	}
+    public override void _Process(double delta)
+    {
+        ResourceLoader.ThreadLoadStatus loadStatus =
+            ResourceLoader.LoadThreadedGetStatus(_sceneToLoad, _progressPercentage);
+        switch (loadStatus)
+        {
+            case ResourceLoader.ThreadLoadStatus.Loaded:
+                Error err = GetTree().ChangeSceneToPacked((PackedScene)ResourceLoader.LoadThreadedGet(_sceneToLoad));
+                switch (err)
+                {
+                    case Error.Ok:
+                        Logger.WriteInfo($"LoadingScreen::_Process - Successfully loaded {_sceneToLoad}");
+                        Logger.WriteDebug(
+                            $"LoadingScreen::_Process - Time to load {_sceneToLoad} = {Time.GetTicksMsec() - _startTime} ms");
+                        break;
+                    default:
+                        Logger.WriteError($"LoadingScreen::_Process - Failed to load {_sceneToLoad} - Error {err}");
+                        GetTree().Crash(ExitCodes.LOAD);
+                        break;
+                }
+
+                break;
+            case ResourceLoader.ThreadLoadStatus.InProgress:
+                _progressBar.Value = (double)_progressPercentage[0] * 100;
+                break;
+            case ResourceLoader.ThreadLoadStatus.InvalidResource:
+                Logger.WriteError($"LoadingScreen::_Process - {_sceneToLoad} is invalid");
+                GetTree().Crash(ExitCodes.NO_FILE);
+                break;
+            case ResourceLoader.ThreadLoadStatus.Failed:
+                Logger.WriteError($"LoadingScreen::_Process - {_sceneToLoad} failed to load");
+                GetTree().Crash(ExitCodes.LOAD);
+                break;
+        }
+    }
 }

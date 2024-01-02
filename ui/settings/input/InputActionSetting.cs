@@ -1,102 +1,111 @@
+using System.Diagnostics;
 using System.Linq;
 using Godot;
 using Godot.Collections;
 using Utilities;
 
 namespace UI;
+
 public partial class InputActionSetting : Node
 {
-	[Signal]
-	public delegate void ChangedEventEventHandler(InputEvent oldEvent, InputEvent newEvent);
+    [Signal]
+    public delegate void ChangedEventEventHandler(InputEvent oldEvent, InputEvent newEvent);
 
-	[Export(PropertyHint.NodePathValidTypes, "InputButtonSetting")]
-	public Array<NodePath> InputKeyPaths;
-	private Array<InputButtonSetting> InputKeys;
+    private StringName _action;
+    private Label _actionLabel;
+    private Array<InputButtonSetting> _inputKeys;
 
-	[Export]
-	public StringName Action
-	{
-		get => action;
-		set
-		{
-			if (Action == value) return;
-			action = value;
-			actionLabel.Text = value.ToString();
-			LoadEvents();
-		}
-	}
-	private StringName action;
-	private Label actionLabel;
+    [Export(PropertyHint.NodePathValidTypes, "InputButtonSetting")]
+    public Array<NodePath> InputKeyPaths;
 
-	public override void _Ready()
-	{
-		actionLabel = GetNode<Label>("%Action");
-		InputKeys = new Array<InputButtonSetting>(InputKeyPaths.Select(GetNode<InputButtonSetting>));
-		InputManager.Instance.CheckedConnect(InputManager.SignalName.IsControllerChanged, Callable.From(LoadEvents));
-		foreach (InputButtonSetting inputKey in InputKeys)
-			inputKey.CheckedConnect(InputButtonSetting.SignalName.EventChanged, Callable.From<InputEvent, InputEvent>(SwapEvents));
-	}
+    [Export]
+    public StringName Action
+    {
+        get => _action;
+        set
+        {
+            if (Action == value) return;
+            _action = value;
+            _actionLabel.Text = value.ToString();
+            LoadEvents();
+        }
+    }
 
-	// This is called by the parent when this action's event conflicts with another action's desired event.
-	public void ForceChangeEvent(InputEvent oldEvent, InputEvent newEvent)
-	{
-		foreach (InputButtonSetting inputKey in InputKeys)
-		{
-			if (EventsConflict(inputKey.Event, oldEvent))
-			{
-				InputManager.SwapEvent(action, inputKey.Event, newEvent);
-				inputKey.SetEventNoSignal(newEvent);
-				return;
-			}
-		}
-	}
+    public override void _Ready()
+    {
+        _actionLabel = GetNode<Label>("%Action");
+        _inputKeys = new Array<InputButtonSetting>(InputKeyPaths.Select(GetNode<InputButtonSetting>));
+        InputManager.Instance.CheckedConnect(InputManager.SignalName.IsControllerChanged, Callable.From(LoadEvents));
+        foreach (InputButtonSetting inputKey in _inputKeys)
+            inputKey.CheckedConnect(InputButtonSetting.SignalName.EventChanged,
+                                    Callable.From<InputEvent, InputEvent>(SwapEvents));
+    }
 
-	public Array<InputEvent> GetInputEvents() => new(InputKeys.Select(button => button.Event));
+    // This is called by the parent when this action's event conflicts with another action's desired event.
+    public void ForceChangeEvent(InputEvent oldEvent, InputEvent newEvent)
+    {
+        foreach (InputButtonSetting inputKey in _inputKeys)
+        {
+            if (EventsConflict(inputKey.Event, oldEvent))
+            {
+                InputManager.SwapEvent(_action, inputKey.Event, newEvent);
+                inputKey.SetEventNoSignal(newEvent);
+                return;
+            }
+        }
+    }
 
-	private void LoadEvents()
-	{
-		Array<InputEvent> inputEvents = InputManager.GetInputEvents(Action);
-		for (int i = 0; i < InputKeys.Count; i++)
-		{
-			InputKeys[i].SetEventNoSignal(i >= inputEvents.Count ? default : inputEvents[i]);
-		}
-	}
+    public Array<InputEvent> GetInputEvents()
+    {
+        return new Array<InputEvent>(_inputKeys.Select(button => button.Event));
+    }
 
-	private void SwapEvents(InputEvent oldEvent, InputEvent newEvent)
-	{
-		foreach (InputButtonSetting inputKey in InputKeys)
-		{
-			if (inputKey.Event != default && EventsConflict(inputKey.Event, newEvent))
-			{
-				// The new value set conflicts with one of the other values, swap accordingly
-				inputKey.SetEventNoSignal(oldEvent);
-				return;
-			}
-		}
-		EmitSignal(SignalName.ChangedEvent, oldEvent, newEvent);
-		InputManager.SwapEvent(Action, oldEvent, newEvent);
-	}
+    private void LoadEvents()
+    {
+        Array<InputEvent> inputEvents = InputManager.GetInputEvents(Action);
+        for (int i = 0; i < _inputKeys.Count; i++)
+            _inputKeys[i].SetEventNoSignal(i >= inputEvents.Count ? default : inputEvents[i]);
+    }
 
-	public static bool EventsConflict(InputEvent eventOne, InputEvent eventTwo)
-	{
-		if (eventOne == default || eventTwo == default)
-			return false;
-		if (eventOne.GetType() != eventTwo.GetType())
-			return false;
+    private void SwapEvents(InputEvent oldEvent, InputEvent newEvent)
+    {
+        foreach (InputButtonSetting inputKey in _inputKeys)
+        {
+            if (inputKey.Event != default && EventsConflict(inputKey.Event, newEvent))
+            {
+                // The new value set conflicts with one of the other values, swap accordingly
+                inputKey.SetEventNoSignal(oldEvent);
+                return;
+            }
+        }
 
-		switch (eventOne)
-		{
-			case InputEventKey eventOneKey:
-				InputEventKey eventTwoKey = eventTwo as InputEventKey;
-				return eventOneKey.PhysicalKeycode == eventTwoKey!.PhysicalKeycode;
-			case InputEventJoypadButton eventOneJoypad:
-				InputEventJoypadButton eventTwoJoypad = eventTwo as InputEventJoypadButton;
-				return eventOneJoypad.ButtonIndex == eventTwoJoypad!.ButtonIndex;
-			case InputEventMouseButton eventOneMouseButton:
-				InputEventMouseButton eventTwoMouseButton = eventTwo as InputEventMouseButton;
-				return eventOneMouseButton.ButtonIndex == eventTwoMouseButton!.ButtonIndex;
-			default:
-				return false;
-		}
-	}
+        EmitSignal(SignalName.ChangedEvent, oldEvent, newEvent);
+        InputManager.SwapEvent(Action, oldEvent, newEvent);
+    }
+
+    public static bool EventsConflict(InputEvent eventOne, InputEvent eventTwo)
+    {
+        if (eventOne == default || eventTwo == default)
+            return false;
+        if (eventOne.GetType() != eventTwo.GetType())
+            return false;
+
+        switch (eventOne)
+        {
+            case InputEventKey eventOneKey:
+                InputEventKey eventTwoKey = eventTwo as InputEventKey;
+                Debug.Assert(eventTwoKey != null, nameof(eventTwoKey) + " != null");
+                return eventOneKey.PhysicalKeycode == eventTwoKey.PhysicalKeycode;
+            case InputEventJoypadButton eventOneJoypad:
+                InputEventJoypadButton eventTwoJoypad = eventTwo as InputEventJoypadButton;
+                Debug.Assert(eventTwoJoypad != null, nameof(eventTwoJoypad) + " != null");
+                return eventOneJoypad.ButtonIndex == eventTwoJoypad.ButtonIndex;
+            case InputEventMouseButton eventOneMouseButton:
+                InputEventMouseButton eventTwoMouseButton = eventTwo as InputEventMouseButton;
+                Debug.Assert(eventTwoMouseButton != null, nameof(eventTwoMouseButton) + " != null");
+                return eventOneMouseButton.ButtonIndex == eventTwoMouseButton.ButtonIndex;
+            default:
+                return false;
+        }
+    }
 }
