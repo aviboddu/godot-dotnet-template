@@ -70,9 +70,7 @@ public static class Logger
 
     private static string FormatMessage(in object message, LogLevel level)
     {
-        // ReSharper disable once UseStringInterpolation
-        return string.Format("[{0}][{1}] {2}", FormatDateTime(Miscellaneous.FastNow()), LogLevelToString[(int)level],
-                             message);
+        return $"[{FormatDateTime(Miscellaneous.FastNow())}][{LogLevelToString[(int)level]}] {message}";
     }
 
     // Custom formatter is faster and means logging is less of a performance hit.
