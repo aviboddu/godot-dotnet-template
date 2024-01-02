@@ -16,9 +16,6 @@ public static class Logger
 
     public const string LOG_LEVEL_SETTING = "plugins/logger/level";
 
-    // Prevents reallocation of the same string.
-    private static readonly string[] LogLevelToString = ["DEBUG", "INFO", "WARN", "ERROR"];
-
     // The minimum log level to write
     private static readonly LogLevel MinLogLevel =
         (LogLevel)(int)ProjectSettings.GetSetting(LOG_LEVEL_SETTING, (int)LogLevel.Info);
@@ -70,7 +67,7 @@ public static class Logger
 
     private static string FormatMessage(in object message, LogLevel level)
     {
-        return $"[{FormatDateTime(Miscellaneous.FastNow())}][{LogLevelToString[(int)level]}] {message}";
+        return $"[{FormatDateTime(Miscellaneous.FastNow())}][{Enum.GetName(level)}] {message}";
     }
 
     // Custom formatter is faster and means logging is less of a performance hit.
